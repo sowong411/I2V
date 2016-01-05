@@ -1,28 +1,50 @@
 package com.example.onzzz.i2v;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by WAICHONG on 31/12/2015.
+ */
+public class EventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_event);
+        Intent intent = getIntent();
+        assert (intent != null);
 
-        findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.photo_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, CreateEventActivity.class);
+                intent.setClass(EventActivity.this, PhotoUploadActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.video_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(EventActivity.this, CreateVideoActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.mem_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(EventActivity.this, AddMemberActivity.class);
                 startActivity(intent);
             }
         });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,10 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     public void Close(View view) {
         finish();
     }
-
 }
-

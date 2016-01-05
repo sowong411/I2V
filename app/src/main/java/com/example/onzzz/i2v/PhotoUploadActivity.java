@@ -1,18 +1,36 @@
 package com.example.onzzz.i2v;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class LoginActivity extends AppCompatActivity {
+/**
+ * Created by WAICHONG on 31/12/2015.
+ */
+public class PhotoUploadActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_upload_photo);
+        Intent intent = getIntent();
+        assert (intent != null);
+
+        findViewById(R.id.upload_photo_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                // TODO
+                intent.setClass(PhotoUploadActivity.this, PhotoUploadActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     public void Close(View view) {
         finish();
     }
