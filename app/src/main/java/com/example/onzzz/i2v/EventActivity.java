@@ -1,5 +1,6 @@
 package com.example.onzzz.i2v;
 
+import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,7 @@ import android.view.View;
 /**
  * Created by WAICHONG on 31/12/2015.
  */
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +19,8 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
         Intent intent = getIntent();
         assert (intent != null);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.photo_view).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +67,16 @@ public class EventActivity extends AppCompatActivity {
         if (id == R.id.userButton) {
             return true;
         }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // API 5+ solution
+                onBackPressed();
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+      //  return super.onOptionsItemSelected(item);
     }
     public void Close(View view) {
         finish();

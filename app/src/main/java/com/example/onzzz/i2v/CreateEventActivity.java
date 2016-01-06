@@ -2,6 +2,7 @@ package com.example.onzzz.i2v;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +11,7 @@ import android.view.View;
 /**
  * Created by WAICHONG on 31/12/2015.
  */
-public class CreateEventActivity extends AppCompatActivity {
+public class CreateEventActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +19,8 @@ public class CreateEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_event);
         Intent intent = getIntent();
         assert (intent != null);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,8 +51,16 @@ public class CreateEventActivity extends AppCompatActivity {
         if (id == R.id.userButton) {
             return true;
         }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // API 5+ solution
+                onBackPressed();
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        //  return super.onOptionsItemSelected(item);
     }
     public void Close(View view) {
         finish();

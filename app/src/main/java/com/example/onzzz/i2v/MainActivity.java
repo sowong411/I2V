@@ -1,5 +1,6 @@
 package com.example.onzzz.i2v;
 
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,12 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,8 +45,16 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.userButton) {
             return true;
         }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // API 5+ solution
+                onBackPressed();
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        //  return super.onOptionsItemSelected(item);
     }
 
     public void Close(View view) {
