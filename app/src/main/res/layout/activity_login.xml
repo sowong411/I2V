@@ -52,7 +52,7 @@
         android:layout_marginTop="15dp"
         >
 
-        <ImageButton
+        <com.facebook.login.widget.LoginButton
             android:id="@+id/fblogin"
             android:layout_width="80sp"
             android:layout_height="80sp"
