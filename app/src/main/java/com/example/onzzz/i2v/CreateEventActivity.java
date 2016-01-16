@@ -22,11 +22,22 @@ public class CreateEventActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        // after typing all info (date time place , app will create event)
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(CreateEventActivity.this, EventActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.addmem_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(CreateEventActivity.this,AddMemberActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,7 +72,12 @@ public class CreateEventActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
         //  return super.onOptionsItemSelected(item);
+
+
+
     }
+
+
     public void Close(View view) {
         finish();
     }

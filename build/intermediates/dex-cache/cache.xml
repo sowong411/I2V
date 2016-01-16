@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\hoyuichan\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="129874135e6081269ace2312092031558865de12">
+        <dex dex="C:\Users\hoyuichan\Documents\GitHub\I2V\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-d75c46aab3a0f554250c1fe19b3d9f1f249db6a3.jar" />
+    </item>
+    <item
+        jar="C:\Users\hoyuichan\Documents\GitHub\I2V\app\build\intermediates\exploded-aar\com.facebook.android\facebook-android-sdk\4.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0f254ec13d6671680482d2218f01ecf14dfa93e6">
+        <dex dex="C:\Users\hoyuichan\Documents\GitHub\I2V\app\build\intermediates\pre-dexed\debug\classes-4cd30f14eee0b9ea33d5bdd9683747215be48a2b.jar" />
+    </item>
+
+</items>
