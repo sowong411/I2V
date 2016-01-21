@@ -3,6 +3,8 @@ package com.example.onzzz.i2v;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by onzzz on 8/1/2016.
  */
@@ -12,7 +14,7 @@ public class UserInfo {
     private String id;
     private String name;
     private boolean authenticated = false;
-
+    private ArrayList<String> eventIds;
     //public data member
     public static UserInfo userInfo = new UserInfo();
     public static UserInfo getInstance() { return userInfo; }
@@ -37,8 +39,12 @@ public class UserInfo {
         authenticated = x;
     }
 
+
     //Get Functions
     public boolean getAuthenticated(){
         return authenticated;
     }
+    public String getId(){return id;}
+    public String getName(){return name;}
+    public ArrayList<String> getEventIds(){return eventIds ;}
 }
