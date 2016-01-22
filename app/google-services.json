@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "finalyearproject-1198",
+    "project_number": "947588443423",
+    "name": "FinalYearProject"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947588443423:android:70310df9e2827718",
+        "client_id": "android:com.example.onzzz.i2v",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.example.onzzz.i2v"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947588443423-jpa66i4h9va9fg9djab328gagavrf1kv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.onzzz.i2v",
+            "certificate_hash": "029592E9F1F3B99A7A19B46B272DA13015B95D17"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
