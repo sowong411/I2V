@@ -63,17 +63,16 @@
             android:src="@drawable/fb_icon"
         />
 
-        <ImageButton
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/googlelogin"
             android:layout_width="80sp"
             android:layout_height="80sp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:gravity="center"
             android:layout_marginLeft="7dp"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/googlep_logo"
-        />
+            android:layout_marginRight="5dp"/>
     </LinearLayout>
+
     <Button
         android:id="@+id/skip_button"
         style="?android:textAppearanceSmall"
@@ -89,6 +88,14 @@
         android:layout_alignParentBottom = "true"
         android:autoLink="web"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signed out"
+        android:textSize="14sp"
+        android:layout_above="@id/skip_button"/>
 
 
 </RelativeLayout>
