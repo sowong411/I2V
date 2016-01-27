@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 public class MainActivity extends ActionBarActivity {
 
     @Override
@@ -15,6 +18,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "B2CKe2UZE0bkBAWZKd6dtg0XZ9hLB3sWs2xvOHq7", "cMqWFwddGkSalo0JAKefTDqcgo0YSDb8FQPWylui ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
