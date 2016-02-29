@@ -1,6 +1,8 @@
 package com.example.onzzz.i2v;
 
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.support.v4.view.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,11 +10,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+
 /**
  * Created by WAICHONG on 31/12/2015.
  */
 public class EventActivity extends ActionBarActivity {
-
+    Toolbar toolbar;
+    ViewPager pager;
+    ViewPagerAdapter adapter;
+    SlidingTabLayout tabs;
+    CharSequence Titles[]={"Video","Photo","Member","info."};
+    int Numboftabs =4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,9 +28,35 @@ public class EventActivity extends ActionBarActivity {
         Intent intent = getIntent();
         assert (intent != null);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Creating The Toolbar and setting it as the Toolbar for the activity
 
-        findViewById(R.id.photo_view).setOnClickListener(new View.OnClickListener() {
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+
+
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+
+        // Assigning ViewPager View and setting the adapter
+        pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(adapter);
+
+        // Assiging the Sliding Tab Layout View
+        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        tabs.setViewPager(pager);
+/*        findViewById(R.id.photo_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -46,13 +80,14 @@ public class EventActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        */
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
+    //    getMenuInflater().inflate(R.menu.menu_user, menu);
         return true;
     }
 
@@ -67,16 +102,8 @@ public class EventActivity extends ActionBarActivity {
         if (id == R.id.userButton) {
             return true;
         }
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // API 5+ solution
-                onBackPressed();
-                return true;
 
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-      //  return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
     public void Close(View view) {
         finish();

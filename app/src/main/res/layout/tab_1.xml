@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/length"
+        android:text="length"
+        android:layout_marginTop="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton android:id="@+id/choice_long"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="long"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/choice_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="middle"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/choice_short"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="short"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/generate"
+        style="?android:textAppearanceSmall"
+        android:textColor="#435190"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/locationContainer"
+        android:layout_marginTop="8dp"
+        android:text="generate"
+        android:autoLink="web"
+        android:textStyle="bold" />
+</LinearLayout>
+
