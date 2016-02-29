@@ -19,6 +19,8 @@ public class PhotoUploadActivity extends AppCompatActivity {
         Intent intent = getIntent();
         assert (intent != null);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         findViewById(R.id.upload_photo_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,8 +52,16 @@ public class PhotoUploadActivity extends AppCompatActivity {
         if (id == R.id.userButton) {
             return true;
         }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // API 5+ solution
+                onBackPressed();
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        //  return super.onOptionsItemSelected(item);
     }
     public void Close(View view) {
         finish();
