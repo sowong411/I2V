@@ -20,6 +20,11 @@ public class Event {
 
     //public data member
     public static Event event = new Event();
+
+    public Event(String name) {
+        this.name = name;
+    }
+
     public Event  getInstance() { return event; }
 
     //Constructor

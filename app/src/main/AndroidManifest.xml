@@ -68,6 +68,11 @@
             android:label="AddMember Page"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".UserInfoActivity"
+            android:label="User Info"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
