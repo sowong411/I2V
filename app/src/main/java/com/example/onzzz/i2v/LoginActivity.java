@@ -25,12 +25,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements
@@ -102,18 +101,24 @@ public class LoginActivity extends AppCompatActivity implements
                             user.put("Id", profile.getId());
                             user.put("ProfilePicUri", profile.getProfilePictureUri(400, 400).toString());
                             user.put("LoginMethod", "Facebook");
-                            user.saveInBackground();
-                            ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
-                            accountQuery.whereEqualTo("Id", profile.getId());
-                            accountQuery.findInBackground(new FindCallback<ParseObject>() {
+                            user.saveInBackground(new SaveCallback() {
                                 @Override
-                                public void done(List<ParseObject> objects, ParseException e) {
-                                    if (e == null) {
-                                        userObjectId = objects.get(0).getObjectId();
-                                        Intent intent = new Intent();
-                                        intent.setClass(LoginActivity.this, MainActivity.class);
-                                        intent.putExtra("UserObjectId", userObjectId);
-                                        startActivity(intent);
+                                public void done(ParseException e) {
+                                    if (e == null){
+                                        ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
+                                        accountQuery.whereEqualTo("Id", profile.getId());
+                                        accountQuery.findInBackground(new FindCallback<ParseObject>() {
+                                            @Override
+                                            public void done(List<ParseObject> objects, ParseException e) {
+                                                if (e == null) {
+                                                    userObjectId = objects.get(0).getObjectId();
+                                                    Intent intent = new Intent();
+                                                    intent.setClass(LoginActivity.this, MainActivity.class);
+                                                    intent.putExtra("UserObjectId", userObjectId);
+                                                    startActivity(intent);
+                                                }
+                                            }
+                                        });
                                     }
                                 }
                             });
@@ -216,18 +221,24 @@ public class LoginActivity extends AppCompatActivity implements
                             user.put("ProfilePicUri", acct.getPhotoUrl().toString());
                         }
                         user.put("LoginMethod", "Google");
-                        user.saveInBackground();
-                        ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
-                        accountQuery.whereEqualTo("Id", acct.getId());
-                        accountQuery.findInBackground(new FindCallback<ParseObject>() {
+                        user.saveInBackground(new SaveCallback() {
                             @Override
-                            public void done(List<ParseObject> objects, ParseException e) {
-                                if (e == null) {
-                                    userObjectId = objects.get(0).getObjectId();
-                                    Intent intent = new Intent();
-                                    intent.setClass(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("UserObjectId", userObjectId);
-                                    startActivity(intent);
+                            public void done(ParseException e) {
+                                if (e == null){
+                                    ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
+                                    accountQuery.whereEqualTo("Id", acct.getId());
+                                    accountQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        @Override
+                                        public void done(List<ParseObject> objects, ParseException e) {
+                                            if (e == null) {
+                                                userObjectId = objects.get(0).getObjectId();
+                                                Intent intent = new Intent();
+                                                intent.setClass(LoginActivity.this, MainActivity.class);
+                                                intent.putExtra("UserObjectId", userObjectId);
+                                                startActivity(intent);
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         });

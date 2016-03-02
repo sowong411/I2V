@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.EditText;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -54,7 +52,53 @@ public class CreateEventActivity extends ActionBarActivity {
             public void onClick(View v) {
                 EditText eventNameText = (EditText) findViewById(R.id.name);
                 eventName = eventNameText.getText().toString();
-                uploadEvent();
+                System.out.println("Before");
+                ParseObject event = new ParseObject("Event");
+                event.put("EventName", eventName);
+                event.put("Date", "");
+                event.put("Time", "");
+                event.put("PhotoNumber", 0);
+                event.put("MemberNumber", numOfMember);
+                event.addAllUnique("Member", Arrays.asList(memberId));
+                event.put("EventHolder", memberId[0]);
+                event.put("VideoNumber", 0);
+                event.put("Video", "");
+                event.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
+                            eventQuery.whereEqualTo("EventName", eventName);
+                            eventQuery.whereEqualTo("EventHolder", userObjectId);
+                            eventQuery.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    if (objects.size() == 1){
+                                        eventObjectId = objects.get(newEventIndex).getObjectId();
+                                    }
+                                    for (int i = 0; i < numOfMember; i++) {
+                                        ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
+                                        accountQuery.getInBackground(memberId[i], new GetCallback<ParseObject>() {
+                                            @Override
+                                            public void done(ParseObject object, ParseException e) {
+                                                if (e == null) {
+                                                    object.add("Event", eventObjectId);
+                                                    object.saveInBackground();
+                                                    Intent intent = new Intent();
+                                                    intent.setClass(CreateEventActivity.this, EventActivity.class);
+                                                    intent.putExtra("UserObjectId", userObjectId);
+                                                    intent.putExtra("EventObjectId", eventObjectId);
+                                                    startActivity(intent);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                System.out.println("After");
                 eventNameText.setText("");
             }
         });
@@ -64,50 +108,6 @@ public class CreateEventActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent i = new Intent(CreateEventActivity.this, AddMemberActivity.class);
                 startActivityForResult(i, 100);
-            }
-        });
-    }
-
-    public void uploadEvent(){
-        ParseObject event = new ParseObject("Event");
-        event.put("EventName", eventName);
-        event.put("Date", "");
-        event.put("Time", "");
-        event.put("PhotoNumber", 0);
-        event.put("MemberNumber", numOfMember);
-        event.addAllUnique("Member", Arrays.asList(memberId));
-        event.put("EventHolder", memberId[0]);
-        event.put("VideoNumber", 0);
-        event.put("Video", "");
-        event.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
-                eventQuery.whereExists("EventName");
-                eventQuery.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> objects, ParseException e) {
-                        newEventIndex = objects.size()-1;
-                        eventObjectId = objects.get(newEventIndex).getObjectId();
-                        for (int i=0; i<numOfMember; i++){
-                            ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
-                            accountQuery.getInBackground(memberId[i], new GetCallback<ParseObject>() {
-                                @Override
-                                public void done(ParseObject object, ParseException e) {
-                                    if (e == null) {
-                                        object.add("Event", eventObjectId);
-                                        object.saveInBackground();
-                                        Intent intent = new Intent();
-                                        intent.setClass(CreateEventActivity.this, EventActivity.class);
-                                        intent.putExtra("UserObjectId", userObjectId);
-                                        intent.putExtra("EventObjectId", eventObjectId);
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
             }
         });
     }
