@@ -19,14 +19,19 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:gravity="center"
             android:src="@drawable/memadd" />
-        <TextView
+        <EditText
             android:id="@+id/memlist"
             android:text="member name"
             android:clickable="true"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+    <Button
+        android:id="@+id/finished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finished"/>
     <TextView
         android:id="@+id/member_list"
         android:text="Member List"

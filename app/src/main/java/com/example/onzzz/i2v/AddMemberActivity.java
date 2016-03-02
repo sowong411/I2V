@@ -1,39 +1,75 @@
 package com.example.onzzz.i2v;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 /**
  * Created by WAICHONG on 31/12/2015.
  */
 public class AddMemberActivity extends ActionBarActivity {
 
+    String[] memberId = new String[20];
+    int numOfMember = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_member);
-        Intent intent = getIntent();
-        assert (intent != null);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.addmem_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                // TODO
-                intent.setClass(AddMemberActivity.this, AddMemberActivity.class);
-                startActivity(intent);
+                EditText memberName = (EditText) findViewById(R.id.memlist);
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+                query.whereEqualTo("Name", memberName.getText().toString());
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e == null) {
+                            if (objects.size() == 0) {
+                                Toast.makeText(getApplicationContext(), "User not found",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            if (objects.size() == 1) {
+                                memberId[numOfMember] = objects.get(0).getObjectId();
+                                numOfMember++;
+                            }
+                        }
+                    }
+                });
+                memberName.setText("");
             }
         });
 
+        findViewById(R.id.finished).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("Member", memberId);
+                resultIntent.putExtra("NumOfMember", numOfMember);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,6 +100,7 @@ public class AddMemberActivity extends ActionBarActivity {
         }
         //  return super.onOptionsItemSelected(item);
     }
+
     public void Close(View view) {
         finish();
     }
