@@ -13,13 +13,16 @@ import com.parse.ParseObject;
 
 public class MainActivity extends ActionBarActivity {
 
+    String userObjectId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "B2CKe2UZE0bkBAWZKd6dtg0XZ9hLB3sWs2xvOHq7", "cMqWFwddGkSalo0JAKefTDqcgo0YSDb8FQPWylui ");
+        Intent intent = getIntent();
+        userObjectId = intent.getStringExtra("UserObjectId");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
