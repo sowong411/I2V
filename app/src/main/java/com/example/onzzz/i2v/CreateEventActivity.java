@@ -28,7 +28,6 @@ public class CreateEventActivity extends ActionBarActivity {
     String eventObjectId;
     String eventName;
 
-    int newEventIndex;
     String[] memberId = new String[20];
     int numOfMember = 1;
 
@@ -52,8 +51,9 @@ public class CreateEventActivity extends ActionBarActivity {
             public void onClick(View v) {
                 EditText eventNameText = (EditText) findViewById(R.id.name);
                 eventName = eventNameText.getText().toString();
-                System.out.println("Before");
-                ParseObject event = new ParseObject("Event");
+
+                /***************Upload Current Event Information***************/
+                final ParseObject event = new ParseObject("Event");
                 event.put("EventName", eventName);
                 event.put("Date", "");
                 event.put("Time", "");
@@ -68,15 +68,13 @@ public class CreateEventActivity extends ActionBarActivity {
                     public void done(ParseException e) {
                         if (e == null) {
                             ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
-                            eventQuery.whereEqualTo("EventName", eventName);
-                            eventQuery.whereEqualTo("EventHolder", userObjectId);
+                            eventQuery.orderByDescending("createdAt");
                             eventQuery.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
                                 public void done(List<ParseObject> objects, ParseException e) {
-                                    if (objects.size() == 1){
-                                        eventObjectId = objects.get(0).getObjectId();
-                                    }
+                                    eventObjectId = objects.get(0).getObjectId();
                                     for (int i = 0; i < numOfMember; i++) {
+                                        /***************Update User's Event***************/
                                         ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
                                         accountQuery.getInBackground(memberId[i], new GetCallback<ParseObject>() {
                                             @Override
@@ -84,21 +82,20 @@ public class CreateEventActivity extends ActionBarActivity {
                                                 if (e == null) {
                                                     object.add("Event", eventObjectId);
                                                     object.saveInBackground();
-                                                    Intent intent = new Intent();
-                                                    intent.setClass(CreateEventActivity.this, EventActivity.class);
-                                                    intent.putExtra("UserObjectId", userObjectId);
-                                                    intent.putExtra("EventObjectId", eventObjectId);
-                                                    startActivity(intent);
                                                 }
                                             }
                                         });
                                     }
+                                    Intent intent = new Intent();
+                                    intent.setClass(CreateEventActivity.this, EventActivity.class);
+                                    intent.putExtra("UserObjectId", userObjectId);
+                                    intent.putExtra("EventObjectId", eventObjectId);
+                                    startActivity(intent);
                                 }
                             });
                         }
                     }
                 });
-                System.out.println("After");
                 eventNameText.setText("");
             }
         });

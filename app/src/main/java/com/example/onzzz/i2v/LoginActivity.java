@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /***Google Login***/
+        /***************Google Login***************/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements
         googleLoginButton.setSize(SignInButton.SIZE_STANDARD);
         googleLoginButton.setScopes(gso.getScopeArray());
 
-        /***Facebook Login***/
+        /***************Facebook Login***************/
         fbLoginButton = (LoginButton)findViewById(R.id.fblogin);
         fbLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,12 +92,14 @@ public class LoginActivity extends AppCompatActivity implements
                 Toast.makeText(LoginActivity.this, "Facebook Login Succeed", Toast.LENGTH_SHORT).show();
                 final Profile profile = Profile.getCurrentProfile();
 
+                /***************Check Existence of Same Facebook Account***************/
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
                 query.whereEqualTo("Id", profile.getId());
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if (objects.size() == 0) {
+                            /***************Upload Facebook Account Information***************/
                             ParseObject user = new ParseObject("Account");
                             user.put("Name", profile.getName());
                             user.put("Id", profile.getId());
@@ -147,60 +149,7 @@ public class LoginActivity extends AppCompatActivity implements
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void Close(View view) {
-        finish();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (fbLogin) {
-            callbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-        else if (googleLogin) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == RC_SIGN_IN) {
-                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                handleSignInResult(result);
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
+    /***************Google Login Related Function***************/
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
@@ -209,12 +158,14 @@ public class LoginActivity extends AppCompatActivity implements
             // Signed in successfully, show authenticated UI.
             final GoogleSignInAccount acct = result.getSignInAccount();
 
+            /***************Check Existence of Same Google Account***************/
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
             query.whereEqualTo("Id", acct.getId());
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> objects, ParseException e) {
                     if (objects.size() == 0) {
+                        /***************Upload Google Account Information***************/
                         ParseObject user = new ParseObject("Account");
                         user.put("Name", acct.getDisplayName());
                         user.put("Id", acct.getId());
@@ -260,15 +211,71 @@ public class LoginActivity extends AppCompatActivity implements
         }
     }
 
+    /***************Google Login Related Function***************/
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /***************Google Login Related Function***************/
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_user, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (fbLogin) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+        else if (googleLogin) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == RC_SIGN_IN) {
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleSignInResult(result);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public void Close(View view) {
+        finish();
     }
 }

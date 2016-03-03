@@ -34,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
         Intent intent = getIntent();
         userObjectId = intent.getStringExtra("UserObjectId");
 
+        /***************Display Event List***************/
         populateEventList();
 
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
@@ -47,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /***************Event List Display Related Function***************/
     private void  populateEventList() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
         query.whereEqualTo("EventHolder", userObjectId);
@@ -64,14 +66,17 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /***************Event List Display Related Function***************/
     private void populateListView() {
         ArrayAdapter<Event> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.event_list);
         list.setAdapter(adapter);
     }
 
+    /***************Event List Display Related Class***************/
     private class MyListAdapter extends ArrayAdapter<Event> {
 
+        //Constructor
         public MyListAdapter() {
             super(MainActivity.this, R.layout.event_item_view, myEvents);
         }

@@ -1,6 +1,5 @@
 package com.example.onzzz.i2v;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +40,7 @@ public class UserInfoActivity extends ActionBarActivity {
         Intent intent = getIntent();
         userObjectId = intent.getStringExtra("UserObjectId");
 
+        /***************Get Current User Information from Parse***************/
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
         query.getInBackground(userObjectId, new GetCallback<ParseObject>() {
             @Override
@@ -52,7 +52,6 @@ public class UserInfoActivity extends ActionBarActivity {
                 TextView loginMethodText = (TextView) findViewById(R.id.login_method);
                 if (loginMethod.equals("Facebook")) {
                     loginMethodText.setText("You are logged in using Facebook");
-                    //ProfilePictureView displayProfilePic = (ProfilePictureView) findViewById(R.id.profilePicFacebook);
                     ImageView displayProfilePic = (ImageView) findViewById(R.id.profilePicFacebook);
                     displayProfilePic.setVisibility(View.VISIBLE);
                     new LoadProfileImage(displayProfilePic).execute(profilePicUri);
@@ -62,7 +61,6 @@ public class UserInfoActivity extends ActionBarActivity {
                     displayProfilePic.setVisibility(View.VISIBLE);
                     new LoadProfileImage(displayProfilePic).execute(profilePicUri);
                 }
-
                 TextView displayName = (TextView) findViewById(R.id.userName);
                 displayName.setText(name);
             }
@@ -100,9 +98,7 @@ public class UserInfoActivity extends ActionBarActivity {
         //  return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Background Async task to load user profile picture from url
-     * */
+    /***************Background Async task to load user profile picture from url***************/
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
