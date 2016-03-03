@@ -1,5 +1,7 @@
 package com.example.onzzz.i2v;
 
+import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
@@ -15,17 +17,25 @@ import android.view.View;
  * Created by WAICHONG on 31/12/2015.
  */
 public class EventActivity extends ActionBarActivity {
+
+    String userObjectId;
+    String eventObjectId;
+
     Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Video","Photo","Member","info."};
-    int Numboftabs =4;
+    CharSequence Titles[] = {"Video","Photo","Member","info."};
+    int Numboftabs = 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         Intent intent = getIntent();
+        userObjectId = intent.getStringExtra("UserObjectId");
+        eventObjectId = intent.getStringExtra("EventObjectId");
+
         assert (intent != null);
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -33,7 +43,6 @@ public class EventActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
@@ -81,6 +90,14 @@ public class EventActivity extends ActionBarActivity {
             }
         });
         */
+    }
+
+    public String getUserObjectId(){
+        return userObjectId;
+    }
+
+    public String getEventObjectId(){
+        return eventObjectId;
     }
 
 

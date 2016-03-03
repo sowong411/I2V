@@ -74,7 +74,7 @@ public class CreateEventActivity extends ActionBarActivity {
                                 @Override
                                 public void done(List<ParseObject> objects, ParseException e) {
                                     if (objects.size() == 1){
-                                        eventObjectId = objects.get(newEventIndex).getObjectId();
+                                        eventObjectId = objects.get(0).getObjectId();
                                     }
                                     for (int i = 0; i < numOfMember; i++) {
                                         ParseQuery<ParseObject> accountQuery = ParseQuery.getQuery("Account");
