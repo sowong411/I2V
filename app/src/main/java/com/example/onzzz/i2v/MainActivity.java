@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
 
             // Fill the view
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_icon);
-            imageView.setImageResource(R.drawable.bug);
+            imageView.setImageResource(R.drawable.no_media);
             // Make:
             TextView event_name = (TextView) itemView.findViewById(R.id.event_name);
             event_name.setText(currentEvent.getName());

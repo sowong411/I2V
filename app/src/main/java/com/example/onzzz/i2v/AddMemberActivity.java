@@ -50,6 +50,8 @@ public class AddMemberActivity extends ActionBarActivity {
                             if (objects.size() == 1) {
                                 memberId[numOfMember] = objects.get(0).getObjectId();
                                 numOfMember++;
+                                Toast.makeText(getApplicationContext(), "Member added",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

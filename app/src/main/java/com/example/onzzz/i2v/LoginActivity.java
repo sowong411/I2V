@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -88,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements
         fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Toast.makeText(LoginActivity.this, "Facebook Login Succeed", Toast.LENGTH_SHORT).show();
                 final Profile profile = Profile.getCurrentProfile();
 
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
@@ -202,6 +204,8 @@ public class LoginActivity extends AppCompatActivity implements
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
+            Toast.makeText(LoginActivity.this, "Google Login Succeed", Toast.LENGTH_SHORT).show();
+
             // Signed in successfully, show authenticated UI.
             final GoogleSignInAccount acct = result.getSignInAccount();
 

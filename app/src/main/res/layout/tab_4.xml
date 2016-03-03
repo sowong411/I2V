@@ -7,6 +7,43 @@
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp" />
+
+    <TextView
+        android:id="@+id/eventMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/eventName"
+        android:layout_marginTop="10dp"
+        android:text="Reserved for Members" />
+
+    <TextView
+        android:id="@+id/eventDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/eventMember"
+        android:layout_marginTop="10dp"
+        android:text="Reserved for Date" />
+
+    <TextView
+        android:id="@+id/eventTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/eventDate"
+        android:layout_marginTop="10dp"
+        android:text="Reserved for Time" />
+
+    <TextView
+        android:id="@+id/eventPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/eventTime"
+        android:layout_marginTop="10dp"
+        android:text="Reserved for Time" />
 
 </RelativeLayout>

@@ -21,7 +21,7 @@
             android:src="@drawable/memadd" />
         <EditText
             android:id="@+id/memlist"
-            android:text="member name"
+            android:hint="member name"
             android:clickable="true"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="fill_parent"

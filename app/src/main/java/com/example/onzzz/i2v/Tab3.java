@@ -9,9 +9,17 @@ import android.view.ViewGroup;
 
 public class Tab3 extends Fragment {
 
+    String userObjectId;
+    String eventObjectId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.tab_3,container,false);
+
+        EventActivity activity = (EventActivity) getActivity();
+        userObjectId = activity.getUserObjectId();
+        eventObjectId = activity.getEventObjectId();
+
         return v;
     }
 }
