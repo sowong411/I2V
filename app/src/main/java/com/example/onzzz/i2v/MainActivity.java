@@ -7,10 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -24,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
     private List<Event> myEvents = new ArrayList<Event>();
     String userObjectId;
-
+    String eventObjectId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +38,13 @@ public class MainActivity extends ActionBarActivity {
 
         /***************Display Event List***************/
         populateEventList();
+        registerClickCallback();
 
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, CreateEventActivity.class);
+                intent.setClass(MainActivity.this, EventInfoActivity.class);
                 intent.putExtra("UserObjectId", userObjectId);
                 startActivity(intent);
             }
@@ -71,6 +74,26 @@ public class MainActivity extends ActionBarActivity {
         ArrayAdapter<Event> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.event_list);
         list.setAdapter(adapter);
+    }
+
+    /***************Event List Display Related Function***************/
+    private void registerClickCallback() {
+        ListView list = (ListView) findViewById(R.id.event_list);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View viewClicked,
+                                    int position, long id) {
+
+                Event clickedEvent = myEvents.get(position);
+                eventObjectId = clickedEvent.getId();
+                Toast.makeText(MainActivity.this, "Event id is : " + eventObjectId, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, EventContentActivity.class);
+                intent.putExtra("UserObjectId", userObjectId);
+                intent.putExtra("EventObjectId", eventObjectId);
+                startActivity(intent);
+            }
+        });
     }
 
     /***************Event List Display Related Class***************/

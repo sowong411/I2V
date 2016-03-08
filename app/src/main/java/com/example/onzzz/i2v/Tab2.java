@@ -20,7 +20,7 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_2, container, false);
 
-        EventActivity activity = (EventActivity) getActivity();
+        EventContentActivity activity = (EventContentActivity) getActivity();
         userObjectId = activity.getUserObjectId();
         eventObjectId = activity.getEventObjectId();
 

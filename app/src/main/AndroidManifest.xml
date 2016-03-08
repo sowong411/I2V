@@ -30,7 +30,7 @@
 
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name"
+            android:label="LoginActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,37 +40,37 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="main page"
+            android:label="MainActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".CreateEventActivity"
-            android:label="CreateEvent Page"
+            android:name=".EventInfoActivity"
+            android:label="EventInfoActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".EventActivity"
-            android:label="Event Page"
+            android:name=".EventContentActivity"
+            android:label="EventContentActivity"
             android:theme="@style/NoActionBarTheme">
         </activity>
         <activity
             android:name=".PhotoUploadActivity"
-            android:label="PhotoUpload Page"
+            android:label="PhotoUploadActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".CreateVideoActivity"
-            android:label="CreateVideo Page"
+            android:label="CreateVideoActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".AddMemberActivity"
-            android:label="AddMember Page"
+            android:label="AddMemberActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".UserInfoActivity"
-            android:label="User Info"
+            android:label="UserInfoActivity"
             android:theme="@style/AppTheme">
         </activity>
     </application>
