@@ -61,7 +61,8 @@ public class MainActivity extends ActionBarActivity {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
                         String eventname = objects.get(i).getString("EventName");
-                        myEvents.add(new Event(eventname));
+                        String eventId = objects.get(i).getObjectId();
+                        myEvents.add(new Event(eventname, eventId));
                         populateListView();
                     }
                 }

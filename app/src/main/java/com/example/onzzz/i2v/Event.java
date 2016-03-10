@@ -21,8 +21,9 @@ public class Event {
     //public data member
     public static Event event = new Event();
 
-    public Event(String name) {
+    public Event(String name, String id) {
         this.name = name;
+        this.id = id;
     }
 
     public Event  getInstance() { return event; }
