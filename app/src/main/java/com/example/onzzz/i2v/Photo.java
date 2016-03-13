@@ -5,6 +5,8 @@ package com.example.onzzz.i2v;
  */
 public class Photo {
 
+    private String photoString;
+
     //  For selection
     private boolean isBlur;
     private double size;
@@ -34,6 +36,10 @@ public class Photo {
         female = 0;
         meanOfAge = 0;
         varianceOfAge = 0;
+    }
+
+    public Photo(String photoString) {
+        this.photoString = photoString;
     }
 
 
