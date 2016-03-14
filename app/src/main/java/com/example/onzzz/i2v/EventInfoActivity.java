@@ -1,12 +1,16 @@
 package com.example.onzzz.i2v;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.parse.FindCallback;
@@ -23,6 +27,10 @@ import java.util.List;
  * Created by WAICHONG on 31/12/2015.
  */
 public class EventInfoActivity extends ActionBarActivity {
+
+    private Button dateButton;
+    private Button timeButton;
+    private Button locationButton;
 
     String userObjectId;
     String eventObjectId;
@@ -107,6 +115,77 @@ public class EventInfoActivity extends ActionBarActivity {
                 startActivityForResult(i, 100);
             }
         });
+
+        findViewById(R.id.date_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialog();
+            }
+        });
+        findViewById(R.id.time_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimeDialog();
+            }
+        });
+        findViewById(R.id.location_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLocationDialog();
+            }
+        });
+    }
+
+    public void showDateDialog() {
+        AlertDialog.Builder builder;
+        AlertDialog alertDialog;
+        Context mContext = EventInfoActivity.this;
+
+        LayoutInflater inflater = (LayoutInflater) mContext
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.input_date, null);
+        //   TextView text = (TextView) layout.findViewById(R.id.location);
+        //  text.setText("Hello, Welcome to Mr Wei's blog!");
+        //   ImageView image = (ImageView) layout.findViewById(R.id.image);
+        //  image.setImageResource(R.drawable.icon);
+        builder = new AlertDialog.Builder(mContext);
+        builder.setView(layout);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+    public void showTimeDialog() {
+        AlertDialog.Builder builder;
+        AlertDialog alertDialog;
+        Context mContext = EventInfoActivity.this;
+
+        LayoutInflater inflater = (LayoutInflater) mContext
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.input_time, null);
+        //   TextView text = (TextView) layout.findViewById(R.id.location);
+        //  text.setText("Hello, Welcome to Mr Wei's blog!");
+        //   ImageView image = (ImageView) layout.findViewById(R.id.image);
+        //  image.setImageResource(R.drawable.icon);
+        builder = new AlertDialog.Builder(mContext);
+        builder.setView(layout);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+    public void showLocationDialog() {
+        AlertDialog.Builder builder;
+        AlertDialog alertDialog;
+        Context mContext = EventInfoActivity.this;
+
+        LayoutInflater inflater = (LayoutInflater) mContext
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.input_location, null);
+        //   TextView text = (TextView) layout.findViewById(R.id.location);
+        //  text.setText("Hello, Welcome to Mr Wei's blog!");
+        //   ImageView image = (ImageView) layout.findViewById(R.id.image);
+        //  image.setImageResource(R.drawable.icon);
+        builder = new AlertDialog.Builder(mContext);
+        builder.setView(layout);
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override

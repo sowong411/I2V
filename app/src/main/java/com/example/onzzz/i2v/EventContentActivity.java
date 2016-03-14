@@ -1,13 +1,17 @@
 package com.example.onzzz.i2v;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 
 /**
@@ -97,7 +101,6 @@ public class EventContentActivity extends ActionBarActivity {
         return eventObjectId;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -119,6 +122,7 @@ public class EventContentActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void Close(View view) {
         finish();
     }
