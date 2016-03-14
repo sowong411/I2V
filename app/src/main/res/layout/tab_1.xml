@@ -46,5 +46,60 @@
         android:text="generate"
         android:autoLink="web"
         android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/operation_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/style_layout"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/makevideo"
+            style="?android:textAppearanceSmall"
+            android:textColor="#435190"
+            android:textSize="20dp"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:layout_marginLeft="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/locationContainer"
+            android:layout_marginTop="8dp"
+            android:text="make video"
+            android:autoLink="web"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/combine_with_music"
+            style="?android:textAppearanceSmall"
+            android:textColor="#435190"
+            android:textSize="20dp"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:layout_marginLeft="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="add music"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/playvideo"
+        android:layout_below="@+id/operation_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <VideoView
+            android:id="@+id/video01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
 </LinearLayout>
 
