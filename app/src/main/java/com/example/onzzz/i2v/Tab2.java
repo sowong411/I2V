@@ -205,7 +205,7 @@ public class Tab2 extends Fragment {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    //playVideoOnView(makevideo);
+                    playVideoOnView(makevideo);
                 }
             });
         }
@@ -266,7 +266,7 @@ public class Tab2 extends Fragment {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    //playVideoOnView(combine);
+                    playVideoOnView(combine);
                 }
             });
         }
