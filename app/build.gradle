@@ -32,6 +32,10 @@ dependencies {
     compile 'com.parse:parse-android:1.+'
     compile 'com.android.support:design:23.0.1'
     compile files('libs/universal-image-loader-1.9.0.jar')
+    compile files('libs/javacpp.jar')
+    compile files('libs/javacv.jar')
+    compile files('libs/ffmpeg.jar')
+    compile files('libs/opencv.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'
