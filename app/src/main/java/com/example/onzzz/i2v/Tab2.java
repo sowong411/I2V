@@ -161,6 +161,16 @@ public class Tab2 extends Fragment {
         File makevideo = new File("/sdcard/DCIM/Camera/", "makevideo.mp4");
         public  void run() {
             completed = 0;
+                opencv_core.Mat temp = new opencv_core.Mat();
+                opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
+                resize(black,black,  new opencv_core.Size(800, 480));
+            for (int k = 0 ; k<photoPaths.size(); k++){
+                    opencv_core.Mat m = imread (photoPaths.get(k));
+                    opencv_core.Mat tempBlackGround = black.clone();
+                    resize(m, m, new opencv_core.Size(640, 480));
+                    m.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
+                    images.add(tempBlackGround);
+                }
             handler.post(new Runnable() {
                 public  void run() {
                     progressBar.setProgress(completed);
