@@ -36,7 +36,17 @@ public class Tab1 extends Fragment {
     String userObjectId;
     String eventObjectId;
 
-    ArrayList<String> photoString = new ArrayList<String>();
+    private int numOfFace;
+    private double averageSmile;
+    private double averageAge;
+    private double varianceAge;
+    private int numOfMale;
+    private int numOfFemale;
+    private double genderRatio;
+    private String photoString;
+
+    private ArrayList<Photo> myPhotos = new ArrayList<Photo>();
+
     private GridView gridView;
     private GridViewAdapter gridAdapter;
 
@@ -57,13 +67,32 @@ public class Tab1 extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null){
                     for (int i=0; i<objects.size(); i++){
-                        photoString.add(objects.get(i).getString("Image"));
+                        photoString = objects.get(i).getString("Image");
+
+                        numOfFace = objects.get(i).getInt("FaceNumber");
+                        averageSmile = objects.get(i).getDouble("AverageSmileLevel");
+                        averageAge = objects.get(i).getDouble("AverageAge");
+                        varianceAge = objects.get(i).getDouble("VarianceAge");
+                        numOfMale = objects.get(i).getInt("MaleNumber");
+                        numOfFemale = objects.get(i).getInt("FemaleNumber");
+
+                        if (numOfMale!=0 && numOfFemale!=0){
+                            genderRatio = numOfMale/(double)numOfFemale; //Ratio大，陽盛陰衰；Ratio細，陰盛陽衰。
+                        }
+                        else if (numOfMale!=0 && numOfFemale==0){
+                            genderRatio = 1000; //全男班，正氣，正數
+                        }
+                        else if (numOfMale==0 && numOfFemale!=0){
+                            genderRatio = -1000; //全女班，陰氣，負數
+                        }
+
+                        myPhotos.add(new Photo(photoString, numOfFace, averageSmile, averageAge, varianceAge, genderRatio));
                     }
                     gridView = (GridView) v.findViewById(R.id.gridView);
                     gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, getData());
                     gridView.setAdapter(gridAdapter);
                 }
-                ((EventContentActivity)getActivity()).setPhotoString(photoString);
+                ((EventContentActivity)getActivity()).setMyPhotos(myPhotos);
             }
         });
 
@@ -82,8 +111,8 @@ public class Tab1 extends Fragment {
 
     private ArrayList<ImageItem> getData() {
         final ArrayList<ImageItem> imageItems = new ArrayList<>();
-        for (int i=0; i<photoString.size(); i++) {
-            imageItems.add(new ImageItem(decodeBase64(photoString.get(i))));
+        for (int i=0; i<myPhotos.size(); i++) {
+            imageItems.add(new ImageItem(decodeBase64(myPhotos.get(i).getPhotoString())));
         }
         return imageItems;
     }
@@ -92,7 +121,7 @@ public class Tab1 extends Fragment {
         byte[] decodedByte = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
-     public ArrayList<String> getImagesEncodedString (){
+     /*public ArrayList<String> getImagesEncodedString (){
          return photoString;
-     }
+     }*/
 }

@@ -25,14 +25,14 @@ public class EventContentActivity extends ActionBarActivity {
 
     String userObjectId;
     String eventObjectId;
-    public static ArrayList<String> photoString = new ArrayList<String>();
+    public static ArrayList<Photo> myPhotos = new ArrayList<Photo>();
 
-    public static ArrayList<String> getPhotoString() {
-        return photoString;
+    public static ArrayList<Photo> getMyPhotos() {
+        return myPhotos;
     }
 
-    public void setPhotoString(ArrayList<String> photoString) {
-        this.photoString = photoString;
+    public void setMyPhotos(ArrayList<Photo> myPhotos) {
+        this.myPhotos = myPhotos;
     }
 
 

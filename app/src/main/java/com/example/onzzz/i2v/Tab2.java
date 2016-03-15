@@ -54,6 +54,7 @@ public class Tab2 extends Fragment {
     private int completed=0;
     private Handler handler;
     VideoView videoview;
+    ArrayList<Photo> myPhotos = new ArrayList<Photo>();
     ArrayList<String> photoString = new ArrayList<String>();
     ArrayList<String> photoPaths = new ArrayList<String>();
     ArrayList<opencv_core.Mat> images = new ArrayList<opencv_core.Mat>();
@@ -130,7 +131,10 @@ public class Tab2 extends Fragment {
                     statusText.setText(String.format("Completed %d", completed));
                 }
             });
-            photoString =  EventContentActivity.getPhotoString();
+            myPhotos = EventContentActivity.getMyPhotos();
+            for (int i=0; i<myPhotos.size(); i++){
+                photoString.add(myPhotos.get(i).getPhotoString());
+            }
             handler.post(new Runnable() {
                 public void run() {
                     Toast.makeText(getActivity(), "Start Downloading photos", Toast.LENGTH_LONG).show();

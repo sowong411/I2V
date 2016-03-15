@@ -62,14 +62,14 @@ public class PhotoUploadActivity extends AppCompatActivity {
 
     String userObjectId;
     String eventObjectId;
-    String photoObjectId;
-    int newPhotoIndex;
 
     private int numOfFace;
     private int totalSmile;
-    private int averageSmile;
+    private double averageSmile;
     private int totalAge;
-    private int averageAge;
+    private int totalSquareAge;
+    private double averageAge;
+    private double varianceAge;
     private int numOfMale;
     private int numOfFemale;
 
@@ -156,6 +156,10 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                     //Way to detect age
                                     totalAge += rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("age").getInt("value");
+                                    totalSquareAge += rst.getJSONArray("face").getJSONObject(i)
+                                            .getJSONObject("attribute").getJSONObject("age").getInt("value") *
+                                            rst.getJSONArray("face").getJSONObject(i)
+                                                    .getJSONObject("attribute").getJSONObject("age").getInt("value");
                                     //Way to detect gender
                                     String gender = rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("gender").getString("value");
@@ -167,8 +171,9 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 }
 
                                 if (numOfFace != 0) {
-                                    averageAge = totalAge / numOfFace;
-                                    averageSmile = totalSmile / numOfFace;
+                                    averageAge = totalAge / (double) numOfFace;
+                                    varianceAge = totalSquareAge / (double) numOfFace;
+                                    averageSmile = totalSmile / (double) numOfFace;
                                 }
 
                                 photo.put("Image", encodedString);
@@ -181,9 +186,11 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 photo.put("MaleNumber", numOfMale);
                                 photo.put("FemaleNumber", numOfFemale);
                                 photo.put("AverageAge", averageAge);
+                                photo.put("VarianceAge", varianceAge);
                                 photo.saveInBackground();
 
                                 totalSmile = 0;
+                                totalSquareAge = 0;
                                 totalAge = 0;
                                 numOfMale = 0;
                                 numOfFemale = 0;
