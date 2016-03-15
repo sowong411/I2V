@@ -189,6 +189,9 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 photo.put("VarianceAge", varianceAge);
                                 photo.saveInBackground();
 
+                                averageAge = 0;
+                                varianceAge = 0;
+                                averageSmile = 0;
                                 totalSmile = 0;
                                 totalSquareAge = 0;
                                 totalAge = 0;

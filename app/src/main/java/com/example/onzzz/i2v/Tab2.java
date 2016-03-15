@@ -55,6 +55,11 @@ public class Tab2 extends Fragment {
     private Handler handler;
     VideoView videoview;
     ArrayList<Photo> myPhotos = new ArrayList<Photo>();
+    ArrayList<Photo> landscapes = new ArrayList<Photo>(); //風景相
+    ArrayList<Photo> photoWithOneFace = new ArrayList<Photo>(); //獨照
+    ArrayList<Photo> normalPhotos = new ArrayList<Photo>(); //人相
+    ArrayList<Photo> groupPhoto = new ArrayList<Photo>(); //大合照
+    private int maxFaceNum;
     ArrayList<String> photoString = new ArrayList<String>();
     ArrayList<String> photoPaths = new ArrayList<String>();
     ArrayList<opencv_core.Mat> images = new ArrayList<opencv_core.Mat>();
@@ -134,7 +139,24 @@ public class Tab2 extends Fragment {
             myPhotos = EventContentActivity.getMyPhotos();
             for (int i=0; i<myPhotos.size(); i++){
                 photoString.add(myPhotos.get(i).getPhotoString());
+                if (maxFaceNum < myPhotos.get(i).getNumberOfFace()){
+                    maxFaceNum = myPhotos.get(i).getNumberOfFace();
+                }
             }
+            for (int i=0; i<myPhotos.size(); i++){
+                if (myPhotos.get(i).getNumberOfFace() == 0)
+                    landscapes.add(myPhotos.get(i));
+                else if (myPhotos.get(i).getNumberOfFace() == 1)
+                    photoWithOneFace.add(myPhotos.get(i));
+                else if (myPhotos.get(i).getNumberOfFace() == maxFaceNum)
+                    groupPhoto.add(myPhotos.get(i));
+                else
+                    normalPhotos.add(myPhotos.get(i));
+            }
+            System.out.println("風景相:" + landscapes.size());
+            System.out.println("獨照:" + photoWithOneFace.size());
+            System.out.println("人相:" + normalPhotos.size());
+            System.out.println("大合照:" + groupPhoto.size());
             handler.post(new Runnable() {
                 public void run() {
                     Toast.makeText(getActivity(), "Start Downloading photos", Toast.LENGTH_LONG).show();
