@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ViewSwitcher;
 
+import com.facepp.error.FaceppParseException;
+import com.facepp.http.HttpRequests;
+import com.facepp.http.PostParameters;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,6 +29,9 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -57,6 +64,14 @@ public class PhotoUploadActivity extends AppCompatActivity {
     String eventObjectId;
     String photoObjectId;
     int newPhotoIndex;
+
+    private int numOfFace;
+    private int totalSmile;
+    private int averageSmile;
+    private int totalAge;
+    private int averageAge;
+    private int numOfMale;
+    private int numOfFemale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,20 +136,70 @@ public class PhotoUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < numOfPhotoSelected; i++) {
-                    ParseObject photo = new ParseObject("Photo");
-                    Bitmap bmp = BitmapFactory.decodeFile(getFile(i).getAbsolutePath());
-                    String encodedString = encodeTobase64(bmp);
-                    photo.put("Image", encodedString);
-                    photo.put("Location", "");
-                    photo.put("Time", "");
-                    photo.put("Event", eventObjectId);
-                    photo.put("UploadedBy", userObjectId);
-                    photo.put("FaceNumber", 0);
-                    photo.put("AverageSmileLevel", 0);
-                    photo.put("MaleNumber", 0);
-                    photo.put("FemaleNumber", 0);
-                    photo.put("AverageAge", 0);
-                    photo.saveInBackground();
+                    final ParseObject photo = new ParseObject("Photo");
+                    final Bitmap bmp = BitmapFactory.decodeFile(getFile(i).getAbsolutePath());
+                    final String encodedString = encodeTobase64(bmp);
+                    FaceppDetect faceppDetect = new FaceppDetect();
+                    faceppDetect.setDetectCallback(new DetectCallback() {
+
+                        public void detectResult(JSONObject rst) {
+
+                            try {
+                                //find out all faces
+                                numOfFace = rst.getJSONArray("face").length();
+                                for (int i = 0; i < numOfFace; ++i) {
+
+                                    //Way to detect smile
+                                    totalSmile += rst.getJSONArray("face").getJSONObject(i)
+                                            .getJSONObject("attribute").getJSONObject("smiling").getInt("value");
+
+                                    //Way to detect age
+                                    totalAge += rst.getJSONArray("face").getJSONObject(i)
+                                            .getJSONObject("attribute").getJSONObject("age").getInt("value");
+                                    //Way to detect gender
+                                    String gender = rst.getJSONArray("face").getJSONObject(i)
+                                            .getJSONObject("attribute").getJSONObject("gender").getString("value");
+                                    if (gender.equals("Male")) {
+                                        numOfMale++;
+                                    } else if (gender.equals("Female")) {
+                                        numOfFemale++;
+                                    }
+                                }
+
+                                if (numOfFace != 0) {
+                                    averageAge = totalAge / numOfFace;
+                                    averageSmile = totalSmile / numOfFace;
+                                }
+
+                                photo.put("Image", encodedString);
+                                photo.put("Location", "");
+                                photo.put("Time", "");
+                                photo.put("Event", eventObjectId);
+                                photo.put("UploadedBy", userObjectId);
+                                photo.put("FaceNumber", numOfFace);
+                                photo.put("AverageSmileLevel", averageSmile);
+                                photo.put("MaleNumber", numOfMale);
+                                photo.put("FemaleNumber", numOfFemale);
+                                photo.put("AverageAge", averageAge);
+                                photo.saveInBackground();
+
+                                totalSmile = 0;
+                                totalAge = 0;
+                                numOfMale = 0;
+                                numOfFemale = 0;
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                PhotoUploadActivity.this.runOnUiThread(new Runnable() {
+                                    public void run() {
+
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+                    faceppDetect.detect(bmp);
                 }
             }
         });
@@ -184,6 +249,55 @@ public class PhotoUploadActivity extends AppCompatActivity {
     private File getFile(int i) {
         File image_file = new File(photoUri[i]);
         return image_file;
+    }
+
+    private class FaceppDetect {
+        DetectCallback callback = null;
+
+        public void setDetectCallback(DetectCallback detectCallback) {
+            callback = detectCallback;
+        }
+
+        public void detect(final Bitmap image) {
+
+            new Thread(new Runnable() {
+
+                public void run() {
+                    HttpRequests httpRequests = new HttpRequests("4480afa9b8b364e30ba03819f3e9eff5", "Pz9VFT8AP3g_Pz8_dz84cRY_bz8_Pz8M", true, false);
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    float scale = Math.min(1, Math.min(600f / image.getWidth(), 600f / image.getHeight()));
+                    Matrix matrix = new Matrix();
+                    matrix.postScale(scale, scale);
+
+                    Bitmap imgSmall = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, false);
+
+                    imgSmall.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] array = stream.toByteArray();
+
+                    try {
+                        //detect
+                        JSONObject result = httpRequests.detectionDetect(new PostParameters().setImg(array));
+                        //finished , then call the callback function
+                        if (callback != null) {
+                            callback.detectResult(result);
+                        }
+                    } catch (FaceppParseException e) {
+                        e.printStackTrace();
+                        PhotoUploadActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+
+                            }
+                        });
+                    }
+
+                }
+            }).start();
+        }
+    }
+
+    interface DetectCallback {
+        void detectResult(JSONObject rst);
     }
 
 
