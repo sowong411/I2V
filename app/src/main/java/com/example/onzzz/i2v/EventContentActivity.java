@@ -13,6 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import org.bytedeco.javacpp.opencv_core;
+
+import java.util.ArrayList;
+
 
 /**
  * Created by WAICHONG on 31/12/2015.
@@ -21,12 +25,22 @@ public class EventContentActivity extends ActionBarActivity {
 
     String userObjectId;
     String eventObjectId;
+    public static ArrayList<String> photoString = new ArrayList<String>();
+
+    public static ArrayList<String> getPhotoString() {
+        return photoString;
+    }
+
+    public void setPhotoString(ArrayList<String> photoString) {
+        this.photoString = photoString;
+    }
+
 
     Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Video","Photo","Member","info."};
+    CharSequence Titles[] = {"Photo","Member","Video","Event Info."};
     int Numboftabs = 4;
 
     @Override
@@ -36,7 +50,6 @@ public class EventContentActivity extends ActionBarActivity {
         Intent intent = getIntent();
         userObjectId = intent.getStringExtra("UserObjectId");
         eventObjectId = intent.getStringExtra("EventObjectId");
-
         assert (intent != null);
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,6 +105,8 @@ public class EventContentActivity extends ActionBarActivity {
         });
         */
     }
+
+
 
     public String getUserObjectId(){
         return userObjectId;

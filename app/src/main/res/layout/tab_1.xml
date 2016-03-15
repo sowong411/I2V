@@ -1,105 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/upload"
+        android:orientation="horizontal"
+        android:layout_marginLeft="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="5dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/upload_photo_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center"
+                android:src="@drawable/add_photo" />
+
+            <TextView
+                android:id="@+id/upload_photo"
+                android:text="Upload Photo"
+                android:clickable="true"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/instantcamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/camera"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/take_photo"
+                android:text="Take Photo"
+                android:clickable="true"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/length"
-        android:text="length"
-        android:layout_marginTop="60dp"
+        android:id="@+id/photo"
+        android:text="Photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    <GridView
+        android:id="@+id/gridView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <RadioButton android:id="@+id/choice_long"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="long"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/choice_middle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="middle"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/choice_short"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="short"
-            android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
-
-
-    <Button
-        android:id="@+id/generate"
-        style="?android:textAppearanceSmall"
-        android:textColor="#435190"
-        android:layout_gravity="end"
-        android:gravity="end"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/locationContainer"
-        android:layout_marginTop="8dp"
-        android:text="generate"
-        android:autoLink="web"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:id="@+id/operation_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/style_layout"
-        android:orientation="horizontal">
-
-
-        <Button
-            android:id="@+id/makevideo"
-            style="?android:textAppearanceSmall"
-            android:textColor="#435190"
-            android:textSize="20dp"
-            android:layout_gravity="end"
-            android:gravity="end"
-            android:layout_marginLeft="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/locationContainer"
-            android:layout_marginTop="8dp"
-            android:text="make video"
-            android:autoLink="web"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/combine_with_music"
-            style="?android:textAppearanceSmall"
-            android:textColor="#435190"
-            android:textSize="20dp"
-            android:layout_gravity="end"
-            android:gravity="end"
-            android:layout_marginLeft="40dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="add music"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/playvideo"
-        android:layout_below="@+id/operation_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <VideoView
-            android:id="@+id/video01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </LinearLayout>
+        android:layout_margin="5dp"
+        android:columnWidth="100dp"
+        android:drawSelectorOnTop="true"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp"
+        android:focusable="true"
+        android:clickable="true"/>
 </LinearLayout>
 
+</android.support.design.widget.CoordinatorLayout>
