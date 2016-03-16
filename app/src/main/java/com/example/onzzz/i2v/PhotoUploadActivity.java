@@ -29,6 +29,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +68,9 @@ public class PhotoUploadActivity extends AppCompatActivity {
     private int numOfFace;
     private int totalSmile;
     private double averageSmile;
+    private ArrayList<Integer> age = new ArrayList<Integer>();
     private int totalAge;
-    private int totalSquareAge;
+    private double totalSquareAge;
     private double averageAge;
     private double varianceAge;
     private int numOfMale;
@@ -148,6 +151,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
                             try {
                                 //find out all faces
                                 numOfFace = rst.getJSONArray("face").length();
+                                System.out.println("NumOfFace: " + numOfFace);
                                 for (int i = 0; i < numOfFace; ++i) {
 
                                     //Way to detect smile
@@ -155,12 +159,11 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                             .getJSONObject("attribute").getJSONObject("smiling").getInt("value");
 
                                     //Way to detect age
-                                    totalAge += rst.getJSONArray("face").getJSONObject(i)
-                                            .getJSONObject("attribute").getJSONObject("age").getInt("value");
-                                    totalSquareAge += rst.getJSONArray("face").getJSONObject(i)
-                                            .getJSONObject("attribute").getJSONObject("age").getInt("value") *
-                                            rst.getJSONArray("face").getJSONObject(i)
-                                                    .getJSONObject("attribute").getJSONObject("age").getInt("value");
+                                    System.out.println("Age " + i + ": " + rst.getJSONArray("face").getJSONObject(i)
+                                            .getJSONObject("attribute").getJSONObject("age").getInt("value"));
+                                    age.add(rst.getJSONArray("face").getJSONObject(i)
+                                            .getJSONObject("attribute").getJSONObject("age").getInt("value"));
+
                                     //Way to detect gender
                                     String gender = rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("gender").getString("value");
@@ -183,8 +186,11 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 }
 
                                 if (numOfFace != 0) {
+                                    for (int i = 0; i < age.size(); i++) {
+                                        totalAge += age.get(i);
+                                    }
                                     averageAge = totalAge / (double) numOfFace;
-                                    varianceAge = totalSquareAge / (double) numOfFace;
+                                    varianceAge = varianceCalculation(age, averageAge, numOfFace);
                                     averageSmile = totalSmile / (double) numOfFace;
                                 }
 
@@ -200,7 +206,12 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 photo.put("AverageAge", averageAge);
                                 photo.put("VarianceAge", varianceAge);
                                 photo.put("FacePosition", facePosition);
-                                photo.saveInBackground();
+                                photo.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+
+                                    }
+                                });
 
                                 averageAge = 0;
                                 varianceAge = 0;
@@ -273,6 +284,14 @@ public class PhotoUploadActivity extends AppCompatActivity {
     private File getFile(int i) {
         File image_file = new File(photoUri[i]);
         return image_file;
+    }
+
+    private double varianceCalculation(ArrayList<Integer> age, double averageAge, int numOfFace){
+        double temp = 0;
+        for (int i=0; i<age.size(); i++){
+            temp += (age.get(i)-averageAge)*(age.get(i)-averageAge);
+        }
+        return temp/numOfFace;
     }
 
     private class FaceppDetect {
