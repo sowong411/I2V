@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -53,17 +54,21 @@ public class MainActivity extends ActionBarActivity {
 
     /***************Event List Display Related Function***************/
     private void  populateEventList() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
-        query.whereEqualTo("EventHolder", userObjectId);
-        query.findInBackground(new FindCallback<ParseObject>() {
+        ParseQuery accountQuery = ParseQuery.getQuery("Account");
+        accountQuery.getInBackground(userObjectId, new GetCallback<ParseObject>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+            public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        String eventname = objects.get(i).getString("EventName");
-                        String eventId = objects.get(i).getObjectId();
-                        myEvents.add(new Event(eventname, eventId));
-                        populateListView();
+                    for (int i = 0; i < object.getList("Event").size(); i++) {
+                        final String eventId = object.getList("Event").get(i).toString();
+                        ParseQuery eventQuery = ParseQuery.getQuery("Event");
+                        eventQuery.getInBackground(eventId, new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                myEvents.add(new Event(object.getString("EventName"), eventId));
+                                populateListView();
+                            }
+                        });
                     }
                 }
             }
