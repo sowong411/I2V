@@ -22,6 +22,7 @@ public class Photo {
     private double genderRatio;
     private double meanOfAge;
     private double varianceOfAge;
+    private int facePosition;
 
     // For choosing template
 
@@ -31,6 +32,7 @@ public class Photo {
         //size= 0;
         //resolution= 0;
         //private String time;   (refer to creation or upload )
+        photoPath = null;
         levelOfSmile = 0;
         numberOfFace = 0;
         averageAge = 0;
@@ -38,13 +40,14 @@ public class Photo {
         genderRatio = 0;
         meanOfAge = 0;
         varianceOfAge = 0;
+        facePosition = 0;
     }
 
     public Photo(String photoString) {
         this.photoString = photoString;
     }
 
-    public Photo(String photoString, int numOfFace, double averageSmile, double averageAge, double varianceAge, double genderRatio) {
+    public Photo(String photoString, int numOfFace, double averageSmile, double averageAge, double varianceAge, double genderRatio, int facePosition) {
         this.photoPath = null;
         this.photoString = photoString;
         this.numberOfFace = numOfFace;
@@ -52,6 +55,7 @@ public class Photo {
         this.averageAge = averageAge;
         this.varianceAge = varianceAge;
         this.genderRatio = genderRatio;
+        this.facePosition = facePosition;
     }
 
 
@@ -65,6 +69,9 @@ public class Photo {
     public void setMeanOfAge (double d){ this.meanOfAge = d;}
     public void setVarianceOfAge (double d){ this.varianceOfAge = d;}
     public void setPhotoPath(String photoPath) {this.photoPath = photoPath;}
+    public void setFacePosition(int facePosition) {
+        this.facePosition = facePosition;
+    }
 
     //Get Functions
     public String getPhotoString(){return photoString;}
@@ -76,5 +83,9 @@ public class Photo {
     public double getMeanOfAge ( ){ return meanOfAge ;}
     public double getVarianceOfAge (){ return varianceOfAge;}
     public String getPhotoPath() {return photoPath;}
+    public int getFacePosition() {
+        return facePosition;
+    }
+
 
 }

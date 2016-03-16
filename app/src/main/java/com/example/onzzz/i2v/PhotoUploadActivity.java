@@ -72,6 +72,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
     private double varianceAge;
     private int numOfMale;
     private int numOfFemale;
+    private int facePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +169,17 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                     } else if (gender.equals("Female")) {
                                         numOfFemale++;
                                     }
+
+                                    //Way to detect face position
+                                    if (numOfFace == 1) {
+                                        if (rst.getJSONArray("face").getJSONObject(i)
+                                                .getJSONObject("position").getJSONObject("center").getInt("x") < 50) {
+                                            facePosition = -1;
+                                        } else if (rst.getJSONArray("face").getJSONObject(i)
+                                                .getJSONObject("position").getJSONObject("center").getInt("x") > 50) {
+                                            facePosition = 1;
+                                        }
+                                    }
                                 }
 
                                 if (numOfFace != 0) {
@@ -187,6 +199,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 photo.put("FemaleNumber", numOfFemale);
                                 photo.put("AverageAge", averageAge);
                                 photo.put("VarianceAge", varianceAge);
+                                photo.put("FacePosition", facePosition);
                                 photo.saveInBackground();
 
                                 averageAge = 0;
@@ -197,6 +210,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 totalAge = 0;
                                 numOfMale = 0;
                                 numOfFemale = 0;
+                                facePosition = 0;
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

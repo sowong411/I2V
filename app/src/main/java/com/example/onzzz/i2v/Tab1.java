@@ -44,6 +44,7 @@ public class Tab1 extends Fragment {
     private int numOfFemale;
     private double genderRatio;
     private String photoString;
+    private int facePosition;
 
     private ArrayList<Photo> myPhotos = new ArrayList<Photo>();
 
@@ -75,6 +76,7 @@ public class Tab1 extends Fragment {
                         varianceAge = objects.get(i).getDouble("VarianceAge");
                         numOfMale = objects.get(i).getInt("MaleNumber");
                         numOfFemale = objects.get(i).getInt("FemaleNumber");
+                        facePosition = objects.get(i).getInt("FacePosition");
 
                         if (numOfMale!=0 && numOfFemale!=0){
                             genderRatio = numOfMale/(double)numOfFemale; //Ratio大，陽盛陰衰；Ratio細，陰盛陽衰。
@@ -86,7 +88,7 @@ public class Tab1 extends Fragment {
                             genderRatio = -1000; //全女班，陰氣，負數
                         }
 
-                        myPhotos.add(new Photo(photoString, numOfFace, averageSmile, averageAge, varianceAge, genderRatio));
+                        myPhotos.add(new Photo(photoString, numOfFace, averageSmile, averageAge, varianceAge, genderRatio, facePosition));
                     }
                     gridView = (GridView) v.findViewById(R.id.gridView);
                     gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, getData());
