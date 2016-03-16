@@ -3,7 +3,7 @@ package com.example.onzzz.i2v;
 /**
  * Created by hoyuichan on 1/21/2016.
  */
-public class Photo {
+public class Photo implements Comparable<Photo> {
 
     private String photoString;
     private String photoPath;
@@ -87,5 +87,12 @@ public class Photo {
         return facePosition;
     }
 
-
+    @Override
+    public int compareTo(Photo another) {
+        double a = this.getLevelOfSmile();
+        double b = another.getLevelOfSmile();
+        if (a < b) {return 1;}
+        if (a > b) {return -1;}
+        return 0;
+    }
 }

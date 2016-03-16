@@ -1,10 +1,7 @@
 package com.example.onzzz.i2v;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,27 +18,22 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.bytedeco.javacpp.opencv_core;
-import org.bytedeco.javacv.AndroidFrameConverter;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Random;
 
-import static org.bytedeco.javacpp.opencv_core.flip;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
+import static org.bytedeco.javacpp.opencv_imgproc.GaussianBlur;
+import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 import static org.bytedeco.javacpp.opencv_imgproc.putText;
 import static org.bytedeco.javacpp.opencv_imgproc.resize;
 
@@ -54,16 +45,18 @@ public class Tab2 extends Fragment {
     private int completed=0;
     private Handler handler;
     VideoView videoview;
-    ArrayList<Photo> myPhotos = new ArrayList<Photo>();
+    private int maxFaceNum;
+
     ArrayList<Photo> landscapes = new ArrayList<Photo>(); //風景相
     ArrayList<Photo> photoWithOneFace = new ArrayList<Photo>(); //獨照
     ArrayList<Photo> normalPhotos = new ArrayList<Photo>(); //人相
     ArrayList<Photo> groupPhoto = new ArrayList<Photo>(); //大合照
-    private int maxFaceNum;
-    //ArrayList<String> photoString = new ArrayList<String>();
-    //ArrayList<String> photoPaths = new ArrayList<String>();
-    ArrayList<opencv_core.Mat> images = new ArrayList<opencv_core.Mat>();
 
+    ArrayList<Photo> myPhotos = new ArrayList<Photo>();
+    ArrayList<Photo> myPhotosWithOrder = new ArrayList<Photo>();
+
+    ArrayList<opencv_core.Mat> images = new ArrayList<opencv_core.Mat>();
+    ArrayList<opencv_core.Mat> imagesWithBackground = new ArrayList<opencv_core.Mat>();
     String userObjectId;
     String eventObjectId;
 
@@ -81,26 +74,6 @@ public class Tab2 extends Fragment {
         statusText = (TextView) v.findViewById(R.id.status_text);
         progressBar.setMax(100);
 
-
-        /*long startTime = System.currentTimeMillis();
-        opencv_core.Mat temp = new opencv_core.Mat();
-        opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
-        resize(black,black,  new opencv_core.Size(800, 480));
-        for (int i=1 ; i<31 ; i++){
-            opencv_core.Mat m = imread ("/sdcard/Download/" +i+".jpg");
-            opencv_core.Mat tempBlackGround = black.clone();
-            resize(m, m, new opencv_core.Size(640, 480));
-            m.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
-            images.add(tempBlackGround);
-        }
-        opencv_core.Scalar sca = new opencv_core.Scalar(255, 255, 255,1);
-        opencv_core.Mat lastFrame = new opencv_core.Mat(640, 480, 1, sca);
-        images.add(lastFrame);
-
-        //makevideo(images);
-        long endTime   = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        System.out.println("Time  to make an video:  " + totalTime);*/
         v.findViewById(R.id.get_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +105,7 @@ public class Tab2 extends Fragment {
             completed = 0;
             handler.post(new Runnable() {
                 public void run() {
-                    Toast.makeText(getActivity(), "Start Downloading photos", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Downloading photos", Toast.LENGTH_SHORT).show();
                     progressBar.setProgress(completed);
                     statusText.setText(String.format("Completed %d", completed));
                 }
@@ -171,12 +144,16 @@ public class Tab2 extends Fragment {
                     normalPhotos.add(myPhotos.get(i));
             }
 
+            myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
+            myPhotosWithOrder.addAll(sortByLevelOfSmile(photoWithOneFace));
+            myPhotosWithOrder.addAll(sortByLevelOfSmile(normalPhotos));
+            myPhotosWithOrder.addAll(sortByLevelOfSmile(landscapes));
 
             handler.post(new Runnable() {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    Toast.makeText(getActivity(), "Photos are Downloaded ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Photos are Downloaded ", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -186,18 +163,20 @@ public class Tab2 extends Fragment {
         File makevideo = new File("/sdcard/DCIM/Camera/", "makevideo.mp4");
         public  void run() {
             completed = 0;
-                opencv_core.Mat temp = new opencv_core.Mat();
-                opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
-                resize(black,black,  new opencv_core.Size(800, 480));
-            for (int k = 0 ; k<myPhotos.size(); k++){
-                    opencv_core.Mat m = imread (myPhotos.get(k).getPhotoPath());
-                    opencv_core.Mat tempBlackGround = black.clone();
-                    resize(m, m, new opencv_core.Size(640, 480));
-                    m.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
-                    images.add(tempBlackGround);
-                }
+
+            for (int k = 0 ; k< myPhotosWithOrder.size(); k++){
+                opencv_core.Mat m = imread ( myPhotosWithOrder.get(k).getPhotoPath());
+                images.add(m);
+            }
+
+            opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
+            for (int k = 0 ; k<images.size(); k++){
+                imagesWithBackground.add(addBackground(images.get(k), black));
+            }
+
+
             handler.post(new Runnable() {
-                public  void run() {
+                public void run() {
                     progressBar.setProgress(completed);
                     statusText.setText(String.format("Completed %d", completed));
                 }
@@ -208,12 +187,12 @@ public class Tab2 extends Fragment {
             try {
                 recorder.setFrameRate(20);
                 recorder.start();
-                for (int i = 0; i < images.size(); i++) {
-                    captured_frame = converter.convert(images.get(i));
+                for (int i = 0; i < imagesWithBackground.size(); i++) {
+                    captured_frame = converter.convert(imagesWithBackground.get(i));
                     for(int j =0 ; j<40 ; j++) {
                         recorder.record(captured_frame);
                     }
-                    completed = (int)(( (float)i/(float)images.size())*100);
+                    completed = (int)(( (float)i/(float) imagesWithBackground.size())*100);
                     handler.post(new Runnable() {
                         public void run() {
                             progressBar.setProgress(completed);
@@ -297,6 +276,19 @@ public class Tab2 extends Fragment {
         }
     };
 
+    private ArrayList<Photo> sortByLevelOfSmile (ArrayList<Photo> photos){
+        Collections.sort(photos);
+        return photos;
+    }
+
+    private opencv_core.Mat addBackground ( opencv_core.Mat image , opencv_core.Mat background) {
+        resize(background, background, new opencv_core.Size(800, 480));
+        opencv_core.Mat tempBlackGround = background.clone();
+        resize(image, image, new opencv_core.Size(640, 480));
+        image.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
+        return tempBlackGround;
+    }
+
     private void playVideoOnView(File video) {
         videoview.setVideoPath(video.getAbsolutePath());
         videoview.setMediaController(new MediaController(Tab2.this.getContext()));
@@ -308,8 +300,6 @@ public class Tab2 extends Fragment {
         videoview.setMinimumWidth(w*4);
         videoview.start();
     }
-
-
 
     private String getBitmapPath(byte[] bitmapArray , String filename){
         File f = new File("/sdcard/DCIM/Camera/", filename+".jpg");
@@ -328,8 +318,41 @@ public class Tab2 extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Path is here :  "   + f.getAbsolutePath() );
+        System.out.println("Path is here :  " + f.getAbsolutePath());
         return  f.getAbsolutePath();
     }
 
+
+    //  The functions  below have not been tested  **********
+    private void insertInbetween( ArrayList<Photo> first, ArrayList<Photo> second  ){
+        Random rand = new Random();
+        final int startAt = 5;
+        final int range = first.size()-startAt*2;
+        for (int i =0 ; i< second.size() ; i++ ) {
+            int rnd = rand.nextInt(range) + startAt;
+            first.add(rnd, second.get(i));
+        }
+    }
+
+
+
+    private ArrayList<opencv_core.Mat> blurring (opencv_core.Mat toBlur){
+        ArrayList<opencv_core.Mat> temp = new ArrayList<opencv_core.Mat>();
+        int v = 99;
+        for (int j = 0; j<5 ; j++) {
+            opencv_core.Mat t = new opencv_core.Mat(toBlur.rows(), toBlur.cols());
+            GaussianBlur(toBlur, t, new opencv_core.Size(v, v), 50);
+            images.add(t);
+            v = v-22;
+        }
+        return temp;
+    }
+
+
+
+    private ArrayList<opencv_core.Mat> combineIntoOne( ArrayList<opencv_core.Mat> inputArray , int rows, int cols){
+        ArrayList<opencv_core.Mat> temp = new ArrayList<opencv_core.Mat>();
+
+        return temp;
+    }
 }
