@@ -94,7 +94,9 @@ public class Tab1 extends Fragment {
                     gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, getData());
                     gridView.setAdapter(gridAdapter);
                 }
-                ((EventContentActivity)getActivity()).setMyPhotos(myPhotos);
+                if (myPhotos != null){
+                    ((EventContentActivity)getActivity()).setMyPhotos(myPhotos);
+                }
             }
         });
 
