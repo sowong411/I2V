@@ -6,7 +6,7 @@ package com.example.onzzz.i2v;
 public class Photo {
 
     private String photoString;
-
+    private String photoPath;
     //  For selection
     private boolean isBlur;
     private double size;
@@ -45,6 +45,7 @@ public class Photo {
     }
 
     public Photo(String photoString, int numOfFace, double averageSmile, double averageAge, double varianceAge, double genderRatio) {
+        this.photoPath = null;
         this.photoString = photoString;
         this.numberOfFace = numOfFace;
         this.levelOfSmile = averageSmile;
@@ -63,6 +64,7 @@ public class Photo {
     public void setGenderRatio(double d){this.genderRatio = d;}
     public void setMeanOfAge (double d){ this.meanOfAge = d;}
     public void setVarianceOfAge (double d){ this.varianceOfAge = d;}
+    public void setPhotoPath(String photoPath) {this.photoPath = photoPath;}
 
     //Get Functions
     public String getPhotoString(){return photoString;}
@@ -73,5 +75,6 @@ public class Photo {
     public double getGenderRatio(){return genderRatio;}
     public double getMeanOfAge ( ){ return meanOfAge ;}
     public double getVarianceOfAge (){ return varianceOfAge;}
+    public String getPhotoPath() {return photoPath;}
 
 }

@@ -60,8 +60,8 @@ public class Tab2 extends Fragment {
     ArrayList<Photo> normalPhotos = new ArrayList<Photo>(); //人相
     ArrayList<Photo> groupPhoto = new ArrayList<Photo>(); //大合照
     private int maxFaceNum;
-    ArrayList<String> photoString = new ArrayList<String>();
-    ArrayList<String> photoPaths = new ArrayList<String>();
+    //ArrayList<String> photoString = new ArrayList<String>();
+    //ArrayList<String> photoPaths = new ArrayList<String>();
     ArrayList<opencv_core.Mat> images = new ArrayList<opencv_core.Mat>();
 
     String userObjectId;
@@ -132,17 +132,34 @@ public class Tab2 extends Fragment {
             completed = 0;
             handler.post(new Runnable() {
                 public void run() {
+                    Toast.makeText(getActivity(), "Start Downloading photos", Toast.LENGTH_LONG).show();
                     progressBar.setProgress(completed);
                     statusText.setText(String.format("Completed %d", completed));
                 }
             });
             myPhotos = EventContentActivity.getMyPhotos();
+
+            //   write photos in device storage and set path for each photo
+            for (int i =0 ; i< myPhotos.size() ; i++){
+                byte[] decodedByte = Base64.decode(myPhotos.get(i).getPhotoString(), 0);
+                myPhotos.get(i).setPhotoPath(getBitmapPath(decodedByte, "iv_" + i));
+                completed = (int)(( (float)i/(float)myPhotos.size())*100);
+                handler.post(new Runnable() {
+                    public void run() {
+                        progressBar.setProgress(completed);
+                        statusText.setText(String.format("Completed %d", completed));
+                    }
+                });
+            }
+
+            // get max number of face
             for (int i=0; i<myPhotos.size(); i++){
-                photoString.add(myPhotos.get(i).getPhotoString());
                 if (maxFaceNum < myPhotos.get(i).getNumberOfFace()){
                     maxFaceNum = myPhotos.get(i).getNumberOfFace();
                 }
             }
+
+            //  divide photo into  four arrays
             for (int i=0; i<myPhotos.size(); i++){
                 if (myPhotos.get(i).getNumberOfFace() == 0)
                     landscapes.add(myPhotos.get(i));
@@ -153,26 +170,8 @@ public class Tab2 extends Fragment {
                 else
                     normalPhotos.add(myPhotos.get(i));
             }
-            System.out.println("風景相:" + landscapes.size());
-            System.out.println("獨照:" + photoWithOneFace.size());
-            System.out.println("人相:" + normalPhotos.size());
-            System.out.println("大合照:" + groupPhoto.size());
-            handler.post(new Runnable() {
-                public void run() {
-                    Toast.makeText(getActivity(), "Start Downloading photos", Toast.LENGTH_LONG).show();
-                }
-            });
-            for (int i =0 ; i< photoString.size() ; i++){
-                byte[] decodedByte = Base64.decode(photoString.get(i), 0);
-                photoPaths.add(getBitmapPath(decodedByte, "iv_" + i));
-                completed = (int)(( (float)i/(float)photoString.size())*100);
-                handler.post(new Runnable() {
-                    public void run() {
-                        progressBar.setProgress(completed);
-                        statusText.setText(String.format("Completed %d", completed));
-                    }
-                });
-            }
+
+
             handler.post(new Runnable() {
                 public void run() {
                     progressBar.setProgress(100);
@@ -190,8 +189,8 @@ public class Tab2 extends Fragment {
                 opencv_core.Mat temp = new opencv_core.Mat();
                 opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
                 resize(black,black,  new opencv_core.Size(800, 480));
-            for (int k = 0 ; k<photoPaths.size(); k++){
-                    opencv_core.Mat m = imread (photoPaths.get(k));
+            for (int k = 0 ; k<myPhotos.size(); k++){
+                    opencv_core.Mat m = imread (myPhotos.get(k).getPhotoPath());
                     opencv_core.Mat tempBlackGround = black.clone();
                     resize(m, m, new opencv_core.Size(640, 480));
                     m.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
