@@ -112,18 +112,6 @@ public class Tab2 extends Fragment {
             });
             myPhotos = EventContentActivity.getMyPhotos();
 
-            //   write photos in device storage and set path for each photo
-            for (int i =0 ; i< myPhotos.size() ; i++){
-                byte[] decodedByte = Base64.decode(myPhotos.get(i).getPhotoString(), 0);
-                myPhotos.get(i).setPhotoPath(getBitmapPath(decodedByte, "iv_" + i));
-                completed = (int)(( (float)i/(float)myPhotos.size())*100);
-                handler.post(new Runnable() {
-                    public void run() {
-                        progressBar.setProgress(completed);
-                        statusText.setText(String.format("Completed %d", completed));
-                    }
-                });
-            }
 
             // get max number of face
             for (int i=0; i<myPhotos.size(); i++){
@@ -143,6 +131,27 @@ public class Tab2 extends Fragment {
                 else
                     normalPhotos.add(myPhotos.get(i));
             }
+
+            //   write photos in device storage and set path , mat for each photo
+            for (int i =0 ; i< myPhotos.size() ; i++){
+                byte[] decodedByte = Base64.decode(myPhotos.get(i).getPhotoString(), 0);
+
+                //set path in photo
+                String newPath = getBitmapPath(decodedByte, "iv_" + i);
+                myPhotos.get(i).setPhotoPath(newPath);
+
+                //set mat in photo
+                opencv_core.Mat mat = imread(newPath);
+                myPhotos.get(i).setMat(mat);
+                completed = (int)(( (float)i/(float)myPhotos.size())*100);
+                handler.post(new Runnable() {
+                    public void run() {
+                        progressBar.setProgress(completed);
+                        statusText.setText(String.format("Completed %d", completed));
+                    }
+                });
+            }
+
 
             myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
             myPhotosWithOrder.addAll(sortByLevelOfSmile(photoWithOneFace));
@@ -165,7 +174,7 @@ public class Tab2 extends Fragment {
             completed = 0;
 
             for (int k = 0 ; k< myPhotosWithOrder.size(); k++){
-                opencv_core.Mat m = imread ( myPhotosWithOrder.get(k).getPhotoPath());
+                opencv_core.Mat m = myPhotosWithOrder.get(k).getMat();
                 images.add(m);
             }
 
@@ -324,6 +333,7 @@ public class Tab2 extends Fragment {
 
 
     //  The functions  below have not been tested  **********
+
     private void insertInbetween( ArrayList<Photo> first, ArrayList<Photo> second  ){
         Random rand = new Random();
         final int startAt = 5;
@@ -350,7 +360,7 @@ public class Tab2 extends Fragment {
 
 
 
-    private ArrayList<opencv_core.Mat> combineIntoOne( ArrayList<opencv_core.Mat> inputArray , int rows, int cols){
+    private ArrayList<opencv_core.Mat> combineIntoOne( ArrayList<opencv_core.Mat> inputArray){
         ArrayList<opencv_core.Mat> temp = new ArrayList<opencv_core.Mat>();
 
         return temp;

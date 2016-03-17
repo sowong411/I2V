@@ -69,7 +69,6 @@ public class Tab1 extends Fragment {
                 if (e == null){
                     for (int i=0; i<objects.size(); i++){
                         photoString = objects.get(i).getString("Image");
-
                         numOfFace = objects.get(i).getInt("FaceNumber");
                         averageSmile = objects.get(i).getDouble("AverageSmileLevel");
                         averageAge = objects.get(i).getDouble("AverageAge");
