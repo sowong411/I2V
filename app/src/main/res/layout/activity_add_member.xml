@@ -13,7 +13,7 @@
         android:layout_marginRight="5dp">
 
         <ImageButton
-            android:id="@+id/addmem_button"
+            android:id="@+id/search_for_member_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -28,17 +28,17 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <Button
-        android:id="@+id/finished"
+        android:id="@+id/Done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Finished"/>
+        android:text="Done"/>
     <TextView
         android:id="@+id/member_list"
         android:text="Member List"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/user_list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:transcriptMode="alwaysScroll"

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content" />
 
     <ListView
-        android:id="@+id/event_list"
+        android:id="@+id/user_list"
         android:layout_below="@+id/existing"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -23,17 +23,26 @@
         android:divider="#ffffff"/>
 
 
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignRight="@+id/user_list">
 
-    <ImageButton
-        android:id="@+id/create_button"
+
+    <Button
+        android:id="@+id/create_event_button"
         android:layout_width="80sp"
         android:layout_height="80sp"
         android:gravity="center"
-        android:src="@drawable/add"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/event_list"
-        android:layout_alignEnd="@+id/event_list" />
+       android:text="create event" />
 
+    <Button
+        android:id="@+id/add_friend_button"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:gravity="center"
+        android:text="add friend"/>
 
-
+</LinearLayout>
 </RelativeLayout>

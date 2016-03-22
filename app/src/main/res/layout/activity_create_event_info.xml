@@ -148,7 +148,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/create_button"
+        android:id="@+id/create_event_button"
         style="?android:textAppearanceSmall"
         android:textColor="#435190"
         android:layout_gravity="end"

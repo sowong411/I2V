@@ -8,4 +8,5 @@
     <string name="server_client_id">947588443423-atlvvodk9ilbj0ggf2d84d1rcmnikjcv.apps.googleusercontent.com</string>
     <string name="parse_application_id">B2CKe2UZE0bkBAWZKd6dtg0XZ9hLB3sWs2xvOHq7</string>
     <string name="parse_client_key">cMqWFwddGkSalo0JAKefTDqcgo0YSDb8FQPWylui</string>
+    <string name="title_activity_add_friend">AddFriendActivity</string>
 </resources>

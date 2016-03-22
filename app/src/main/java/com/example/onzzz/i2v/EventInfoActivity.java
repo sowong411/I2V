@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -63,7 +62,6 @@ public class EventInfoActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         userObjectId = intent.getStringExtra("UserObjectId");
-
         memberId[0] = userObjectId;
 
         assert (intent != null);
@@ -79,7 +77,7 @@ public class EventInfoActivity extends ActionBarActivity {
         final int mMinute = eventMinute = c.get(Calendar.MINUTE);
 
         // after typing all info (date time place , app will create event)
-        findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.create_event_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText eventNameText = (EditText) findViewById(R.id.name);
@@ -211,10 +209,7 @@ public class EventInfoActivity extends ActionBarActivity {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.input_location, null);
-        //   TextView text = (TextView) layout.findViewById(R.id.location);
-        //  text.setText("Hello, Welcome to Mr Wei's blog!");
-        //   ImageView image = (ImageView) layout.findViewById(R.id.image);
-        //  image.setImageResource(R.drawable.icon);
+
         builder = new AlertDialog.Builder(mContext);
         builder.setView(layout);
         alertDialog = builder.create();

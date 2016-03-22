@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -41,11 +40,21 @@ public class MainActivity extends ActionBarActivity {
         populateEventList();
         registerClickCallback();
 
-        findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.create_event_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, EventInfoActivity.class);
+                intent.putExtra("UserObjectId", userObjectId);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.add_friend_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, AddFriendActivity.class);
                 intent.putExtra("UserObjectId", userObjectId);
                 startActivity(intent);
             }
@@ -78,13 +87,13 @@ public class MainActivity extends ActionBarActivity {
     /***************Event List Display Related Function***************/
     private void populateListView() {
         ArrayAdapter<Event> adapter = new MyListAdapter();
-        ListView list = (ListView) findViewById(R.id.event_list);
+        ListView list = (ListView) findViewById(R.id.user_list);
         list.setAdapter(adapter);
     }
 
     /***************Event List Display Related Function***************/
     private void registerClickCallback() {
-        ListView list = (ListView) findViewById(R.id.event_list);
+        ListView list = (ListView) findViewById(R.id.user_list);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,
@@ -122,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
             Event currentEvent = myEvents.get(position);
 
             // Fill the view
-            ImageView imageView = (ImageView)itemView.findViewById(R.id.item_icon);
+            ImageView imageView = (ImageView)itemView.findViewById(R.id.event_item_icon);
             imageView.setImageResource(R.drawable.no_media);
             // Make:
             TextView event_name = (TextView) itemView.findViewById(R.id.event_name);

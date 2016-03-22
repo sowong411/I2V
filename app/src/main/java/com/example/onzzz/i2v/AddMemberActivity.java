@@ -1,24 +1,14 @@
 package com.example.onzzz.i2v;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -46,24 +36,9 @@ public class AddMemberActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        findViewById(R.id.addmem_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.search_for_member_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder;
-                AlertDialog alertDialog;
-                Context mContext = AddMemberActivity.this;
-
-                LayoutInflater inflater = (LayoutInflater) mContext
-                        .getSystemService(LAYOUT_INFLATER_SERVICE);
-                View layout = inflater.inflate(R.layout.add_member, null);
-                //   TextView text = (TextView) layout.findViewById(R.id.location);
-                //  text.setText("Hello, Welcome to Mr Wei's blog!");
-                //   ImageView image = (ImageView) layout.findViewById(R.id.image);
-                //  image.setImageResource(R.drawable.icon);
-                builder = new AlertDialog.Builder(mContext);
-                builder.setView(layout);
-                alertDialog = builder.create();
-                alertDialog.show();
 
                 EditText memberName = (EditText) findViewById(R.id.memlist);
 
@@ -90,7 +65,7 @@ public class AddMemberActivity extends ActionBarActivity {
             }
         });
 
-        findViewById(R.id.finished).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.Done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent resultIntent = new Intent();

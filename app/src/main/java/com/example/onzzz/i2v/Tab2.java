@@ -131,6 +131,11 @@ public class Tab2 extends Fragment {
                 else
                     normalPhotos.add(myPhotos.get(i));
             }
+            System.out.println("全部:" + myPhotos.size());
+            System.out.println("風景相:" + landscapes.size());
+            System.out.println("獨照:" + photoWithOneFace.size());
+            System.out.println("人相:" + normalPhotos.size());
+            System.out.println("大合照:" + groupPhoto.size());
 
             //   write photos in device storage and set path , mat for each photo
             for (int i =0 ; i< myPhotos.size() ; i++){
@@ -139,10 +144,13 @@ public class Tab2 extends Fragment {
                 //set path in photo
                 String newPath = getBitmapPath(decodedByte, "iv_" + i);
                 myPhotos.get(i).setPhotoPath(newPath);
+                System.out.println("set path in photo is done" );
 
                 //set mat in photo
                 opencv_core.Mat mat = imread(newPath);
                 myPhotos.get(i).setMat(mat);
+                System.out.println("set Mat in photo is done");
+
                 completed = (int)(( (float)i/(float)myPhotos.size())*100);
                 handler.post(new Runnable() {
                     public void run() {
@@ -152,11 +160,11 @@ public class Tab2 extends Fragment {
                 });
             }
 
-
             myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
             myPhotosWithOrder.addAll(sortByLevelOfSmile(photoWithOneFace));
             myPhotosWithOrder.addAll(sortByLevelOfSmile(normalPhotos));
             myPhotosWithOrder.addAll(sortByLevelOfSmile(landscapes));
+
 
             handler.post(new Runnable() {
                 public void run() {
@@ -178,6 +186,7 @@ public class Tab2 extends Fragment {
                 images.add(m);
             }
 
+            // add background
             opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
             for (int k = 0 ; k<images.size(); k++){
                 imagesWithBackground.add(addBackground(images.get(k), black));
@@ -345,17 +354,21 @@ public class Tab2 extends Fragment {
     }
 
 
-
-    private ArrayList<opencv_core.Mat> blurring (opencv_core.Mat toBlur){
-        ArrayList<opencv_core.Mat> temp = new ArrayList<opencv_core.Mat>();
+        // can not use so Far
+    private ArrayList<Photo> blurring (Photo toBlur){
+        ArrayList<Photo> blurPhotos = new ArrayList<Photo>();
+        opencv_core.Mat toBlurMat = new opencv_core.Mat(toBlur.getMat().rows(), toBlur.getMat().cols());
         int v = 99;
         for (int j = 0; j<5 ; j++) {
-            opencv_core.Mat t = new opencv_core.Mat(toBlur.rows(), toBlur.cols());
-            GaussianBlur(toBlur, t, new opencv_core.Size(v, v), 50);
-            images.add(t);
+            opencv_core.Mat temp = new opencv_core.Mat();
+            GaussianBlur(toBlurMat, temp, new opencv_core.Size(v, v), 50);
+
+            Photo p = new Photo ();
+            p.setMat(temp);
+            blurPhotos.add(p);
             v = v-22;
         }
-        return temp;
+        return blurPhotos;
     }
 
 
