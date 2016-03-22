@@ -1,6 +1,8 @@
 package com.example.onzzz.i2v;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -21,6 +27,7 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -28,9 +35,19 @@ import java.util.List;
  */
 public class EventInfoActivity extends ActionBarActivity {
 
-    private Button dateButton;
-    private Button timeButton;
-    private Button locationButton;
+    private ImageButton dateButton;
+    private ImageButton timeButton;
+    private ImageButton locationButton;
+
+    private TextView date;
+    private TextView time;
+    private TextView location;
+
+    private int eventDay;
+    private int eventMonth;
+    private int eventYear;
+    private int eventHour;
+    private int eventMinute;
 
     String userObjectId;
     String eventObjectId;
@@ -53,6 +70,14 @@ public class EventInfoActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final Calendar c = Calendar.getInstance();
+        final int mYear = eventYear = c.get(Calendar.YEAR);
+        final int mMonth = eventMonth = c.get(Calendar.MONTH);
+        eventMonth++;
+        final int mDay = eventDay = c.get(Calendar.DAY_OF_MONTH);
+        final int mHour = eventHour = c.get(Calendar.HOUR_OF_DAY);
+        final int mMinute = eventMinute = c.get(Calendar.MINUTE);
+
         // after typing all info (date time place , app will create event)
         findViewById(R.id.create_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +88,13 @@ public class EventInfoActivity extends ActionBarActivity {
                 /***************Upload Current Event Information***************/
                 final ParseObject event = new ParseObject("Event");
                 event.put("EventName", eventName);
-                event.put("Date", "");
-                event.put("Time", "");
+                event.put("Date", eventYear+"-"+eventMonth+"-"+eventDay);
+                if (eventMinute < 10){
+                    event.put("Time", eventHour+":0"+eventMinute);
+                }
+                else {
+                    event.put("Time", eventHour+":"+eventMinute);
+                }
                 event.put("PhotoNumber", 0);
                 event.put("MemberNumber", numOfMember);
                 event.addAllUnique("Member", Arrays.asList(memberId));
@@ -116,19 +146,56 @@ public class EventInfoActivity extends ActionBarActivity {
             }
         });
 
-        findViewById(R.id.date_button).setOnClickListener(new View.OnClickListener() {
+        dateButton = (ImageButton) findViewById(R.id.date_button);
+        date = (TextView) findViewById(R.id.date);
+        dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDateDialog();
+
+                DatePickerDialog dpd = new DatePickerDialog(EventInfoActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                eventYear = year;
+                                eventMonth = monthOfYear+1;
+                                eventDay = dayOfMonth;
+                                date.setText(eventYear + "-" + eventMonth + "-" + eventDay);
+                            }
+                        }, mYear, mMonth, mDay);
+                dpd.show();
             }
         });
-        findViewById(R.id.time_button).setOnClickListener(new View.OnClickListener() {
+
+        time = (TextView) findViewById(R.id.time);
+        timeButton = (ImageButton) findViewById(R.id.time_button);
+        timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimeDialog();
+                TimePickerDialog tpd = new TimePickerDialog(EventInfoActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                eventHour = hourOfDay;
+                                eventMinute = minute;
+                                if (eventMinute < 10){
+                                    time.setText(eventHour+":0"+eventMinute);
+                                }
+                                else {
+                                    time.setText(eventHour+":"+eventMinute);
+                                }
+                            }
+                        }, mHour, mMinute, true);
+                tpd.show();
             }
         });
-        findViewById(R.id.location_button).setOnClickListener(new View.OnClickListener() {
+
+        location = (TextView) findViewById(R.id.location);
+        locationButton = (ImageButton) findViewById(R.id.location_button);
+        locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showLocationDialog();
@@ -136,40 +203,6 @@ public class EventInfoActivity extends ActionBarActivity {
         });
     }
 
-    public void showDateDialog() {
-        AlertDialog.Builder builder;
-        AlertDialog alertDialog;
-        Context mContext = EventInfoActivity.this;
-
-        LayoutInflater inflater = (LayoutInflater) mContext
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.input_date, null);
-        //   TextView text = (TextView) layout.findViewById(R.id.location);
-        //  text.setText("Hello, Welcome to Mr Wei's blog!");
-        //   ImageView image = (ImageView) layout.findViewById(R.id.image);
-        //  image.setImageResource(R.drawable.icon);
-        builder = new AlertDialog.Builder(mContext);
-        builder.setView(layout);
-        alertDialog = builder.create();
-        alertDialog.show();
-    }
-    public void showTimeDialog() {
-        AlertDialog.Builder builder;
-        AlertDialog alertDialog;
-        Context mContext = EventInfoActivity.this;
-
-        LayoutInflater inflater = (LayoutInflater) mContext
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.input_time, null);
-        //   TextView text = (TextView) layout.findViewById(R.id.location);
-        //  text.setText("Hello, Welcome to Mr Wei's blog!");
-        //   ImageView image = (ImageView) layout.findViewById(R.id.image);
-        //  image.setImageResource(R.drawable.icon);
-        builder = new AlertDialog.Builder(mContext);
-        builder.setView(layout);
-        alertDialog = builder.create();
-        alertDialog.show();
-    }
     public void showLocationDialog() {
         AlertDialog.Builder builder;
         AlertDialog alertDialog;
