@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.Light"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
     <LinearLayout
         android:id="@+id/memContainer"
         android:orientation="horizontal"
-        android:layout_marginLeft="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginBottom="17dp"
+        android:layout_marginTop="50dp">
 
         <ImageButton
             android:id="@+id/addmem_button"
@@ -18,10 +21,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:gravity="center"
+            android:background="#00000000"
             android:src="@drawable/memadd" />
         <TextView
             android:id="@+id/memlist"
-            android:text="member name"
+            android:text="Add members"
+            android:layout_marginLeft="10dp"
+            android:textSize = "25sp"
             android:clickable="true"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
@@ -30,6 +36,8 @@
     <TextView
         android:id="@+id/member_list"
         android:text="Member List"
+        android:textSize = "20sp"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ListView

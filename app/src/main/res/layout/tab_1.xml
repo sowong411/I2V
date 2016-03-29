@@ -2,79 +2,72 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@android:style/Theme.Light"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/instantcamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/camera"
+            app:backgroundTint="@color/orange"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"/>
+
     <LinearLayout
-        android:id="@+id/upload"
+        android:id="@+id/uploadContainer"
         android:orientation="horizontal"
         android:layout_marginLeft="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="17dp"
+        android:layout_marginTop="50dp"
         android:layout_marginRight="5dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/upload_photo_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:gravity="center"
-                android:src="@drawable/add_photo" />
-
-            <TextView
-                android:id="@+id/upload_photo"
-                android:text="Upload Photo"
-                android:clickable="true"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/instantcamera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:src="@drawable/camera"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/take_photo"
-                android:text="Take Photo"
-                android:clickable="true"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/upload_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:src="@drawable/add_photo"
+            />
+        <TextView
+            android:id="@+id/upload_photo"
+            android:text="Upload Photo"
+            android:clickable="true"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:textSize = "15sp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/photo"
-        android:text="Photo"
+        android:text="Photos"
+        android:textSize = "20sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/uploadContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <GridView
         android:id="@+id/gridView"
+        android:layout_below="@+id/photo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -86,6 +79,7 @@
         android:verticalSpacing="5dp"
         android:focusable="true"
         android:clickable="true"/>
-</LinearLayout>
+
+</RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

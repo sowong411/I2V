@@ -1,6 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.Light"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -19,6 +21,8 @@
         <TextView
             android:id="@+id/event_name"
             android:text="Create Event"
+            android:textSize = "30sp"
+            android:textStyle="bold"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -26,6 +30,8 @@
         <EditText
             android:id="@+id/name"
             android:hint="Enter an event name"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -37,7 +43,7 @@
     android:layout_marginLeft="7dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="7dp"
+    android:layout_marginBottom="17dp"
     android:layout_marginTop="3dp"
     android:layout_marginRight="5dp">
 
@@ -45,13 +51,15 @@
         android:id="@+id/addmem_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:gravity="center"
-        android:src="@drawable/memadd" />
+        android:src="@drawable/memadd"
+        android:background="#00000000"
+        />
     <TextView
         android:id="@+id/memlist"
-        android:text="member name"
+        android:text="Member name"
+        android:textSize = "25sp"
         android:clickable="true"
+        android:layout_marginLeft="10dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -61,6 +69,7 @@
         android:id="@+id/more"
         android:text="show more"
         android:clickable="true"
+        android:layout_marginBottom="17dp"
         android:layout_below="@+id/memContainer"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_width="wrap_content"
@@ -74,7 +83,7 @@
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="17dp"
         android:layout_marginTop="3dp"
         android:layout_marginRight="5dp">
 
@@ -82,12 +91,13 @@
             android:id="@+id/date_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:gravity="center"
+            android:background="#00000000"
             android:src="@drawable/date" />
             <TextView
             android:id="@+id/date"
-            android:text="date"
+            android:layout_marginLeft="10dp"
+            android:text="Date"
+            android:textSize = "25sp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -100,7 +110,7 @@
         android:layout_marginLeft="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="17dp"
         android:layout_marginTop="3dp"
         android:layout_marginRight="5dp">
 
@@ -108,12 +118,13 @@
             android:id="@+id/time_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:gravity="center"
+            android:background="#00000000"
             android:src="@drawable/time" />
         <TextView
             android:id="@+id/time"
-            android:text="time"
+            android:layout_marginLeft="10dp"
+            android:text="Time"
+            android:textSize = "25sp"
             android:clickable="true"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
@@ -127,7 +138,7 @@
         android:layout_marginLeft="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="17dp"
         android:layout_marginTop="3dp"
         android:layout_marginRight="5dp">
 
@@ -135,30 +146,29 @@
             android:id="@+id/location_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:gravity="center"
+            android:background="#00000000"
             android:src="@drawable/location" />
         <TextView
             android:id="@+id/location"
-            android:text="place"
+            android:text="Location"
+            android:layout_marginLeft="10dp"
+            android:textSize = "25sp"
             android:clickable="true"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/create_event_button"
         style="?android:textAppearanceSmall"
-        android:textColor="#435190"
         android:layout_gravity="end"
-        android:gravity="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Event"
+        android:text="Create"
         android:autoLink="web"
-        android:textStyle="bold"
-        android:layout_below="@+id/memContainer"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:src="@drawable/tick"
+        android:background="#00000000"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
 </RelativeLayout>

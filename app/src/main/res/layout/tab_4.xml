@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.Light"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <TextView
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textSize = "20sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
         android:layout_marginTop="150dp" />
 
     <TextView
@@ -15,6 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textSize = "20sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
         android:layout_below="@id/eventName"
         android:layout_marginTop="10dp"
         android:text="Reserved for Members" />
@@ -24,6 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textSize = "20sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
         android:layout_below="@id/eventMember"
         android:layout_marginTop="10dp"
         android:text="Reserved for Date" />
@@ -33,6 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textSize = "20sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
         android:layout_below="@id/eventDate"
         android:layout_marginTop="10dp"
         android:text="Reserved for Time" />
@@ -42,8 +59,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textSize = "20sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
         android:layout_below="@id/eventTime"
         android:layout_marginTop="10dp"
-        android:text="Reserved for Time" />
+        android:text="Reserved for Place" />
 
 </RelativeLayout>
