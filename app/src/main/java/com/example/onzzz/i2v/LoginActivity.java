@@ -31,6 +31,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements
@@ -103,6 +104,8 @@ public class LoginActivity extends AppCompatActivity implements
                             ParseObject user = new ParseObject("Account");
                             user.put("Name", profile.getName());
                             user.put("Id", profile.getId());
+                            user.put("Event", Arrays.asList());
+                            user.put("Friends", Arrays.asList());
                             user.put("ProfilePicUri", profile.getProfilePictureUri(400, 400).toString());
                             user.put("LoginMethod", "Facebook");
                             user.saveInBackground(new SaveCallback() {
@@ -169,6 +172,9 @@ public class LoginActivity extends AppCompatActivity implements
                         ParseObject user = new ParseObject("Account");
                         user.put("Name", acct.getDisplayName());
                         user.put("Id", acct.getId());
+                        // adding event array-yui
+                        user.put("Event", Arrays.asList());
+                        user.put("Friends", Arrays.asList());
                         if (acct.getPhotoUrl().toString().equals(null)){
                             user.put("ProfilePicUri", "https://lh3.googleusercontent.com/-ey9WZml7lB0/AAAAAAAAAAI/AAAAAAAAAAA/J_iBGpIPDmA/photo.jpg");
                         }

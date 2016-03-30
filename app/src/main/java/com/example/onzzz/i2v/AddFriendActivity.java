@@ -36,6 +36,8 @@ public class AddFriendActivity extends ActionBarActivity {
     String userObjectId;
     String eventObjectId;
     String eventName;
+    String clickedfriend;
+    String clickedFriendId;
     ArrayList<String> friendId = new ArrayList<String>();
     ArrayList<String> friendName = new ArrayList<String>();
 
@@ -43,7 +45,6 @@ public class AddFriendActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
-
         Intent intent = getIntent();
         userObjectId = intent.getStringExtra("UserObjectId");
         assert (intent != null);
@@ -51,11 +52,13 @@ public class AddFriendActivity extends ActionBarActivity {
 
 
 
+
         findViewById(R.id.search_friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                friendId.clear();
+                friendName.clear();
                 populateEventList();
-                registerClickCallback();
             }
         });
     }
@@ -75,20 +78,21 @@ public class AddFriendActivity extends ActionBarActivity {
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         for (int i = 0; i < objects.size(); i++) {
-                            String id = objects.get(0).getObjectId();
-                            String name = objects.get(0).getString("Name");
+                            String id = objects.get(i).getObjectId();
+                            String name = objects.get(i).getString("Name");
                             friendId.add(id);
                             friendName.add(name);
-                            Toast.makeText(getApplicationContext(), "The" + i + "result is " + name, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "The " + i + " result is " + name, Toast.LENGTH_SHORT).show();
                             populateListView();
+                            registerClickCallback();
                         }
+
 
                     }
                 }
             }
         });
         friend_name.setText("");
-
     }
 
     /***************Event List Display Related Function***************/
@@ -106,8 +110,29 @@ public class AddFriendActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked,
                                     int position, long id) {
 
-                String clickedfriend = friendName.get(position);
-                Toast.makeText(AddFriendActivity.this, "the clicking friend name is : " + clickedfriend, Toast.LENGTH_LONG).show();
+                 clickedfriend = friendName.get(position);
+                 clickedFriendId = friendId.get(position);
+
+                Toast.makeText(AddFriendActivity.this, "the clicking friend name is : " + clickedfriend, Toast.LENGTH_SHORT).show();
+
+                // update the friendlist for user
+                ParseQuery accountQuery = ParseQuery.getQuery("Account");
+                accountQuery.getInBackground(userObjectId, new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject object, ParseException e) {
+                        if (e == null)  {
+                            object.addAllUnique("Friends", Arrays.asList(clickedFriendId));
+                            object.saveInBackground();
+                            // clear clicked item data
+                            clickedfriend = "";
+                            clickedFriendId = "";
+                            Toast.makeText(AddFriendActivity.this, "Clicking friend name is added " , Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                // clear search result arrays
+                friendId.clear();
+                friendName.clear();
             }
         });
     }

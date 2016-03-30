@@ -140,6 +140,7 @@ public class EventInfoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(EventInfoActivity.this, AddMemberActivity.class);
+                i.putExtra("UserObjectId", userObjectId);
                 startActivityForResult(i, 100);
             }
         });

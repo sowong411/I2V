@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
 
         /***************Display Event List***************/
         populateEventList();
-        registerClickCallback();
+
 
         findViewById(R.id.create_event_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,34 +66,35 @@ public class MainActivity extends ActionBarActivity {
         ParseQuery accountQuery = ParseQuery.getQuery("Account");
         accountQuery.getInBackground(userObjectId, new GetCallback<ParseObject>() {
             @Override
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < object.getList("Event").size(); i++) {
-                        final String eventId = object.getList("Event").get(i).toString();
-                        ParseQuery eventQuery = ParseQuery.getQuery("Event");
-                        eventQuery.getInBackground(eventId, new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                myEvents.add(new Event(object.getString("EventName"), eventId));
-                                populateListView();
-                            }
-                        });
-                    }
+        public void done(ParseObject object, ParseException e) {
+            if( (e == null) && (object.getList("Event").size()!= 0)) {
+                for (int i = 0; i < object.getList("Event").size(); i++) {
+                    final String eventId = object.getList("Event").get(i).toString();
+                    ParseQuery eventQuery = ParseQuery.getQuery("Event");
+                    eventQuery.getInBackground(eventId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject object, ParseException e) {
+                            myEvents.add(new Event(object.getString("EventName"), eventId));
+                            populateListView();
+                            registerClickCallback();
+                        }
+                    });
                 }
             }
-        });
+        }
+    });
     }
 
     /***************Event List Display Related Function***************/
     private void populateListView() {
         ArrayAdapter<Event> adapter = new MyListAdapter();
-        ListView list = (ListView) findViewById(R.id.user_list);
+        ListView list = (ListView) findViewById(R.id.history_event_list);
         list.setAdapter(adapter);
     }
 
     /***************Event List Display Related Function***************/
     private void registerClickCallback() {
-        ListView list = (ListView) findViewById(R.id.user_list);
+        ListView list = (ListView) findViewById(R.id.history_event_list);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked,

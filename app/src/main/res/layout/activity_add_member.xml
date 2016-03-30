@@ -18,7 +18,7 @@
         android:layout_marginRight="5dp">
 
         <ImageButton
-            android:id="@+id/search_for_member_button"
+            android:id="@+id/search_for_alluser_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -27,7 +27,7 @@
             android:src="@drawable/memadd" />
         <EditText
             android:id="@+id/memlist"
-            android:hint="member name"
+            android:hint="search user here"
             android:layout_marginLeft="5dp"
             android:clickable="true"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <ImageButton
-        android:id="@+id/Done"
+        android:id="@+id/finish_add_member"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -43,14 +43,14 @@
         android:background="#00000000"
         android:src="@drawable/tick" />
     <TextView
-        android:id="@+id/member_list"
+        android:id="@+id/memberList"
         android:textSize = "20sp"
-        android:text="Member List"
+        android:text="Add current friend as member here"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ListView
-        android:id="@+id/user_list"
+        android:id="@+id/friend_as_member_list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:transcriptMode="alwaysScroll"
