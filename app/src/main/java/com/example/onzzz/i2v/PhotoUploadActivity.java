@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.facepp.error.FaceppParseException;
@@ -139,15 +140,14 @@ public class PhotoUploadActivity extends AppCompatActivity {
         btnPhotoUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < numOfPhotoSelected; i++) {
+                 int count = numOfPhotoSelected;
+                for (int i = 0 ; i < numOfPhotoSelected; i++, count--) {
                     final ParseObject photo = new ParseObject("Photo");
                     final Bitmap bmp = BitmapFactory.decodeFile(getFile(i).getAbsolutePath());
                     final String encodedString = encodeTobase64(bmp);
                     FaceppDetect faceppDetect = new FaceppDetect();
                     faceppDetect.setDetectCallback(new DetectCallback() {
-
                         public void detectResult(JSONObject rst) {
-
                             try {
                                 //find out all faces
                                 numOfFace = rst.getJSONArray("face").length();
@@ -209,7 +209,8 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 photo.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-
+                                        if (e == null) {
+                                        }
                                     }
                                 });
 
@@ -236,6 +237,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
                     });
                     faceppDetect.detect(bmp);
                 }
+                if (count == 0){Toast.makeText(PhotoUploadActivity.this, "All photo uploaded", Toast.LENGTH_LONG).show();}
             }
         });
     }
