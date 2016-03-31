@@ -47,6 +47,7 @@ import java.util.List;
  */
 public class PhotoUploadActivity extends AppCompatActivity {
 
+
     GridView gridGallery;
     Handler handler;
     GalleryAdapter adapter;

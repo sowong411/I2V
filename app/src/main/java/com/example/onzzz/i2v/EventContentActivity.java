@@ -1,6 +1,10 @@
 package com.example.onzzz.i2v;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -12,17 +16,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.bytedeco.javacpp.opencv_core;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
  * Created by WAICHONG on 31/12/2015.
  */
 public class EventContentActivity extends ActionBarActivity {
-
+    private static File imageFile;
     String userObjectId;
     String eventObjectId;
     public static ArrayList<Photo> myPhotos = new ArrayList<Photo>();
@@ -52,14 +60,14 @@ public class EventContentActivity extends ActionBarActivity {
         eventObjectId = intent.getStringExtra("EventObjectId");
         assert (intent != null);
 
-    //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
@@ -104,7 +112,9 @@ public class EventContentActivity extends ActionBarActivity {
             }
         });
         */
+
     }
+
 
 
 
