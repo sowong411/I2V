@@ -91,7 +91,7 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/upload_button"
+            android:id="@+id/upload_video_button"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textAllCaps="false"
@@ -106,7 +106,7 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/download_button"
+            android:id="@+id/download_video_button"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textAllCaps="false"

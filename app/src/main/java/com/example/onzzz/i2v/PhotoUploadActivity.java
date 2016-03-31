@@ -284,6 +284,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
         return imageEncoded;
     }
 
+
     private File getFile(int i) {
         File image_file = new File(photoUri[i]);
         return image_file;

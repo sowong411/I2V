@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -24,12 +32,15 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
@@ -68,8 +79,11 @@ public class Tab2 extends Fragment {
         View v =inflater.inflate(R.layout.tab_2,container,false);
         EventContentActivity activity = (EventContentActivity) getActivity();
 
+
         userObjectId = activity.getUserObjectId();
+        System.out.println("111"+userObjectId);
         eventObjectId = activity.getEventObjectId();
+        System.out.println("222"+eventObjectId);
         handler = new Handler();
         progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         videoview = (VideoView) v.findViewById(R.id.video01);
@@ -79,7 +93,7 @@ public class Tab2 extends Fragment {
         v.findViewById(R.id.get_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread download_photo_thread = new  Thread(download_photo_worker);
+                Thread download_photo_thread = new Thread(download_photo_worker);
                 download_photo_thread.start();
             }
         });
@@ -95,10 +109,60 @@ public class Tab2 extends Fragment {
         v.findViewById(R.id.combine_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread combine_thread = new  Thread(combine_worker);
+                Thread combine_thread = new Thread(combine_worker);
                 combine_thread.start();
             }
         });
+
+         //upload the encoded video to server
+        v.findViewById(R.id.upload_video_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File video2 = new File("/sdcard/DCIM/Camera/combine.mp4");
+                ParseObject VVV = new ParseObject("video");
+                byte[] data = videoTobyte(video2);
+                System.out.println("data to string " + data.toString());
+                ParseFile file = new ParseFile("66.mp4", data);
+                file.saveInBackground();
+                VVV.put("file", file);
+                VVV.put("eventID" , eventObjectId);
+                VVV.put("generatedBy" ,userObjectId);
+                VVV.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Toast.makeText(getActivity(), "video uploaded", Toast.LENGTH_LONG).show();
+                        System.out.println("video uploaded");
+                    }
+                });
+            }
+        });
+
+        v.findViewById(R.id.download_video_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("video");
+                query.whereEqualTo("eventID", eventObjectId);
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> videos, ParseException e) {
+                        if (e == null) {
+                            ParseObject o = videos.get(0);
+                            ParseFile file = o.getParseFile("file");
+                            try {
+                                byte[] data = file.getData();
+                                byteToVideo(data);
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                        }
+                        Toast.makeText(getActivity(), "video downloaded", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+
         return v;
     }
 
@@ -144,9 +208,9 @@ public class Tab2 extends Fragment {
                 byte[] decodedByte = Base64.decode(myPhotos.get(i).getPhotoString(), 0);
 
                 //set path in photo
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                String currentDateandTime = sdf.format(new Date());
-                String newPath = getBitmapPath(decodedByte, "iv_" +currentDateandTime + i);
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                //String currentDateandTime = sdf.format(new Date());
+                String newPath = getBitmapPath(decodedByte, "iv_" + i);
                 myPhotos.get(i).setPhotoPath(newPath);
                 System.out.println("set path in photo is done" );
 
@@ -298,6 +362,7 @@ public class Tab2 extends Fragment {
         }
     };
 
+
     private ArrayList<Photo> sortByLevelOfSmile (ArrayList<Photo> photos){
         Collections.sort(photos);
         return photos;
@@ -375,7 +440,34 @@ public class Tab2 extends Fragment {
         return blurPhotos;
     }
 
+    public byte[] videoTobyte(File video) {
+        String encodedBase64 = null;
+        byte[] bytes = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(video);
+            bytes = new byte[(int) video.length()];
+            fileInputStream.read(bytes);
 
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
+
+    public File byteToVideo(byte[] b){
+        File outfile = new File("/sdcard/DCIM/Camera/byteToVideo.mp4");
+        try {
+            FileOutputStream os = new FileOutputStream(outfile);
+            os.write(b);
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return outfile;
+    }
 
     private ArrayList<opencv_core.Mat> combineIntoOne( ArrayList<opencv_core.Mat> inputArray){
         ArrayList<opencv_core.Mat> temp = new ArrayList<opencv_core.Mat>();
