@@ -26,8 +26,10 @@ import org.bytedeco.javacv.OpenCVFrameConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Random;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
@@ -142,7 +144,9 @@ public class Tab2 extends Fragment {
                 byte[] decodedByte = Base64.decode(myPhotos.get(i).getPhotoString(), 0);
 
                 //set path in photo
-                String newPath = getBitmapPath(decodedByte, "iv_" + i);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                String currentDateandTime = sdf.format(new Date());
+                String newPath = getBitmapPath(decodedByte, "iv_" +currentDateandTime + i);
                 myPhotos.get(i).setPhotoPath(newPath);
                 System.out.println("set path in photo is done" );
 
