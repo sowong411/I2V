@@ -120,7 +120,7 @@ public class Tab1 extends Fragment {
                 intent.setClass(v.getContext(), PhotoUploadActivity.class);
                 intent.putExtra("UserObjectId", userObjectId);
                 intent.putExtra("EventObjectId", eventObjectId);
-                startActivity(intent);
+                getActivity().startActivityForResult(intent, 500);
             }
         });
         return v;

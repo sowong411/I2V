@@ -147,6 +147,21 @@ public class EventContentActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode){
+            case 500: {
+                if (resultCode == RESULT_OK) {
+                    finish();
+                    startActivity(getIntent());
+                }
+                break;
+            }
+        }
+    };
+
     public void Close(View view) {
         finish();
     }

@@ -141,8 +141,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
         btnPhotoUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 int count = numOfPhotoSelected;
-                for (int i = 0 ; i < numOfPhotoSelected; i++, count--) {
+                for (int i = 0 ; i < numOfPhotoSelected; i++) {
                     final ParseObject photo = new ParseObject("Photo");
                     final Bitmap bmp = BitmapFactory.decodeFile(getFile(i).getAbsolutePath());
                     final String encodedString = encodeTobase64(bmp);
@@ -211,6 +210,10 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                     @Override
                                     public void done(ParseException e) {
                                         if (e == null) {
+                                            Toast.makeText(PhotoUploadActivity.this, "All photo uploaded", Toast.LENGTH_LONG).show();
+                                            Intent data = new Intent();
+                                            setResult(RESULT_OK, data);
+                                            finish();
                                         }
                                     }
                                 });
@@ -238,7 +241,6 @@ public class PhotoUploadActivity extends AppCompatActivity {
                     });
                     faceppDetect.detect(bmp);
                 }
-                if (count == 0){Toast.makeText(PhotoUploadActivity.this, "All photo uploaded", Toast.LENGTH_LONG).show();}
             }
         });
     }
