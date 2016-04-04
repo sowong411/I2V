@@ -1,6 +1,8 @@
 package com.example.onzzz.i2v;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -43,12 +46,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Math.min;
+import static java.lang.Math.random;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgproc.GaussianBlur;
+import static org.bytedeco.javacpp.opencv_core.addWeighted;
 import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 import static org.bytedeco.javacpp.opencv_imgproc.putText;
 import static org.bytedeco.javacpp.opencv_imgproc.resize;
+import static org.bytedeco.javacpp.opencv_core.Point;
 
 public class Tab2 extends Fragment {
     final String tag = "Tab 2 is here";
@@ -60,6 +67,9 @@ public class Tab2 extends Fragment {
     VideoView videoview;
     private int maxFaceNum;
 
+    private int transitionFrameDuration;
+    private int mainFrameDuration;
+
     ArrayList<Photo> landscapes = new ArrayList<Photo>(); //風景相
     ArrayList<Photo> photoWithOneFace = new ArrayList<Photo>(); //獨照
     ArrayList<Photo> normalPhotos = new ArrayList<Photo>(); //人相
@@ -70,20 +80,41 @@ public class Tab2 extends Fragment {
 
     ArrayList<opencv_core.Mat> images = new ArrayList<opencv_core.Mat>();
     ArrayList<opencv_core.Mat> imagesWithBackground = new ArrayList<opencv_core.Mat>();
+    ArrayList<opencv_core.Mat> imagesWithEffect1 = new ArrayList<opencv_core.Mat>();
+    ArrayList<opencv_core.Mat> imagesWithEffect2 = new ArrayList<opencv_core.Mat>();
+    ArrayList<opencv_core.Mat> imagesWithEffect3 = new ArrayList<opencv_core.Mat>();
+
     String userObjectId;
     String eventObjectId;
+    String eventName;
+
+    File makevideo;
+    File combine;
+
+    int firstTemplateDecision;
+    int secondTemplateDecision;
+    int effectDecision;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         System.out.println(tag);
         View v =inflater.inflate(R.layout.tab_2,container,false);
         EventContentActivity activity = (EventContentActivity) getActivity();
 
-
         userObjectId = activity.getUserObjectId();
-        System.out.println("111"+userObjectId);
         eventObjectId = activity.getEventObjectId();
-        System.out.println("222"+eventObjectId);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+        query.getInBackground(eventObjectId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    eventName = object.getString("EventName");
+                    System.out.println(eventName);
+                    System.out.println(eventName.length());
+                }
+            }
+        });
+
         handler = new Handler();
         progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         videoview = (VideoView) v.findViewById(R.id.video01);
@@ -101,8 +132,67 @@ public class Tab2 extends Fragment {
         v.findViewById(R.id.make_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread make_video_thread = new  Thread(make_video_worker);
-                make_video_thread.start();
+                Thread download_photo_thread = new Thread(download_photo_worker);
+                download_photo_thread.start();
+                final AlertDialog.Builder firstTemplateBuilder = new AlertDialog.Builder(Tab2.this.getContext());
+                LayoutInflater firstTemplateInflater = getLayoutInflater(savedInstanceState);
+                firstTemplateBuilder.setTitle("Choose Template");
+                firstTemplateBuilder.setSingleChoiceItems(new String[]{"Christmas", "Wedding"}, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        firstTemplateDecision = which;
+                    }
+                });
+                firstTemplateBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder secondTemplateBuilder = new AlertDialog.Builder(Tab2.this.getContext());
+                        LayoutInflater secondTemplateInflater = getLayoutInflater(savedInstanceState);
+                        secondTemplateBuilder.setTitle("Choose Template");
+                        String[] template = new String[]{};
+                        switch (firstTemplateDecision){
+                            case 0: template = new String[]{"Style1", "Style2"};
+                                    break;
+                            case 1: template = new String[]{"Style1", "Style2"};
+                                    break;
+                        }
+                        secondTemplateBuilder.setSingleChoiceItems(template, 0, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                secondTemplateDecision = which;
+                            }
+                        });
+                        secondTemplateBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AlertDialog.Builder effectBuilder = new AlertDialog.Builder(Tab2.this.getContext());
+                                LayoutInflater effectInflater = getLayoutInflater(savedInstanceState);
+                                effectBuilder.setTitle("Choose Effect");
+                                effectBuilder.setSingleChoiceItems(new String[]{"閃光過場", "模糊過場", "交錯過場", "Zooming"}, 0, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        effectDecision = which;
+                                    }
+                                });
+                                effectBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        makevideo = new File("/sdcard/MemorVi/"+eventObjectId+"/", "makevideo.mp4");
+                                        combine = new File("/sdcard/MemorVi/"+eventObjectId+"/combine.mp4");
+                                        Thread make_video_thread = new Thread(make_video_worker);
+                                        make_video_thread.start();
+                                    }
+                                });
+                                effectBuilder.setNegativeButton("Cancel", null);
+                                effectBuilder.show();
+                            }
+                        });
+                        secondTemplateBuilder.setNegativeButton("Cancel", null);
+                        secondTemplateBuilder.show();
+                    }
+                });
+                firstTemplateBuilder.setNegativeButton("Cancel", null);
+                firstTemplateBuilder.show();
             }
         });
 
@@ -228,11 +318,33 @@ public class Tab2 extends Fragment {
                 });
             }
 
-            myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
-            myPhotosWithOrder.addAll(sortByLevelOfSmile(photoWithOneFace));
-            myPhotosWithOrder.addAll(sortByLevelOfSmile(normalPhotos));
-            myPhotosWithOrder.addAll(sortByLevelOfSmile(landscapes));
+            sortByLevelOfSmile(photoWithOneFace);
+            sortByLevelOfSmile(normalPhotos);
 
+            int indexOfLandscape = 0;
+            for (int i=0; i<photoWithOneFace.size();){
+                int randomNumber = (int) (random()*100);
+                if (randomNumber % 2 == 0 && indexOfLandscape<landscapes.size()){
+                    myPhotosWithOrder.add(landscapes.get(indexOfLandscape));
+                    indexOfLandscape++;
+                }
+                else {
+                    myPhotosWithOrder.add(photoWithOneFace.get(i));
+                    i++;
+                }
+            }
+            for (int i=0; i<normalPhotos.size();){
+                int randomNumber = (int) (random()*100);
+                if (randomNumber % 2 == 0 && indexOfLandscape<landscapes.size()){
+                    myPhotosWithOrder.add(landscapes.get(indexOfLandscape));
+                    indexOfLandscape++;
+                }
+                else {
+                    myPhotosWithOrder.add(normalPhotos.get(i));
+                    i++;
+                }
+            }
+            myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
 
             handler.post(new Runnable() {
                 public void run() {
@@ -245,11 +357,93 @@ public class Tab2 extends Fragment {
     };
 
     private Runnable make_video_worker = new Runnable() {
-        File makevideo = new File("/sdcard/DCIM/Camera/", "makevideo.mp4");
         public  void run() {
             completed = 0;
 
+            switch (firstTemplateDecision){
+                case 0: switch (secondTemplateDecision){
+                            case 0: images.add(imread("/sdcard/Download/christmas1_1.jpg"));
+                                    if (eventName.length()%2 == 0){
+                                        putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*13,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
+                                    }
+                                    else {
+                                        putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*25,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
+                                    }
+                                    break;
+                            case 1: images.add(imread("/sdcard/Download/christmas2_1.jpg"));
+                                    if (eventName.length()%2 == 0){
+                                        putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*18,560), 3, 1.5, new opencv_core.Scalar(0, 0, 0, 0));
+                                    }
+                                    else {
+                                        putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*30,560), 3, 1.5, new opencv_core.Scalar(0, 0, 0, 0));
+                                    }
+                                    break;
+                        }
+                        break;
+                case 1: switch (secondTemplateDecision){
+                            case 0: images.add(imread("/sdcard/Download/wedding1_1.jpg"));
+                                    if (eventName.length()%2 == 0){
+                                        putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
+                                    }
+                                    else {
+                                        putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
+                                    }
+                                    break;
+                            case 1: images.add(imread("/sdcard/Download/wedding2_1.jpg"));
+                                    if (eventName.length()%2 == 0){
+                                        putText(images.get(0), eventName, new Point(300-(eventName.length()/2)*30,320), 3, 2, new opencv_core.Scalar(0, 100, 100, 0));
+                                    }
+                                    else {
+                                        putText(images.get(0), eventName, new Point(300-(eventName.length()/2)*45,320), 3, 2, new opencv_core.Scalar(0, 100, 100, 0));
+                                    }
+                                    break;
+                        }
+                        break;
+            }
+
             for (int k = 0 ; k< myPhotosWithOrder.size(); k++){
+                switch (firstTemplateDecision){
+                    case 0: switch (secondTemplateDecision){
+                                case 0: if (k == myPhotosWithOrder.size()/2){
+                                            images.add(imread("sdcard/Download/christmas1_2.jpg"));
+                                        }
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                            images.add(imread("/sdcard/Download/christmas1_3.jpg"));
+                                        }
+                                        break;
+                                case 1: if (k == myPhotosWithOrder.size()/2){
+                                            images.add(imread("sdcard/Download/christmas2_2.jpg"));
+                                        }
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                            images.add(imread("/sdcard/Download/christmas2_3.jpg"));
+                                        }
+                                        break;
+                            }
+                            break;
+                    case 1: switch (secondTemplateDecision){
+                                case 0: if (k == myPhotosWithOrder.size()/3){
+                                            images.add(imread("sdcard/Download/wedding1_2.jpg"));
+                                        }
+                                        if (k == myPhotosWithOrder.size()/3*2){
+                                            images.add(imread("sdcard/Download/wedding1_3.jpg"));
+                                        }
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                            images.add(imread("/sdcard/Download/wedding1_4.jpg"));
+                                        }
+                                        break;
+                                case 1: if (k == myPhotosWithOrder.size()/3){
+                                            images.add(imread("sdcard/Download/wedding2_2.jpg"));
+                                        }
+                                        if (k == myPhotosWithOrder.size()/3*2){
+                                            images.add(imread("sdcard/Download/wedding2_3.jpg"));
+                                        }
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                            images.add(imread("/sdcard/Download/wedding2_4.jpg"));
+                                        }
+                                        break;
+                            }
+                            break;
+                }
                 opencv_core.Mat m = myPhotosWithOrder.get(k).getMat();
                 images.add(m);
             }
@@ -258,8 +452,40 @@ public class Tab2 extends Fragment {
             opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
             for (int k = 0 ; k<images.size(); k++){
                 imagesWithBackground.add(addBackground(images.get(k), black));
+                imagesWithEffect1.add(addBackground(images.get(k), black));
+                imagesWithEffect2.add(addBackground(images.get(k), black));
+                imagesWithEffect3.add(addBackground(images.get(k), black));
             }
 
+            switch (effectDecision){
+                case 0: {
+                    for (int i=0; i<imagesWithBackground.size(); i++){
+                        imagesWithEffect1.get(i).convertTo(imagesWithEffect1.get(i), -1, 1.0, 20);
+                        imagesWithEffect2.get(i).convertTo(imagesWithEffect2.get(i), -1, 1.0, 40);
+                        imagesWithEffect3.get(i).convertTo(imagesWithEffect3.get(i), -1, 1.0, 60);
+                    }
+                    break;
+                }
+                case 1: {
+                    for (int i=0; i<imagesWithBackground.size(); i++){
+                        GaussianBlur(imagesWithEffect1.get(i), imagesWithEffect1.get(i), new opencv_core.Size(23,23), 0);
+                        GaussianBlur(imagesWithEffect2.get(i), imagesWithEffect2.get(i), new opencv_core.Size(45,45), 0);
+                        GaussianBlur(imagesWithEffect3.get(i), imagesWithEffect3.get(i), new opencv_core.Size(69,69), 0);
+                    }
+                    break;
+                }
+                case 2: {
+                    for (int i=0; i<imagesWithBackground.size()-1; i++){
+                        addWeighted(imagesWithEffect1.get(i), 0.8, imagesWithEffect1.get(i+1), 0.2, 0.0, imagesWithEffect1.get(i));
+                        addWeighted(imagesWithEffect2.get(i), 0.5, imagesWithEffect2.get(i+1), 0.5, 0.0, imagesWithEffect2.get(i));
+                        addWeighted(imagesWithEffect3.get(i), 0.2, imagesWithEffect3.get(i+1), 0.8, 0.0, imagesWithEffect3.get(i));
+                    }
+                    break;
+                }
+                case 3: {
+                    break;
+                }
+            }
 
             handler.post(new Runnable() {
                 public void run() {
@@ -272,19 +498,104 @@ public class Tab2 extends Fragment {
             Frame captured_frame;
             try {
                 recorder.setFrameRate(20);
+                transitionFrameDuration = 4;
+                mainFrameDuration = 80;
                 recorder.start();
-                for (int i = 0; i < imagesWithBackground.size(); i++) {
-                    captured_frame = converter.convert(imagesWithBackground.get(i));
-                    for(int j =0 ; j<40 ; j++) {
-                        recorder.record(captured_frame);
-                    }
-                    completed = (int)(( (float)i/(float) imagesWithBackground.size())*100);
-                    handler.post(new Runnable() {
-                        public void run() {
-                            progressBar.setProgress(completed);
-                            statusText.setText(String.format("Completed %d", completed));
+                if (effectDecision == 0 || effectDecision == 1){
+                    for (int i = 0; i < imagesWithBackground.size(); i++) {
+                        captured_frame = converter.convert(imagesWithEffect3.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
                         }
-                    });
+                        captured_frame = converter.convert(imagesWithEffect2.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect1.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithBackground.get(i));
+                        for(int j =0 ; j<mainFrameDuration; j++) {
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect1.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect2.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect3.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        completed = (int)(( (float)i/(float) imagesWithBackground.size())*100);
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(completed);
+                                statusText.setText(String.format("Completed %d", completed));
+                            }
+                        });
+                    }
+                }
+                else if (effectDecision == 2){
+                    for (int i = 0; i < imagesWithBackground.size(); i++) {
+                        captured_frame = converter.convert(imagesWithBackground.get(i));
+                        for(int j =0 ; j<mainFrameDuration ; j++) {
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect1.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect2.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        captured_frame = converter.convert(imagesWithEffect3.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        completed = (int)(( (float)i/(float) imagesWithBackground.size())*100);
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(completed);
+                                statusText.setText(String.format("Completed %d", completed));
+                            }
+                        });
+                    }
+                }
+                else if (effectDecision == 3){
+                    for (int i = 0; i < imagesWithBackground.size(); i++) {
+                        int randomNumber = (int) (random()*100);
+                        if (randomNumber % 2 == 0){
+                            imagesWithBackground.get(i).adjustROI(2,2,2,2);
+                            for (int k=0; k<20; k++){
+                                captured_frame = converter.convert(imagesWithBackground.get(i).adjustROI(-2, -2, -2, -2));
+                                for (int j=0; j<transitionFrameDuration; j++){
+                                    recorder.record(captured_frame);
+                                }
+                            }
+                        }
+                        else {
+                            imagesWithBackground.get(i).adjustROI(-40,-40,-40,-40);
+                            for (int k=19; k>=0; k--){
+                                captured_frame = converter.convert(imagesWithBackground.get(i).adjustROI(2, 2, 2, 2));
+                                for (int j=0; j<transitionFrameDuration; j++){
+                                    recorder.record(captured_frame);
+                                }
+                            }
+                        }
+                        completed = (int)(( (float)i/(float) imagesWithBackground.size())*100);
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(completed);
+                                statusText.setText(String.format("Completed %d", completed));
+                            }
+                        });
+                    }
                 }
                 recorder.stop();
                 recorder.release();
@@ -295,16 +606,16 @@ public class Tab2 extends Fragment {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    playVideoOnView(makevideo);
+                    //playVideoOnView(makevideo);
+                    Thread combine_thread = new Thread(combine_worker);
+                    combine_thread.start();
                 }
             });
         }
     };
 
     private Runnable combine_worker = new Runnable() {
-        File makevideo = new File("/sdcard/DCIM/Camera/", "makevideo.mp4");
-        File audio = new File("/sdcard/Download/2015.mp3");
-        File combine = new File("/sdcard/DCIM/Camera/combine.mp4");
+        File audio;
         public void run() {
             completed = 0;
             handler.post(new Runnable() {
@@ -313,6 +624,32 @@ public class Tab2 extends Fragment {
                     statusText.setText(String.format("Completed %d", completed));
                 }
             });
+            switch (firstTemplateDecision){
+                case 0: switch(secondTemplateDecision){
+                            case 0: int randomNumber = (int) (random()*100%3);
+                                    if (randomNumber == 0)
+                                        audio = new File("/sdcard/Download/christmas1_1.mp3");
+                                    if (randomNumber == 1)
+                                        audio = new File("/sdcard/Download/christmas1_2.mp3");
+                                    if (randomNumber == 2)
+                                        audio = new File("/sdcard/Download/christmas1_3.mp3");
+                                    break;
+                            case 1: audio = new File("/sdcard/Download/christmas2.mp3");
+                                    break;
+                        }
+                        break;
+                case 1: switch(secondTemplateDecision){
+                            case 0: int randomNumber = (int) (random()*100%2);
+                                    if (randomNumber == 0)
+                                        audio = new File("/sdcard/Download/wedding1_1.mp3");
+                                    if (randomNumber == 1)
+                                        audio = new File("/sdcard/Download/wedding1_2.mp3");
+                                    break;
+                            case 1: audio = new File("/sdcard/Download/wedding2.mp3");
+                                    break;
+                        }
+                        break;
+            }
             FFmpegFrameGrabber grabber1 = new FFmpegFrameGrabber(makevideo.getAbsolutePath());
             FFmpegFrameGrabber grabber2 = new FFmpegFrameGrabber(audio.getAbsolutePath());
             Frame video_frame = null;
@@ -371,8 +708,14 @@ public class Tab2 extends Fragment {
     private opencv_core.Mat addBackground ( opencv_core.Mat image , opencv_core.Mat background) {
         resize(background, background, new opencv_core.Size(800, 480));
         opencv_core.Mat tempBlackGround = background.clone();
-        resize(image, image, new opencv_core.Size(640, 480));
-        image.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
+        if (image.cols() < image.rows()){
+            resize(image, image, new opencv_core.Size(320, 480));
+            image.copyTo(tempBlackGround.rowRange(0, 480).colRange(240, 560));
+        }
+        else {
+            resize(image, image, new opencv_core.Size(640, 480));
+            image.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
+        }
         return tempBlackGround;
     }
 
@@ -384,12 +727,15 @@ public class Tab2 extends Fragment {
         int h = displaymetrics.heightPixels;
         int w = displaymetrics.widthPixels;
         videoview.setMinimumHeight(h*3);
-        videoview.setMinimumWidth(w*4);
+        videoview.setMinimumWidth(w * 4);
         videoview.start();
     }
 
     private String getBitmapPath(byte[] bitmapArray , String filename){
-        File f = new File("/sdcard/DCIM/Camera/", filename+".jpg");
+        File f = new File("/sdcard/MemorVi/"+eventObjectId+"/", filename+".jpg");
+        if (!f.exists()){
+            f.getParentFile().mkdirs();
+        }
         try {
             f.createNewFile();
         } catch (IOException e) {
