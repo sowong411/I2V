@@ -121,13 +121,7 @@ public class Tab2 extends Fragment {
         statusText = (TextView) v.findViewById(R.id.status_text);
         progressBar.setMax(100);
 
-        v.findViewById(R.id.get_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread download_photo_thread = new Thread(download_photo_worker);
-                download_photo_thread.start();
-            }
-        });
+
 
         v.findViewById(R.id.make_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,19 +190,12 @@ public class Tab2 extends Fragment {
             }
         });
 
-        v.findViewById(R.id.combine_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread combine_thread = new Thread(combine_worker);
-                combine_thread.start();
-            }
-        });
 
          //upload the encoded video to server
         v.findViewById(R.id.upload_video_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File video2 = new File("/sdcard/DCIM/Camera/combine.mp4");
+                File video2 = new File("/sdcard/MemorVi/"+eventObjectId+"/combine.mp4");
                 ParseObject VVV = new ParseObject("video");
                 byte[] data = videoTobyte(video2);
                 System.out.println("data to string " + data.toString());
