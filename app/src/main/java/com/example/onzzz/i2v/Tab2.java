@@ -305,29 +305,27 @@ public class Tab2 extends Fragment {
             sortByLevelOfSmile(photoWithOneFace);
             sortByLevelOfSmile(normalPhotos);
 
+
             int indexOfLandscape = 0;
-            for (int i=0; i<photoWithOneFace.size();){
-                int randomNumber = (int) (random()*100);
-                if (randomNumber % 2 == 0 && indexOfLandscape<landscapes.size()){
+            int indexOfOneFace = 0;
+            int indexOfNormal = 0;
+
+            while (indexOfLandscape+indexOfOneFace+indexOfNormal < landscapes.size()+photoWithOneFace.size()+normalPhotos.size()){
+                int random = (int) random()*100;
+                if (random % 3 == 0 && indexOfLandscape < landscapes.size()){
                     myPhotosWithOrder.add(landscapes.get(indexOfLandscape));
                     indexOfLandscape++;
                 }
-                else {
-                    myPhotosWithOrder.add(photoWithOneFace.get(i));
-                    i++;
-                }
-            }
-            for (int i=0; i<normalPhotos.size();){
-                int randomNumber = (int) (random()*100);
-                if (randomNumber % 2 == 0 && indexOfLandscape<landscapes.size()){
-                    myPhotosWithOrder.add(landscapes.get(indexOfLandscape));
-                    indexOfLandscape++;
+                else if (random % 3 == 1 && indexOfOneFace < photoWithOneFace.size()){
+                    myPhotosWithOrder.add(photoWithOneFace.get(indexOfOneFace));
+                    indexOfOneFace++;
                 }
                 else {
-                    myPhotosWithOrder.add(normalPhotos.get(i));
-                    i++;
+                    myPhotosWithOrder.add(normalPhotos.get(indexOfNormal));
+                    indexOfNormal++;
                 }
             }
+
             myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
 
             handler.post(new Runnable() {
@@ -391,14 +389,14 @@ public class Tab2 extends Fragment {
                                 case 0: if (k == myPhotosWithOrder.size()/2){
                                             images.add(imread("sdcard/Download/christmas1_2.jpg"));
                                         }
-                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
                                             images.add(imread("/sdcard/Download/christmas1_3.jpg"));
                                         }
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/2){
                                             images.add(imread("sdcard/Download/christmas2_2.jpg"));
                                         }
-                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
                                             images.add(imread("/sdcard/Download/christmas2_3.jpg"));
                                         }
                                         break;
@@ -411,7 +409,7 @@ public class Tab2 extends Fragment {
                                         if (k == myPhotosWithOrder.size()/3*2){
                                             images.add(imread("sdcard/Download/wedding1_3.jpg"));
                                         }
-                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
                                             images.add(imread("/sdcard/Download/wedding1_4.jpg"));
                                         }
                                         break;
@@ -421,7 +419,7 @@ public class Tab2 extends Fragment {
                                         if (k == myPhotosWithOrder.size()/3*2){
                                             images.add(imread("sdcard/Download/wedding2_3.jpg"));
                                         }
-                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()){
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
                                             images.add(imread("/sdcard/Download/wedding2_4.jpg"));
                                         }
                                         break;
