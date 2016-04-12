@@ -562,10 +562,9 @@ public class Tab2 extends Fragment {
                     break;
                 }
                 case 4: {
-                    //int randomNumber = (int) (random()*100) % 8;
-                    int randomNumber = 0;
                     int count = images.size();
                     for (int i=0; i<images.size();){
+                        int randomNumber = (int) (random()*100) % 8;
                         if (count < 4){
                             multipleInOne.add(addBackground(images.get(i++), black));
                             count--;
@@ -986,7 +985,7 @@ public class Tab2 extends Fragment {
         c.copyTo(temp.rowRange(485, 715).colRange(645, 955));
         d.copyTo(temp.rowRange(5, 715).colRange(5, 635));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
     private opencv_core.Mat combine_style_2a (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c , opencv_core.Mat d, opencv_core.Mat e){
@@ -1004,7 +1003,7 @@ public class Tab2 extends Fragment {
         d.copyTo(temp.rowRange(5, 355).colRange(325, 955));
         e.copyTo(temp.rowRange(365, 715).colRange(325, 955));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
 
@@ -1023,7 +1022,7 @@ public class Tab2 extends Fragment {
         d.copyTo(temp.rowRange(5, 355).colRange(5, 635));
         e.copyTo(temp.rowRange(365, 715).colRange(5, 635));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
     private opencv_core.Mat combine_style_3a (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c , opencv_core.Mat d, opencv_core.Mat e){
@@ -1041,7 +1040,7 @@ public class Tab2 extends Fragment {
         d.copyTo(temp.rowRange(420, 670).colRange(325, 625));
         e.copyTo(temp.rowRange(420, 670).colRange(645, 945));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
 
@@ -1060,7 +1059,7 @@ public class Tab2 extends Fragment {
         d.copyTo(temp.rowRange(20, 270).colRange(325, 625));
         e.copyTo(temp.rowRange(20, 270).colRange(645, 945));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
     private opencv_core.Mat combine_style_4 (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c, opencv_core.Mat d){
@@ -1076,7 +1075,7 @@ public class Tab2 extends Fragment {
         c.copyTo(temp.rowRange(365, 715).colRange(5, 475));
         d.copyTo(temp.rowRange(365, 715).colRange(485, 955));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
     private opencv_core.Mat combine_style_5 (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c, opencv_core.Mat d, opencv_core.Mat e, opencv_core.Mat f, opencv_core.Mat g, opencv_core.Mat h,opencv_core.Mat i){
@@ -1102,7 +1101,7 @@ public class Tab2 extends Fragment {
         h.copyTo(temp.rowRange(485,715).colRange(325, 635));
         i.copyTo(temp.rowRange(485,715).colRange(645, 955));
         imwrite("/sdcard/DCIM/Camera//"+"testinginging.jpg", black);
-        return black;
+        return temp;
     }
 
     private void playVideoOnView(File video) {
