@@ -3,37 +3,43 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@android:style/Theme.Light"
+    android:transcriptMode="alwaysScroll"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
     <TextView
-    android:id="@+id/status_text"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:textStyle="bold"
-    android:textSize = "20sp"
-    android:paddingTop="50dip"
-    android:text="Click the button"/>
+        android:id="@+id/status_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize = "20sp"
+        android:layout_marginTop="20dp"
+        android:paddingTop="20dip"
+        android:visibility="gone"
+        android:text="Click the button"/>
 
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:textSize = "13sp"
+        android:textSize = "5sp"
         android:paddingTop="20dip"
-        android:text="Progress:"/>
+        android:text="Progress:"
+        />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="80dip"
+        android:layout_height="8dip"
         android:indeterminate="false"
         android:padding="10dip"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:clickable="false" />
 
 
@@ -44,6 +50,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/get_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dip"
+            android:layout_marginRight="3dip"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:background="@drawable/buttonshape"
+            android:visibility="gone"
+            android:text="Get Photo"
+            android:padding="1dip"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/make_button"
@@ -61,7 +83,23 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/upload_video_button"
+            android:id="@+id/combine_button"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:background="@drawable/buttonshape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dip"
+            android:layout_marginRight="3dip"
+            android:text="Add Music"
+            android:visibility="gone"
+            android:padding="1dip"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/upload_button"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textAllCaps="false"
@@ -72,11 +110,12 @@
             android:layout_marginTop="20dip"
             android:layout_marginRight="3dip"
             android:text="Upload"
+            android:visibility="gone"
             android:padding="1dip"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/download_video_button"
+            android:id="@+id/download_button"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textAllCaps="false"
@@ -87,6 +126,7 @@
             android:layout_marginTop="20dip"
             android:layout_marginRight="3dip"
             android:text="Download"
+            android:visibility="gone"
             android:padding="1dip"
             android:layout_weight="1"/>
 
@@ -98,13 +138,12 @@
         android:layout_below="@id/button_layer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginBottom="1dp"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="1dp"
         android:minHeight="240dp"
         android:minWidth="320dp" />
 
 
 </LinearLayout>
-
