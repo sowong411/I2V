@@ -49,6 +49,7 @@ import java.util.Random;
 import static java.lang.Math.min;
 import static java.lang.Math.random;
 import static org.bytedeco.javacpp.opencv_core.multiplyPut;
+import static org.bytedeco.javacpp.opencv_core.norm;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgproc.GaussianBlur;
@@ -195,7 +196,7 @@ public class Tab2 extends Fragment {
         });
 
          //upload the encoded video to server
-        v.findViewById(R.id.upload_video_button).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.upload_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 File video2 = new File("/sdcard/MemorVi/"+eventObjectId+"/combine.mp4");
@@ -217,7 +218,7 @@ public class Tab2 extends Fragment {
             }
         });
 
-        v.findViewById(R.id.download_video_button).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.download_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("video");
@@ -311,8 +312,11 @@ public class Tab2 extends Fragment {
             sortByLevelOfSmile(photoWithOneFace);
             sortByLevelOfSmile(normalPhotos);
 
+            myPhotosWithOrder.addAll(landscapes);
+            myPhotosWithOrder.addAll(photoWithOneFace);
+            myPhotosWithOrder.addAll(normalPhotos);
 
-            int indexOfLandscape = 0;
+            /*int indexOfLandscape = 0;
             int indexOfOneFace = 0;
             int indexOfNormal = 0;
 
@@ -330,7 +334,7 @@ public class Tab2 extends Fragment {
                     myPhotosWithOrder.add(normalPhotos.get(indexOfNormal));
                     indexOfNormal++;
                 }
-            }
+            }*/
 
             myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
 

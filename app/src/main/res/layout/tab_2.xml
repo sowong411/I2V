@@ -52,22 +52,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/get_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
-            android:layout_marginRight="3dip"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:visibility="gone"
-            android:text="Get Photo"
-            android:padding="1dip"
-            android:layout_weight="1"/>
-
-        <Button
             android:id="@+id/make_button"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
@@ -79,22 +63,6 @@
             android:layout_marginTop="20dip"
             android:layout_marginRight="3dip"
             android:text="Make Video"
-            android:padding="1dip"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/combine_button"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
-            android:layout_marginRight="3dip"
-            android:text="Add Music"
-            android:visibility="gone"
             android:padding="1dip"
             android:layout_weight="1"/>
 
