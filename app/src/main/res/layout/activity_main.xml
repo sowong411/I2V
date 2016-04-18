@@ -4,12 +4,47 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    <LinearLayout
+        android:id="@+id/main_button"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+
+        <Button
+            android:id="@+id/create_event_button"
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:background="@drawable/buttonshape"
+            android:text="Create Event" />
+
+        <Button
+            android:id="@+id/add_friend_button"
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:background="@drawable/buttonshape"
+            android:text="Add Friends"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/existing"
         android:text="Previous Events "
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/main_button"
         android:layout_marginBottom="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
@@ -24,35 +59,5 @@
         android:divider="#ffffff"/>
 
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:layout_alignRight="@+id/history_event_list">
 
-
-    <Button
-        android:id="@+id/create_event_button"
-        android:layout_width="80sp"
-        android:layout_height="50sp"
-        android:gravity="center"
-        android:layout_marginRight="10dp"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:textAllCaps="false"
-        android:background="@drawable/buttonshape"
-       android:text="Create Event" />
-
-    <Button
-        android:id="@+id/add_friend_button"
-        android:layout_width="80sp"
-        android:layout_height="50sp"
-        android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:textAllCaps="false"
-        android:background="@drawable/buttonshape"
-        android:text="Add Friends"/>
-
-</LinearLayout>
 </RelativeLayout>
