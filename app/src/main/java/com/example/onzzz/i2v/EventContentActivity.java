@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.support.design.widget.TabLayout;
 
 
 import org.bytedeco.javacpp.opencv_core;
@@ -44,11 +45,19 @@ public class EventContentActivity extends ActionBarActivity {
 
 
     Toolbar toolbar;
+    TabLayout tabLayout;
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     CharSequence Titles[] = {"Photo","Member","Video","Event Info."};
     int Numboftabs = 4;
+
+    private int[] tabIcons = {
+            R.drawable.photo_library,
+            R.drawable.video,
+            R.drawable.group,
+            R.drawable.info
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +67,14 @@ public class EventContentActivity extends ActionBarActivity {
         userObjectId = intent.getStringExtra("UserObjectId");
         eventObjectId = intent.getStringExtra("EventObjectId");
         assert (intent != null);
+     //   toolbar.setTitle(eventName);
 
         //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
@@ -86,35 +97,20 @@ public class EventContentActivity extends ActionBarActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-/*        findViewById(R.id.photo_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(EventContentActivity.this, PhotoUploadActivity.class);
-                startActivity(intent);
-            }
-        });
-        findViewById(R.id.video_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(EventContentActivity.this, CreateVideoActivity.class);
-                startActivity(intent);
-            }
-        });
-        findViewById(R.id.mem_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(EventContentActivity.this, AddMemberActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
+
+        tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        tabLayout.setupWithViewPager(pager);
+        setupTabIcons();
+
 
     }
 
-
+    private void setupTabIcons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        tabLayout.getTabAt(3).setIcon(tabIcons[3]);
+    }
 
 
     public String getUserObjectId(){
