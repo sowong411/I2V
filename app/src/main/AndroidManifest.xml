@@ -28,7 +28,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".LoginActivity"
-            android:label="LoginActivity"
+            android:label="Login"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,43 +38,43 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="MainActivity"
+            android:label="Main Page"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".EventInfoActivity"
-            android:label="EventInfoActivity"
+            android:label="Event Page"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".EventContentActivity"
-            android:label="EventContentActivity"
+            android:label="Event Content"
             android:theme="@style/NoActionBarTheme" >
         </activity>
 
         <activity
             android:name=".PhotoUploadActivity"
-            android:label="PhotoUploadActivity"
+            android:label="Photo Upload"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".CreateVideoActivity"
-            android:label="CreateVideoActivity"
+            android:label="Create Video"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".AddMemberActivity"
-            android:label="AddMemberActivity"
+            android:label="Add Members"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".UserInfoActivity"
-            android:label="UserInfoActivity"
+            android:label="User Information"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".CustomGalleryActivity"
-            android:label="CustomGallery"
+            android:label="Custom Gallery"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="luminous.ACTION_MULTIPLE_PICK" />
@@ -82,7 +82,7 @@
         </activity>
         <activity
             android:name=".AddFriendActivity"
-            android:label="AddFriendActivity"
+            android:label="Add Friends"
             android:theme="@style/AppTheme">
         </activity>
 
