@@ -56,7 +56,7 @@
         />
     <TextView
         android:id="@+id/memlist"
-        android:text="Member name"
+        android:text="Add Members"
         android:textSize = "25sp"
         android:clickable="true"
         android:layout_marginLeft="10dp"
@@ -67,7 +67,7 @@
 
     <TextView
         android:id="@+id/more"
-        android:text="show more"
+        android:text="More information"
         android:clickable="true"
         android:layout_marginBottom="17dp"
         android:layout_below="@+id/memContainer"
