@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@android:style/Theme.Light"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -12,58 +13,118 @@
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize = "20sp"
+        android:layout_gravity="center_horizontal"
+        android:textSize = "25sp"
         android:textStyle="bold"
         android:typeface="monospace"
-        android:layout_marginTop="150dp" />
-
-    <TextView
-        android:id="@+id/eventMember"
+        android:layout_marginTop="100dp"
+        android:text="Event name"/>
+    <LinearLayout
+        android:layout_below="@+id/eventName"
+        android:id="@+id/memContainer"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize = "20sp"
-        android:textStyle="bold"
-        android:typeface="monospace"
-        android:layout_below="@id/eventName"
-        android:layout_marginTop="10dp"
-        android:text="Reserved for Members" />
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/memlogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mem"
+            android:background="#00000000"
+            />
+        <TextView
+            android:id="@+id/eventMember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:textSize = "20sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            android:text="Reserved for Members" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/eventDate"
+    <LinearLayout
+        android:layout_below="@+id/memContainer"
+        android:id="@+id/dateContainer"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize = "20sp"
-        android:textStyle="bold"
-        android:typeface="monospace"
-        android:layout_below="@id/eventMember"
         android:layout_marginTop="10dp"
-        android:text="Reserved for Date" />
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/datelogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/date2"
+            android:background="#00000000"
+            />
+        <TextView
+            android:id="@+id/eventDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:textSize = "20sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            android:text="Reserved for Date" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/eventTime"
+    <LinearLayout
+        android:layout_below="@+id/dateContainer"
+        android:id="@+id/timeContainer"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize = "20sp"
-        android:textStyle="bold"
-        android:typeface="monospace"
-        android:layout_below="@id/eventDate"
         android:layout_marginTop="10dp"
-        android:text="Reserved for Time" />
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/timelogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/time2"
+            android:background="#00000000"
+            />
+        <TextView
+            android:id="@+id/eventTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:textSize = "20sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            android:text="Reserved for Time" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/eventPlace"
+    <LinearLayout
+        android:layout_below="@+id/timeContainer"
+        android:id="@+id/placeContainer"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize = "20sp"
-        android:textStyle="bold"
-        android:typeface="monospace"
-        android:layout_below="@id/eventTime"
         android:layout_marginTop="10dp"
-        android:text="Reserved for Place" />
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/placelogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/place"
+            android:background="#00000000"
+            />
+        <TextView
+            android:id="@+id/eventPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:textSize = "20sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            android:text="Reserved for Place" />
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

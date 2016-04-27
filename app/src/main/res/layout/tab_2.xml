@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@android:style/Theme.Light"
@@ -28,6 +29,7 @@
         android:gravity="left"
         android:textSize = "5sp"
         android:paddingTop="20dip"
+        android:visibility="gone"
         android:text="Progress:"
         />
 
@@ -42,29 +44,26 @@
         android:layout_marginBottom="5dp"
         android:clickable="false" />
 
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/make_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:src="@drawable/add"
+        app:backgroundTint="@color/app_primary"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
 
     <LinearLayout
         android:layout_below="@+id/progress_bar"
         android:id="@+id/button_layer"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/make_button"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
-            android:layout_marginRight="3dip"
-            android:text="Make Video"
-            android:padding="1dip"
-            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/upload_button"
@@ -103,15 +102,15 @@
 
     <VideoView
         android:id="@+id/video01"
-        android:layout_below="@id/button_layer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
         android:layout_marginLeft="1dp"
         android:layout_marginBottom="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="60dp"
         android:layout_marginRight="1dp"
         android:minHeight="240dp"
         android:minWidth="320dp" />
 
 
-</LinearLayout>
+</RelativeLayout>

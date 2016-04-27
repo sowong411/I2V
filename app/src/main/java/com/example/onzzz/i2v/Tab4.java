@@ -31,7 +31,7 @@ public class Tab4 extends Fragment {
         query.getInBackground(eventObjectId, new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                eventName.setText("Event Name: " + object.getString("EventName"));
+                eventName.setText(object.getString("EventName"));
             }
         });
 

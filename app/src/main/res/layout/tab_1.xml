@@ -20,11 +20,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:src="@drawable/camera"
-            app:backgroundTint="@color/orange"
+            app:backgroundTint="@color/app_primary"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center"/>
 
     <LinearLayout
