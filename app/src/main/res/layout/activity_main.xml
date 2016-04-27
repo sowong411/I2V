@@ -1,50 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
-    <LinearLayout
-        android:id="@+id/main_button"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
-
-
-        <Button
-            android:id="@+id/create_event_button"
-            android:layout_width="80sp"
-            android:layout_height="50sp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:text="Create Event" />
-
-        <Button
-            android:id="@+id/add_friend_button"
-            android:layout_width="80sp"
-            android:layout_height="50sp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:text="Add Friends"/>
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/existing"
         android:text="Previous Events "
         android:textSize="25dp"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/main_button"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
@@ -58,6 +27,30 @@
         android:touchscreenBlocksFocus="false"
         android:divider="#ffffff"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/create_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:src="@drawable/add"
+        app:backgroundTint="@color/app_primary"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_friend_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:src="@drawable/addfd"
+        app:backgroundTint="@color/app_primary_dark"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="85dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
 
 </RelativeLayout>
