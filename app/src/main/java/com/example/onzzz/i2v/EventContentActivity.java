@@ -18,6 +18,11 @@ import android.view.View;
 import android.support.design.widget.TabLayout;
 
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import org.bytedeco.javacpp.opencv_core;
 
 import java.io.File;
@@ -67,7 +72,15 @@ public class EventContentActivity extends ActionBarActivity {
         userObjectId = intent.getStringExtra("UserObjectId");
         eventObjectId = intent.getStringExtra("EventObjectId");
         assert (intent != null);
-     //   toolbar.setTitle(eventName);
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+        query.getInBackground(eventObjectId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                String eventName=object.getString("EventName");
+                setTitle(eventName);
+            }
+        });
 
         //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Creating The Toolbar and setting it as the Toolbar for the activity
