@@ -54,13 +54,14 @@ public class EventContentActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Photo","Member","Video","Event Info."};
+//    CharSequence Titles[] = {"Photo","Member","Video","Event Info."};
+    CharSequence Titles[] = {"","","",""};
     int Numboftabs = 4;
 
     private int[] tabIcons = {
             R.drawable.photo_library,
-            R.drawable.video,
             R.drawable.group,
+            R.drawable.video,
             R.drawable.info
     };
 
