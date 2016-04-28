@@ -25,11 +25,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import org.json.JSONException;
@@ -38,9 +35,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by WAICHONG on 31/12/2015.
@@ -62,11 +57,14 @@ public class PhotoUploadActivity extends AppCompatActivity {
 
     int numOfPhotoSelected;
 
-    String[] photoUri = new String[MAX_PHOTO_SELECTED];
-
+    ArrayList<String> photoUri = new ArrayList<String>();
+    ArrayList<Integer> numberOfFaceList = new ArrayList<Integer>();
+    ArrayList<Double> averageSmileList = new ArrayList<Double>();
+    ArrayList<Boolean> readyToBeRemovedList = new ArrayList<Boolean>();
     String userObjectId;
     String eventObjectId;
 
+    boolean FandSDetectorDone = false;
     private int numOfFace;
     private int totalSmile;
     private double averageSmile;
@@ -100,6 +98,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
 
         initImageLoader();
         init();
+
     }
 
     private void initImageLoader() {
@@ -141,7 +140,45 @@ public class PhotoUploadActivity extends AppCompatActivity {
         btnPhotoUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0 ; i < numOfPhotoSelected; i++) {
+                // remove all low resolution photo in arraylist
+                for (int k = 0; k < photoUri.size(); k++) {
+                    if (new Detection().resDetection(photoUri.get(k))) {
+                        System.out.println("Drop low res:" + photoUri.get(k));
+                        photoUri.remove(k);
+                        numOfPhotoSelected--;
+                    }
+                }
+                // remove all blur photo in arraylist
+                for (int k = 0; k < photoUri.size(); k++) {
+                    if (new Detection().blurDetection(photoUri.get(k))) {
+                        System.out.println(" Drop blur  :" + photoUri.get(k));
+                        photoUri.remove(k);
+                        numOfPhotoSelected--;
+                    }
+                }
+
+
+                // first do number of face and smile detection and drop out sim photo
+                Thread FandSDetector = new Thread(detect_FaceAndSmile_worker);
+                FandSDetector.start();
+                while (true) {
+                    if (FandSDetectorDone == false) {
+                        try {
+                            Thread.sleep(2000);                 //1000 milliseconds is one second.
+                        } catch (InterruptedException ex) {
+                            Thread.currentThread().interrupt();
+                        }
+                    } else {
+                        simChecking();
+                        break;
+                    }
+
+                }
+
+
+                //attribute detection
+                for (int i = 0; i < numOfPhotoSelected; i++) {
+                    System.out.println("select : " + photoUri.get(i));
                     final ParseObject photo = new ParseObject("Photo");
                     final Bitmap bmp = BitmapFactory.decodeFile(getFile(i).getAbsolutePath());
                     final String encodedString = encodeTobase64(bmp);
@@ -152,6 +189,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 //find out all faces
                                 numOfFace = rst.getJSONArray("face").length();
                                 System.out.println("NumOfFace: " + numOfFace);
+                                numberOfFaceList.add(numOfFace);
                                 for (int i = 0; i < numOfFace; ++i) {
 
                                     //Way to detect smile
@@ -192,6 +230,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                     averageAge = totalAge / (double) numOfFace;
                                     varianceAge = varianceCalculation(age, averageAge, numOfFace);
                                     averageSmile = totalSmile / (double) numOfFace;
+                                    averageSmileList.add(averageSmile);
                                 }
 
                                 photo.put("Image", encodedString);
@@ -232,7 +271,6 @@ public class PhotoUploadActivity extends AppCompatActivity {
                                 e.printStackTrace();
                                 PhotoUploadActivity.this.runOnUiThread(new Runnable() {
                                     public void run() {
-
                                     }
                                 });
                             }
@@ -259,7 +297,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
             for (String string : all_path) {
                 CustomGallery item = new CustomGallery();
                 item.sdcardPath = string;
-                photoUri[numOfPhotoSelected] = string;
+                photoUri.add(string);
                 numOfPhotoSelected++;
                 dataT.add(item);
             }
@@ -268,7 +306,15 @@ public class PhotoUploadActivity extends AppCompatActivity {
             adapter.addAll(dataT);
         }
     }
-
+     public void simChecking(){
+         new Detection().simChecking(photoUri , readyToBeRemovedList);
+         for (int i = readyToBeRemovedList.size()-1 ; i>=0 ; i-- ){
+             if (readyToBeRemovedList.get(i)== true){
+                 photoUri.remove(i);
+                 numOfPhotoSelected--;
+             }
+         }
+     }
     public static String encodeTobase64(Bitmap image){
         Bitmap immagex=image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -288,7 +334,7 @@ public class PhotoUploadActivity extends AppCompatActivity {
 
 
     private File getFile(int i) {
-        File image_file = new File(photoUri[i]);
+        File image_file = new File(photoUri.get(i));
         return image_file;
     }
 
@@ -349,7 +395,45 @@ public class PhotoUploadActivity extends AppCompatActivity {
         void detectResult(JSONObject rst);
     }
 
+    private Runnable detect_FaceAndSmile_worker = new Runnable() {
 
+        public void run() {
+            for (int k = 0; k < photoUri.size(); k++) {
+                final Bitmap bmp = BitmapFactory.decodeFile(getFile(k).getAbsolutePath());
+                FaceppDetect faceppDetect = new FaceppDetect();
+                faceppDetect.setDetectCallback(new DetectCallback() {
+                    public void detectResult(JSONObject rst) {
+                        try {
+                            //find out all faces
+                            numOfFace = rst.getJSONArray("face").length();
+                            System.out.println("TTT N" + numOfFace);
+                            numberOfFaceList.add(numOfFace);
+                            readyToBeRemovedList.add(false);
+                            for (int i = 0; i < numOfFace; ++i) {
+
+                                //Way to detect smile
+                                totalSmile += rst.getJSONArray("face").getJSONObject(i)
+                                        .getJSONObject("attribute").getJSONObject("smiling").getInt("value");
+                            }
+                            if (numOfFace != 0) {
+                                averageSmile = totalSmile / (double) numOfFace;
+                                System.out.println("TTT S " + averageSmile);
+                                averageSmileList.add(averageSmile);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            PhotoUploadActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                }
+                            });
+                        }
+                    }
+                });
+                faceppDetect.detect(bmp);
+                if ( k == photoUri.size()-1){FandSDetectorDone = true;}
+            }
+        }
+    };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

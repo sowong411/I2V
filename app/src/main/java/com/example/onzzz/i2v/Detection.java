@@ -3,6 +3,7 @@ package com.example.onzzz.i2v;
 import org.bytedeco.javacpp.opencv_core;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 import static org.bytedeco.javacpp.opencv_core.cvAvgSdv;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
@@ -12,16 +13,16 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvLaplace;
 /**
  * Created by hoyuichan on 4/26/2016.
  */
-public class Dectection {
+public class Detection {
 
     public boolean resDetection(String path){
         opencv_core.Mat m1 = imread(path);
         int h = m1.arrayHeight();
         int w = m1.arrayWidth();
         if ((h<240) || (w<320)){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean blurDetection( String path ){
@@ -77,4 +78,13 @@ public class Dectection {
         return (result>threshold);
     }
 
+    public void simChecking (ArrayList<String> photoUri , ArrayList<Boolean> checkList){
+        for (int i =0 ; i< photoUri.size()-1 ; i++){
+            for (int j =i+1 ; j< photoUri.size() ; j++){
+                if (simDetection(getHist(photoUri.get(i)), getHist(photoUri.get(j)))){
+                    checkList.set(i, true);
+                }
+            }
+        }
+    }
 }
