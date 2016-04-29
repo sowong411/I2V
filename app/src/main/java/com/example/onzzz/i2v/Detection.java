@@ -83,6 +83,7 @@ public class Detection {
             for (int j =i+1 ; j< photoUri.size() ; j++){
                 if (simDetection(getHist(photoUri.get(i)), getHist(photoUri.get(j)))){
                     checkList.set(i, true);
+                    System.out.println(i +" Checking sim");
                 }
             }
         }
