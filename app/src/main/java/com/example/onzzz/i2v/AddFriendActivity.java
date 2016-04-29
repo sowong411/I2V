@@ -188,7 +188,7 @@ public class AddFriendActivity extends ActionBarActivity {
                 // API 5+ solution
                 onBackPressed();
                 return true;
-
+        }
 
         return super.onOptionsItemSelected(item);
     }

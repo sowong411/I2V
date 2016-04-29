@@ -199,6 +199,10 @@ public class AddMemberActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.userButton) {
+            Intent intent = new Intent();
+            intent.setClass(AddMemberActivity.this, UserInfoActivity.class);
+            intent.putExtra("UserObjectId", userObjectId);
+            startActivity(intent);
             return true;
         }
         switch (item.getItemId()) {
