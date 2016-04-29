@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -35,12 +34,13 @@
 
     <ProgressBar
         android:id="@+id/progress_bar"
+        android:layout_below="@+id/video01"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="20dp"
+        android:layout_height="8dip"
         android:indeterminate="false"
         android:padding="10dip"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:clickable="false" />
 
@@ -57,51 +57,26 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"/>
 
-    <LinearLayout
-        android:layout_below="@+id/progress_bar"
-        android:id="@+id/button_layer"
-        android:layout_alignParentRight="true"
+
+    <Button
+        android:id="@+id/upload_button"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textAllCaps="false"
+        android:background="@drawable/buttonshape"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/upload_button"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
-            android:layout_marginRight="3dip"
-            android:text="Upload"
-            android:visibility="gone"
-            android:padding="1dip"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/download_button"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:background="@drawable/buttonshape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
-            android:layout_marginRight="3dip"
-            android:text="Download"
-            android:visibility="gone"
-            android:padding="1dip"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="3dip"
+        android:text="Upload"
+        android:visibility="gone"
+        android:padding="1dip"
+        android:layout_weight="1"/>
 
     <VideoView
         android:id="@+id/video01"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:layout_marginLeft="1dp"
@@ -111,5 +86,18 @@
         android:minHeight="240dp"
         android:minWidth="320dp" />
 
+    <ImageButton
+        android:id="@+id/download_button"
+        android:src="@drawable/download"
+        android:background="#00000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginRight="5dp" />
 
 </RelativeLayout>
