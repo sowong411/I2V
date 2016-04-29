@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -38,6 +40,7 @@ public class EventInfoActivity extends ActionBarActivity {
     private ImageButton timeButton;
     private ImageButton locationButton;
 
+    private TextView moreless;
     private TextView date;
     private TextView time;
     private TextView location;
@@ -82,8 +85,16 @@ public class EventInfoActivity extends ActionBarActivity {
             public void onClick(View v) {
                 EditText eventNameText = (EditText) findViewById(R.id.name);
                 eventName = eventNameText.getText().toString();
-
-                /***************Upload Current Event Information***************/
+                if(eventName.length() == 0) {
+                    Snackbar snackbar = Snackbar
+                            .make((findViewById(R.id.coordinatorLayoutEventInfo)), "Please enter event name", Snackbar.LENGTH_LONG);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                //    textView.setTextColor(Color.YELLOW);
+                    snackbar.show();
+                    return;
+                }
+                    /***************Upload Current Event Information***************/
                 final ParseObject event = new ParseObject("Event");
                 event.put("EventName", eventName);
                 event.put("Date", eventYear+"-"+eventMonth+"-"+eventDay);
@@ -145,6 +156,8 @@ public class EventInfoActivity extends ActionBarActivity {
             }
         });
 
+
+
         dateButton = (ImageButton) findViewById(R.id.date_button);
         date = (TextView) findViewById(R.id.date);
         dateButton.setOnClickListener(new View.OnClickListener() {
@@ -200,6 +213,32 @@ public class EventInfoActivity extends ActionBarActivity {
                 showLocationDialog();
             }
         });
+
+        moreless = (TextView) findViewById(R.id.more);
+        moreless.setText("show more");
+        moreless.setOnClickListener(new View.OnClickListener() {
+            boolean moreop=false;
+            LinearLayout lay1= (LinearLayout) findViewById(R.id.dateContainer);
+            LinearLayout lay2= (LinearLayout) findViewById(R.id.timeContainer);
+            LinearLayout lay3= (LinearLayout) findViewById(R.id.locationContainer);
+            @Override
+            public void onClick(View v) {
+                if(!moreop){
+                    moreless.setText("show less");
+                    lay1.setVisibility(View.VISIBLE);
+                    lay2.setVisibility(View.VISIBLE);
+                    lay3.setVisibility(View.VISIBLE);
+                    moreop = true;
+                }else{
+                    moreless.setText("show more");
+                    lay1.setVisibility(View.GONE);
+                    lay2.setVisibility(View.GONE);
+                    lay3.setVisibility(View.GONE);
+                    moreop=false;
+                }
+
+            }
+        });
     }
 
     public void showLocationDialog() {
@@ -233,6 +272,10 @@ public class EventInfoActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.userButton) {
+            Intent intent = new Intent();
+            intent.setClass(EventInfoActivity.this, UserInfoActivity.class);
+            intent.putExtra("UserObjectId", userObjectId);
+            startActivity(intent);
             return true;
         }
         switch (item.getItemId()) {
