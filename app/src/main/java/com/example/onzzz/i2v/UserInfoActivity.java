@@ -71,7 +71,7 @@ public class UserInfoActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
+    //    getMenuInflater().inflate(R.menu.menu_user, menu);
         return true;
     }
 
@@ -83,9 +83,9 @@ public class UserInfoActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.userButton) {
+   /*     if (id == R.id.userButton) {
             return true;
-        }
+        }*/
         switch (item.getItemId()) {
             case android.R.id.home:
                 // API 5+ solution
