@@ -1,12 +1,14 @@
 package com.example.onzzz.i2v;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -90,7 +92,14 @@ public class LoginActivity extends AppCompatActivity implements
         fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(LoginActivity.this, "Facebook Login Succeed", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(LoginActivity.this, "Facebook Login Succeed", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar
+                        .make((findViewById(R.id.coordinatorLayoutLogin)), "Facebook Login Succeed", Snackbar.LENGTH_LONG);
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                //    textView.setTextColor(Color.YELLOW);
+                snackbar.show();
+
                 final Profile profile = Profile.getCurrentProfile();
 
                 /***************Check Existence of Same Facebook Account***************/
@@ -156,7 +165,13 @@ public class LoginActivity extends AppCompatActivity implements
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            Toast.makeText(LoginActivity.this, "Google Login Succeed", Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(LoginActivity.this, "Google Login Succeed", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar
+                    .make((findViewById(R.id.coordinatorLayoutLogin)), "Google Login Succeed", Snackbar.LENGTH_LONG);
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            //    textView.setTextColor(Color.YELLOW);
+            snackbar.show();
 
             // Signed in successfully, show authenticated UI.
             final GoogleSignInAccount acct = result.getSignInAccount();

@@ -102,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
 
                 Event clickedEvent = myEvents.get(position);
                 eventObjectId = clickedEvent.getId();
-                Toast.makeText(MainActivity.this, "Event id is : " + eventObjectId, Toast.LENGTH_LONG).show();
+         //       Toast.makeText(MainActivity.this, "Event id is : " + eventObjectId, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, EventContentActivity.class);
                 intent.putExtra("UserObjectId", userObjectId);
