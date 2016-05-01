@@ -38,12 +38,10 @@ public class EventInfoActivity extends ActionBarActivity {
 
     private ImageButton dateButton;
     private ImageButton timeButton;
-    private ImageButton locationButton;
 
     private TextView moreless;
     private TextView date;
     private TextView time;
-    private TextView location;
 
     private int eventDay;
     private int eventMonth;
@@ -205,14 +203,7 @@ public class EventInfoActivity extends ActionBarActivity {
             }
         });
 
-        location = (TextView) findViewById(R.id.location);
-        locationButton = (ImageButton) findViewById(R.id.location_button);
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLocationDialog();
-            }
-        });
+
 
         moreless = (TextView) findViewById(R.id.more);
         moreless.setText("show more");
@@ -220,20 +211,17 @@ public class EventInfoActivity extends ActionBarActivity {
             boolean moreop=false;
             LinearLayout lay1= (LinearLayout) findViewById(R.id.dateContainer);
             LinearLayout lay2= (LinearLayout) findViewById(R.id.timeContainer);
-            LinearLayout lay3= (LinearLayout) findViewById(R.id.locationContainer);
             @Override
             public void onClick(View v) {
                 if(!moreop){
                     moreless.setText("show less");
                     lay1.setVisibility(View.VISIBLE);
                     lay2.setVisibility(View.VISIBLE);
-                    lay3.setVisibility(View.VISIBLE);
                     moreop = true;
                 }else{
                     moreless.setText("show more");
                     lay1.setVisibility(View.GONE);
                     lay2.setVisibility(View.GONE);
-                    lay3.setVisibility(View.GONE);
                     moreop=false;
                 }
 
@@ -241,20 +229,6 @@ public class EventInfoActivity extends ActionBarActivity {
         });
     }
 
-    public void showLocationDialog() {
-        AlertDialog.Builder builder;
-        AlertDialog alertDialog;
-        Context mContext = EventInfoActivity.this;
-
-        LayoutInflater inflater = (LayoutInflater) mContext
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.input_location, null);
-
-        builder = new AlertDialog.Builder(mContext);
-        builder.setView(layout);
-        alertDialog = builder.create();
-        alertDialog.show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
