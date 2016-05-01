@@ -34,18 +34,20 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <TextView
-        android:id="@+id/member_list"
+        android:id="@+id/member_list_text"
         android:text="Member List"
         android:textSize = "20sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/member_list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:transcriptMode="alwaysScroll"
+        android:layout_marginTop="10dp"
         android:touchscreenBlocksFocus="false"
+        android:layout_marginBottom="35dp"
         android:divider="#ffffff" />
     　
 </LinearLayout>
