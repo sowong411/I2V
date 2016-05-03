@@ -16,7 +16,7 @@
         <LinearLayout
             android:id="@+id/info"
             android:layout_width="fill_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_below="@+id/view"
             android:layout_marginTop="3dp">

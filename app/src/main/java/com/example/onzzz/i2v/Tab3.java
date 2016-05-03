@@ -1,5 +1,6 @@
 package com.example.onzzz.i2v;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 public class Tab3 extends Fragment {
     final String tag = "Tab 3 is here";
@@ -22,49 +29,64 @@ public class Tab3 extends Fragment {
         EventContentActivity activity = (EventContentActivity) getActivity();
         userObjectId = activity.getUserObjectId();
         eventObjectId = activity.getEventObjectId();
+
+
         // Get ListView object from xml
-       listView = (ListView) v.findViewById(R.id.member_list);
+        // Construct the data source
+        ArrayList<User> arrayOfUsers = new ArrayList<User>();
+        // Create the adapter to convert the array to views
+        UsersAdapter adapter = new UsersAdapter( activity, arrayOfUsers);
 
-        // Defined Array values to show in ListView
-        String[] values = new String[] { "Wong Sui On",
-                "Liu Wai Chong",
-                "Chan Ho Yui",
-                "Eva Tsang",
-        };
+        // Add item to adapter
+        User newUser = new User("Eva Tsang", R.drawable.fish);
+        User newUser2 = new User("Liu Wai Chong");
+        adapter.add(newUser);
+        adapter.add(newUser2);
 
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
-                R.layout.user_item_view, R.id.friend_name, values);
-
-        // Assign adapter to ListView
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) v.findViewById(R.id.member_list);
         listView.setAdapter(adapter);
 
-        // ListView Item Click Listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
-                String itemValue = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-         //       Toast.makeText(getApplicationContext(),
-          //              "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-           //             .show();
-
-            }
-
-        });
         return v;
     }
+    public class UsersAdapter extends ArrayAdapter<User> {
+        public UsersAdapter(Context context, ArrayList<User> users) {
+            super(context, 0, users);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Get the data item for this position
+            User user = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.user_item_view, parent, false);
+            }
+
+            // Lookup view for data population
+            ImageView icon = (ImageView) convertView.findViewById(R.id.user_item_icon);
+            TextView fdname = (TextView) convertView.findViewById(R.id.friend_name);
+
+            // Populate the data into the template view using the data object
+            icon.setImageResource(user.icon);
+            fdname.setText(user.name);
+            // Return the completed view to render on screen
+            return convertView;
+        }
+    }
+
+    public class User {
+        public String name;
+        public int icon;
+
+        public User(String name, int icon) {
+            this.name = name;
+            this.icon = icon;
+        }
+        public User(String name) {
+            this.name = name;
+            this.icon = R.drawable.no_media;
+        }
+    }
+
 }
