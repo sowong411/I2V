@@ -126,16 +126,6 @@ public class PhotoUploadActivity extends AppCompatActivity {
         viewSwitcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
         viewSwitcher.setDisplayedChild(1);
 
-        btnGalleryPickMul = (Button) findViewById(R.id.btnGalleryPickMul);
-        btnGalleryPickMul.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Action.ACTION_MULTIPLE_PICK);
-                startActivityForResult(i, 200);
-            }
-        });
-
         btnPhotoUpload = (Button) findViewById(R.id.btnUpload);
         btnPhotoUpload.setOnClickListener(new View.OnClickListener() {
             @Override

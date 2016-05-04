@@ -117,7 +117,7 @@ public class Tab1 extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(v.getContext(), PhotoUploadActivity.class);
+                intent.setClass(v.getContext(), CustomGalleryActivity.class);
                 intent.putExtra("UserObjectId", userObjectId);
                 intent.putExtra("EventObjectId", eventObjectId);
                 getActivity().startActivityForResult(intent, 500);
