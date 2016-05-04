@@ -32,7 +32,7 @@
                 android:adjustViewBounds="true"
                 android:maxHeight="40dp"
                 android:maxWidth="40dp"
-                android:src="@drawable/heart" />
+                android:src="@drawable/no_media" />
             <TextView
                 android:id="@+id/friend_name"
                 android:layout_width="wrap_content"
@@ -45,6 +45,16 @@
                 android:text="Member name"
                 android:textSize="25dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/login_icon"
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:src="@drawable/bug" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
