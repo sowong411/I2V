@@ -76,9 +76,6 @@
             android:name=".CustomGalleryActivity"
             android:label="Custom Gallery"
             android:theme="@style/AppTheme" >
-            <intent-filter>
-                <action android:name="luminous.ACTION_MULTIPLE_PICK" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".AddFriendActivity"

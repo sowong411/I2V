@@ -47,11 +47,6 @@ public class CustomGalleryActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.gallery);
-
-        action = getIntent().getAction();
-        if (action == null) {
-            finish();
-        }
         initImageLoader();
         init();
     }
@@ -93,13 +88,9 @@ public class CustomGalleryActivity extends Activity {
                 true, true);
         gridGallery.setOnScrollListener(listener);
 
-        if (action.equalsIgnoreCase(Action.ACTION_MULTIPLE_PICK)) {
-
-            findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
-            gridGallery.setOnItemClickListener(mItemMulClickListener);
-            adapter.setMultiplePick(true);
-
-        }
+        findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
+        gridGallery.setOnItemClickListener(mItemMulClickListener);
+        adapter.setMultiplePick(true);
 
         gridGallery.setAdapter(adapter);
 
