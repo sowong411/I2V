@@ -136,7 +136,7 @@ public class Tab2 extends Fragment {
                 final AlertDialog.Builder firstTemplateBuilder = new AlertDialog.Builder(Tab2.this.getContext());
                 LayoutInflater firstTemplateInflater = getLayoutInflater(savedInstanceState);
                 firstTemplateBuilder.setTitle("Choose Template");
-                firstTemplateBuilder.setSingleChoiceItems(new String[]{"Christmas", "Wedding"}, 0, new DialogInterface.OnClickListener() {
+                firstTemplateBuilder.setSingleChoiceItems(new String[]{"General","Christmas","Wedding","Love","Energetic"}, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         firstTemplateDecision = which;
@@ -150,10 +150,14 @@ public class Tab2 extends Fragment {
                         secondTemplateBuilder.setTitle("Choose Template");
                         String[] template = new String[]{};
                         switch (firstTemplateDecision){
-                            case 0: template = new String[]{"Style1", "Style2"};
-                                    break;
+                            case 0: break;
                             case 1: template = new String[]{"Style1", "Style2"};
                                     break;
+                            case 2: template = new String[]{"Style1", "Style2"};
+                                    break;
+                            case 3: template = new String[]{"Style1", "Style2"};
+                                    break;
+                            case 4: break;
                         }
                         secondTemplateBuilder.setSingleChoiceItems(template, 0, new DialogInterface.OnClickListener() {
                             @Override
@@ -353,7 +357,9 @@ public class Tab2 extends Fragment {
             completed = 0;
 
             switch (firstTemplateDecision){
-                case 0: switch (secondTemplateDecision){
+                case 0: images.add(imread("/sdcard/Download/general1.jpg"));
+                        break;
+                case 1: switch (secondTemplateDecision){
                             case 0: images.add(imread("/sdcard/Download/christmas1_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*13,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
@@ -372,7 +378,7 @@ public class Tab2 extends Fragment {
                                     break;
                         }
                         break;
-                case 1: switch (secondTemplateDecision){
+                case 2: switch (secondTemplateDecision){
                             case 0: images.add(imread("/sdcard/Download/wedding1_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
@@ -391,11 +397,25 @@ public class Tab2 extends Fragment {
                                     break;
                         }
                         break;
+                case 3: switch(secondTemplateDecision){
+                            case 0: images.add(imread("/sdcard/Download/love1_1.jpg"));
+                                    break;
+                            case 1: images.add(imread("/sdcard/Download/love2_1.jpg"));
+                                    break;
+                        }
+                        break;
+                case 4: images.add(imread("/sdcard/Download/energetic1.jpg"));
+                        break;
             }
 
             for (int k = 0 ; k< myPhotosWithOrder.size(); k++){
                 switch (firstTemplateDecision){
-                    case 0: switch (secondTemplateDecision){
+                    case 0: if (k == myPhotosWithOrder.size()/2)
+                                images.add(imread("/sdcard/Download/general2.jpg"));
+                            if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
+                                images.add(imread("/sdcard/Download/general3.jpg"));
+                            break;
+                    case 1: switch (secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/2){
                                             images.add(imread("sdcard/Download/christmas1_2.jpg"));
                                         }
@@ -412,7 +432,7 @@ public class Tab2 extends Fragment {
                                         break;
                             }
                             break;
-                    case 1: switch (secondTemplateDecision){
+                    case 2: switch (secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/3){
                                             images.add(imread("sdcard/Download/wedding1_2.jpg"));
                                         }
@@ -434,6 +454,24 @@ public class Tab2 extends Fragment {
                                         }
                                         break;
                             }
+                            break;
+                    case 3: switch(secondTemplateDecision){
+                                case 0: if (k == myPhotosWithOrder.size()/2)
+                                            images.add(imread("sdcard/Download/love1_2.jpg"));
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
+                                            images.add(imread("/sdcard/Download/love1_3.jpg"));
+                                        break;
+                                case 1: if (k == myPhotosWithOrder.size()/2)
+                                            images.add(imread("sdcard/Download/love2_2.jpg"));
+                                        if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
+                                            images.add(imread("/sdcard/Download/love2_3.jpg"));
+                                        break;
+                            }
+                            break;
+                    case 4: if (k == myPhotosWithOrder.size()/2)
+                                images.add(imread("/sdcard/Download/energetic2.jpg"));
+                            if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
+                                images.add(imread("/sdcard/Download/energetic3.jpg"));
                             break;
                 }
                 opencv_core.Mat m = myPhotosWithOrder.get(k).getMat();
@@ -777,9 +815,18 @@ public class Tab2 extends Fragment {
                     statusText.setText(String.format("Completed %d", completed));
                 }
             });
+            int randomNumber = (int) (random()*100);
             switch (firstTemplateDecision){
-                case 0: switch(secondTemplateDecision){
-                            case 0: int randomNumber = (int) (random()*100%3);
+                case 0: randomNumber %= 3;
+                        if (randomNumber == 0)
+                            audio = new File("/sdcard/Download/general1.mp3");
+                        if (randomNumber == 1)
+                            audio = new File("/sdcard/Download/general2.mp3");
+                        if (randomNumber == 2)
+                            audio = new File("/sdcard/Download/general3.mp3");
+                        break;
+                case 1: switch(secondTemplateDecision){
+                            case 0: randomNumber %= 3;
                                     if (randomNumber == 0)
                                         audio = new File("/sdcard/Download/christmas1_1.mp3");
                                     if (randomNumber == 1)
@@ -791,8 +838,8 @@ public class Tab2 extends Fragment {
                                     break;
                         }
                         break;
-                case 1: switch(secondTemplateDecision){
-                            case 0: int randomNumber = (int) (random()*100%2);
+                case 2: switch(secondTemplateDecision){
+                            case 0: randomNumber %= 2;
                                     if (randomNumber == 0)
                                         audio = new File("/sdcard/Download/wedding1_1.mp3");
                                     if (randomNumber == 1)
@@ -801,6 +848,23 @@ public class Tab2 extends Fragment {
                             case 1: audio = new File("/sdcard/Download/wedding2.mp3");
                                     break;
                         }
+                        break;
+                case 3: switch(secondTemplateDecision){
+                            case 0: randomNumber %= 2;
+                                    if (randomNumber == 0)
+                                        audio = new File("/sdcard/Download/love1_1.mp3");
+                                    if (randomNumber == 1)
+                                        audio = new File("/sdcard/Download/love1_2.mp3");
+                                    break;
+                            case 1: audio = new File("/sdcard/Download/love2.mp3");
+                                    break;
+                        }
+                        break;
+                case 4: randomNumber %= 2;
+                        if (randomNumber == 0)
+                            audio = new File("/sdcard/Download/energetic1.mp3");
+                        if (randomNumber == 1)
+                            audio = new File("/sdcard/Download/energetic2.mp3");
                         break;
             }
             FFmpegFrameGrabber grabber1 = new FFmpegFrameGrabber(makevideo.getAbsolutePath());
