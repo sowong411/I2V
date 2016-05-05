@@ -34,15 +34,6 @@
             android:src="@drawable/add_photo"
             />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/instantcamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:src="@drawable/camera"
-            app:backgroundTint="@color/app_primary"
-            />
-
         <TextView
             android:id="@+id/upload_photo"
             android:text="Upload Photo"
@@ -78,6 +69,19 @@
         android:verticalSpacing="5dp"
         android:focusable="true"
         android:clickable="true"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/instantcamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/camera"
+            app:backgroundTint="@color/app_primary"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"/>
 
 </RelativeLayout>
 

@@ -44,20 +44,6 @@
         android:layout_marginBottom="5dp"
         android:clickable="false" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/make_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:src="@drawable/add"
-        app:backgroundTint="@color/app_primary"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"/>
-
-
     <Button
         android:id="@+id/upload_button"
         android:textColor="#FFFFFF"
@@ -99,5 +85,18 @@
         android:layout_marginBottom="1dp"
         android:layout_marginTop="65dp"
         android:layout_marginRight="5dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/make_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:src="@drawable/add"
+        app:backgroundTint="@color/app_primary"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
 
 </RelativeLayout>
