@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -49,13 +50,15 @@ public class CustomGalleryActivity extends Activity {
     GalleryAdapter adapter;
 
     Button btnGalleryOk;
-
+    ArrayList<Boolean> readyToBeRemovedList = new ArrayList<Boolean>();
+    ArrayList<Photo>  photos = new ArrayList<Photo>();
     String action;
     private ImageLoader imageLoader;
     private int numOfFace;
     private int totalSmile;
     private double averageSmile;
     private ArrayList<Integer> age = new ArrayList<Integer>();
+    private ArrayList<String> allPath = new ArrayList<String>();
     private int totalAge;
     private double totalSquareAge;
     private double averageAge;
@@ -90,18 +93,15 @@ public class CustomGalleryActivity extends Activity {
                     .defaultDisplayImageOptions(defaultOptions)
                     .discCache(new UnlimitedDiscCache(cacheDir))
                     .memoryCache(new WeakMemoryCache());
-
             ImageLoaderConfiguration config = builder.build();
             imageLoader = ImageLoader.getInstance();
             imageLoader.init(config);
-
         } catch (Exception e) {
 
         }
     }
 
     private void init() {
-
         handler = new Handler();
         gridGallery = (GridView) findViewById(R.id.gridGallery);
         gridGallery.setFastScrollEnabled(true);
@@ -109,48 +109,60 @@ public class CustomGalleryActivity extends Activity {
         PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader,
                 true, true);
         gridGallery.setOnScrollListener(listener);
-
         findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
         gridGallery.setOnItemClickListener(mItemMulClickListener);
         adapter.setMultiplePick(true);
-
         gridGallery.setAdapter(adapter);
-
         btnGalleryOk = (Button) findViewById(R.id.btnGalleryOk);
         btnGalleryOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<CustomGallery> selected = adapter.getSelected();
-
-                String[] allPath = new String[selected.size()];
-                for (int i = 0; i < allPath.length; i++) {
-                    allPath[i] = selected.get(i).sdcardPath;
+                for (int i = 0; i < selected.size(); i++) {
+                    allPath.add( selected.get(i).sdcardPath );
                 }
 
+                // remove all low resolution photo in arraylist
+                for (int k = 0; k < allPath.size(); k++) {
+                    if (new Detection().resDetection(allPath.get(k))) {
+                        System.out.println("Drop low res:" + allPath.get(k));
+                        allPath.remove(k);
+                    }
+                }
+                // remove all blur photo in arraylist
+                for (int k = 0; k < allPath.size(); k++) {
+                    if (new Detection().blurDetection(allPath.get(k))) {
+                        System.out.println(" Drop blur  :" + allPath.get(k));
+                        allPath.remove(k);
+                    }
+                }
+
+                // remove all similar photo in arraylist
+                //simChecking();
+
+
+                Bitmap bmp;
                 //attribute detection
-                for (int i = 0; i < allPath.length; i++) {
-                    final Bitmap bmp = BitmapFactory.decodeFile(allPath[i]);
-                    final String encodedString = encodeTobase64(bmp);
+                for (int i = 0; i < allPath.size(); i++) {
+                    bmp = BitmapFactory.decodeFile(allPath.get(i));
+                    //final String encodedString = encodeTobase64(bmp);
+                    System.out.println("Testing the:" + i +" photo");
                     FaceppDetect faceppDetect = new FaceppDetect();
                     faceppDetect.setDetectCallback(new DetectCallback() {
                         public void detectResult(JSONObject rst) {
                             try {
                                 //find out all faces
                                 numOfFace = rst.getJSONArray("face").length();
-                                System.out.println("Testing:"+numOfFace);
-
+                                System.out.println("Testing numOfFace:" + numOfFace);
                                 for (int i = 0; i < numOfFace; ++i) {
-
                                     //Way to detect smile
                                     totalSmile += rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("smiling").getInt("value");
-
                                     //Way to detect age
                                     System.out.println("Age " + i + ": " + rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("age").getInt("value"));
                                     age.add(rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("age").getInt("value"));
-
                                     //Way to detect gender
                                     String gender = rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("gender").getString("value");
@@ -159,7 +171,6 @@ public class CustomGalleryActivity extends Activity {
                                     } else if (gender.equals("Female")) {
                                         numOfFemale++;
                                     }
-
                                     //Way to detect face position
                                     if (numOfFace == 1) {
                                         if (rst.getJSONArray("face").getJSONObject(i)
@@ -171,8 +182,6 @@ public class CustomGalleryActivity extends Activity {
                                         }
                                     }
                                 }
-
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 CustomGalleryActivity.this.runOnUiThread(new Runnable() {
@@ -180,21 +189,19 @@ public class CustomGalleryActivity extends Activity {
                                     }
                                 });
                             }
-
                         }
                     });
                     faceppDetect.detect(bmp);
+                    Photo p = new Photo( null ,  numOfFace,  averageSmile, averageAge, varianceAge, 0,  facePosition );
+                    photos.add(p);
                 }
             }
         });
-
         new Thread() {
-
             @Override
             public void run() {
                 Looper.prepare();
                 handler.post(new Runnable() {
-
                     @Override
                     public void run() {
                         adapter.addAll(getGalleryPhotos());
@@ -202,49 +209,37 @@ public class CustomGalleryActivity extends Activity {
                 });
                 Looper.loop();
             };
-
         }.start();
-
     }
 
     AdapterView.OnItemClickListener mItemMulClickListener = new AdapterView.OnItemClickListener() {
-
         @Override
         public void onItemClick(AdapterView<?> l, View v, int position, long id) {
             adapter.changeSelection(v, position);
-
         }
     };
 
     private ArrayList<CustomGallery> getGalleryPhotos() {
         ArrayList<CustomGallery> galleryList = new ArrayList<CustomGallery>();
-
         try {
             final String[] columns = { MediaStore.Images.Media.DATA,
                     MediaStore.Images.Media._ID };
             final String orderBy = MediaStore.Images.Media._ID;
-
             Cursor imagecursor = managedQuery(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
                     null, null, orderBy);
-
             if (imagecursor != null && imagecursor.getCount() > 0) {
-
                 while (imagecursor.moveToNext()) {
                     CustomGallery item = new CustomGallery();
-
                     int dataColumnIndex = imagecursor
                             .getColumnIndex(MediaStore.Images.Media.DATA);
-
                     item.sdcardPath = imagecursor.getString(dataColumnIndex);
-
                     galleryList.add(item);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // show newest photo at beginning of the list
         Collections.reverse(galleryList);
         return galleryList;
@@ -269,11 +264,9 @@ public class CustomGalleryActivity extends Activity {
 
     private class FaceppDetect {
         DetectCallback callback = null;
-
         public void setDetectCallback(DetectCallback detectCallback) {
             callback = detectCallback;
         }
-
         public void detect(final Bitmap image) {
             new Thread(new Runnable() {
                 public void run() {
@@ -301,6 +294,21 @@ public class CustomGalleryActivity extends Activity {
                     }
                 }
             }).start();
+        }
+    }
+
+
+
+
+    public void simChecking( ){
+        ArrayList<Boolean> readyToBeRemovedList = new ArrayList<Boolean>(allPath.size());
+        Collections.fill(readyToBeRemovedList, Boolean.FALSE);
+        new Detection().simChecking(allPath, readyToBeRemovedList);
+        for (int i = readyToBeRemovedList.size()-1 ; i>=0 ; i-- ){
+            if (readyToBeRemovedList.get(i) == true){
+                System.out.println("Drop sim :" + allPath.get(i));
+                allPath.remove(i);
+            }
         }
     }
 
