@@ -95,7 +95,17 @@ public class CustomGalleryActivity extends Activity {
         gridGallery.setAdapter(adapter);
 
         btnGalleryOk = (Button) findViewById(R.id.btnGalleryOk);
-        btnGalleryOk.setOnClickListener(mOkClickListener);
+        btnGalleryOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<CustomGallery> selected = adapter.getSelected();
+
+                String[] allPath = new String[selected.size()];
+                for (int i = 0; i < allPath.length; i++) {
+                    allPath[i] = selected.get(i).sdcardPath;
+                }
+            }
+        });
 
         new Thread() {
 
@@ -116,23 +126,6 @@ public class CustomGalleryActivity extends Activity {
 
     }
 
-    View.OnClickListener mOkClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            ArrayList<CustomGallery> selected = adapter.getSelected();
-
-            String[] allPath = new String[selected.size()];
-            for (int i = 0; i < allPath.length; i++) {
-                allPath[i] = selected.get(i).sdcardPath;
-            }
-
-            Intent data = new Intent().putExtra("all_path", allPath);
-            setResult(RESULT_OK, data);
-            finish();
-
-        }
-    };
     AdapterView.OnItemClickListener mItemMulClickListener = new AdapterView.OnItemClickListener() {
 
         @Override
