@@ -30,6 +30,9 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.Frame;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +42,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static java.lang.Math.random;
 
 /**
  * Created by onzzz on 1/3/2016.
@@ -66,6 +71,9 @@ public class CustomGalleryActivity extends Activity {
     private int numOfMale;
     private int numOfFemale;
     private int facePosition;
+
+    FaceppDetect faceppDetect = new FaceppDetect();
+    Bitmap bmp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -140,14 +148,11 @@ public class CustomGalleryActivity extends Activity {
                 // remove all similar photo in arraylist
                 //simChecking();
 
-
-                Bitmap bmp;
                 //attribute detection
                 for (int i = 0; i < allPath.size(); i++) {
                     bmp = BitmapFactory.decodeFile(allPath.get(i));
                     //final String encodedString = encodeTobase64(bmp);
-                    System.out.println("Testing the:" + i +" photo");
-                    FaceppDetect faceppDetect = new FaceppDetect();
+                    System.out.println("Testing the:" + i + " photo");
                     faceppDetect.setDetectCallback(new DetectCallback() {
                         public void detectResult(JSONObject rst) {
                             try {
@@ -191,7 +196,8 @@ public class CustomGalleryActivity extends Activity {
                             }
                         }
                     });
-                    faceppDetect.detect(bmp);
+                    Thread face_detect_thread = new Thread(face_detect_worker);
+                    face_detect_thread.run();
                     Photo p = new Photo( null ,  numOfFace,  averageSmile, averageAge, varianceAge, 0,  facePosition );
                     photos.add(p);
                 }
@@ -315,5 +321,12 @@ public class CustomGalleryActivity extends Activity {
     interface DetectCallback {
         void detectResult(JSONObject rst);
     }
+
+    private Runnable face_detect_worker = new Runnable() {
+
+        public void run() {
+            faceppDetect.detect(bmp);
+        }
+    };
 
 }
