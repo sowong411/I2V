@@ -88,9 +88,9 @@ public class EventContentActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+      //  getSupportActionBar().setDisplayShowHomeEnabled(true);
+     //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //    getSupportActionBar().setHomeButtonEnabled(true);
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
 
@@ -137,7 +137,7 @@ public class EventContentActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
+    //    getMenuInflater().inflate(R.menu.menu_user, menu);
 
         return true;
     }
@@ -148,13 +148,13 @@ public class EventContentActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.userButton) {
+       /* if (id == R.id.userButton) {
             Intent intent = new Intent();
             intent.setClass(EventContentActivity.this, UserInfoActivity.class);
             intent.putExtra("UserObjectId", userObjectId);
             startActivity(intent);
             return true;
-        }
+        }*/
         switch (item.getItemId()) {
             case android.R.id.home:
                 // this takes the user 'back', as if they pressed the left-facing triangle icon on the main android toolbar.
