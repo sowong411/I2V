@@ -1,6 +1,7 @@
 package com.example.onzzz.i2v;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +30,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -71,6 +75,8 @@ public class CustomGalleryActivity extends Activity {
     private int numOfMale;
     private int numOfFemale;
     private int facePosition;
+    private String  userObjectId;
+    private String  eventObjectId;
 
     FaceppDetect faceppDetect = new FaceppDetect();
     Bitmap bmp;
@@ -80,6 +86,10 @@ public class CustomGalleryActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.gallery);
+        Intent intent = getIntent();
+        userObjectId = intent.getStringExtra("UserObjectId");
+        eventObjectId = intent.getStringExtra("EventObjectId");
+        assert (intent != null);
         initImageLoader();
         init();
     }
@@ -146,12 +156,14 @@ public class CustomGalleryActivity extends Activity {
                 }
 
                 // remove all similar photo in arraylist
-                //simChecking();
+                simChecking();
 
                 //attribute detection
                 for (int i = 0; i < allPath.size(); i++) {
+                    //if(i!= 0){ bmp.recycle();}
                     bmp = BitmapFactory.decodeFile(allPath.get(i));
-                    //final String encodedString = encodeTobase64(bmp);
+                    final ParseObject photo = new ParseObject("Photo");
+                    final String encodedString = encodeTobase64(bmp);
                     System.out.println("Testing the:" + i + " photo");
                     faceppDetect.setDetectCallback(new DetectCallback() {
                         public void detectResult(JSONObject rst) {
@@ -186,6 +198,40 @@ public class CustomGalleryActivity extends Activity {
                                             facePosition = 1;
                                         }
                                     }
+                                    photo.put("Image", encodedString);
+                                    photo.put("Location", "");
+                                    photo.put("Time", "");
+                                    photo.put("Event", eventObjectId);
+                                    photo.put("UploadedBy", userObjectId);
+                                    photo.put("FaceNumber", numOfFace);
+                                    photo.put("AverageSmileLevel", 	averageSmile);
+                                    photo.put("MaleNumber", numOfMale);
+                                    photo.put("FemaleNumber", numOfFemale);
+                                    photo.put("AverageAge", averageAge);
+                                    photo.put("VarianceAge", varianceAge);
+                                    photo.put("FacePosition", facePosition);
+                                    photo.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Toast.makeText(CustomGalleryActivity.this, "Uploading", Toast.LENGTH_LONG).show();
+                                                Intent data = new Intent();
+                                                setResult(RESULT_OK, data);
+                                                finish();
+                                            }
+                                        }
+                                    });
+
+                                    averageAge = 0;
+                                    varianceAge = 0;
+                                    averageSmile = 0;
+                                    totalSmile = 0;
+                                    totalSquareAge = 0;
+                                    totalAge = 0;
+                                    numOfMale = 0;
+                                    numOfFemale = 0;
+                                    facePosition = 0;
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -198,8 +244,7 @@ public class CustomGalleryActivity extends Activity {
                     });
                     Thread face_detect_thread = new Thread(face_detect_worker);
                     face_detect_thread.run();
-                    Photo p = new Photo( null ,  numOfFace,  averageSmile, averageAge, varianceAge, 0,  facePosition );
-                    photos.add(p);
+                    //bmp.recycle();
                 }
             }
         });
@@ -307,13 +352,16 @@ public class CustomGalleryActivity extends Activity {
 
 
     public void simChecking( ){
-        ArrayList<Boolean> readyToBeRemovedList = new ArrayList<Boolean>(allPath.size());
-        Collections.fill(readyToBeRemovedList, Boolean.FALSE);
+        for(int j =0 ; j< allPath.size() ; j++){
+            readyToBeRemovedList.add(false);
+        }
         new Detection().simChecking(allPath, readyToBeRemovedList);
-        for (int i = readyToBeRemovedList.size()-1 ; i>=0 ; i-- ){
-            if (readyToBeRemovedList.get(i) == true){
-                System.out.println("Drop sim :" + allPath.get(i));
-                allPath.remove(i);
+        if (allPath.size() != 0){
+            for (int i = readyToBeRemovedList.size() - 1; i >= 0; i--) {
+                if (readyToBeRemovedList.get(i) == true) {
+                    System.out.println("Drop sim :" + allPath.get(i));
+                    allPath.remove(i);
+                }
             }
         }
     }
