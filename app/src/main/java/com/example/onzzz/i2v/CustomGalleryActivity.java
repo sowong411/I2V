@@ -143,14 +143,14 @@ public class CustomGalleryActivity extends Activity {
                 // remove all low resolution photo in arraylist
                 for (int k = 0; k < allPath.size(); k++) {
                     if (new Detection().resDetection(allPath.get(k))) {
-                        System.out.println("Drop low res:" + allPath.get(k));
+                        Toast.makeText(CustomGalleryActivity.this, "Drop low res : " + allPath.get(k), Toast.LENGTH_SHORT).show();
                         allPath.remove(k);
                     }
                 }
                 // remove all blur photo in arraylist
                 for (int k = 0; k < allPath.size(); k++) {
                     if (new Detection().blurDetection(allPath.get(k))) {
-                        System.out.println(" Drop blur  :" + allPath.get(k));
+                        Toast.makeText(CustomGalleryActivity.this, "Drop blur : " + allPath.get(k), Toast.LENGTH_SHORT).show();
                         allPath.remove(k);
                     }
                 }
@@ -359,7 +359,7 @@ public class CustomGalleryActivity extends Activity {
         if (allPath.size() != 0){
             for (int i = readyToBeRemovedList.size() - 1; i >= 0; i--) {
                 if (readyToBeRemovedList.get(i) == true) {
-                    System.out.println("Drop sim :" + allPath.get(i));
+                    Toast.makeText(CustomGalleryActivity.this, "Drop sim :" + allPath.get(i), Toast.LENGTH_SHORT).show();
                     allPath.remove(i);
                 }
             }
