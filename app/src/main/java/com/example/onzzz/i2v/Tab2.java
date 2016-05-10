@@ -3,8 +3,10 @@ package com.example.onzzz.i2v;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -131,6 +133,15 @@ public class Tab2 extends Fragment {
         v.findViewById(R.id.make_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(Tab2.this.getContext(), VideoSettingActivity.class);
+                startActivityForResult(intent, 200);
+            }
+        });
+
+        /*v.findViewById(R.id.make_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Thread download_photo_thread = new Thread(download_photo_worker);
                 download_photo_thread.start();
                 final AlertDialog.Builder firstTemplateBuilder = new AlertDialog.Builder(Tab2.this.getContext());
@@ -197,7 +208,7 @@ public class Tab2 extends Fragment {
                 firstTemplateBuilder.setNegativeButton("Cancel", null);
                 firstTemplateBuilder.show();
             }
-        });
+        });*/
 
          //upload the encoded video to server
         v.findViewById(R.id.upload_button).setOnClickListener(new View.OnClickListener() {
@@ -249,6 +260,15 @@ public class Tab2 extends Fragment {
 
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200){
+            System.out.println("on9Malca:" + data.getExtras().getString("chosenMusicPath") + " " +
+            data.getExtras().getInt("chosenEffect") + " " + data.getExtras().getInt("chosenTemplate"));
+        }
     }
 
     private Runnable download_photo_worker = new Runnable() {

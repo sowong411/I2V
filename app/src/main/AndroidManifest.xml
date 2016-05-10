@@ -77,6 +77,10 @@
             android:label="Add Friends"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".VideoSettingActivity"
+            android:label="Video Setting"
+            android:theme="@style/AppTheme"/>
 
     </application>
 
