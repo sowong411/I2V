@@ -100,6 +100,7 @@ public class Tab2 extends Fragment {
     File makevideo;
     File combine;
 
+    String chosenMusicPath;
     int firstTemplateDecision;
     int secondTemplateDecision;
     int effectDecision;
@@ -139,78 +140,7 @@ public class Tab2 extends Fragment {
             }
         });
 
-        /*v.findViewById(R.id.make_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread download_photo_thread = new Thread(download_photo_worker);
-                download_photo_thread.start();
-                final AlertDialog.Builder firstTemplateBuilder = new AlertDialog.Builder(Tab2.this.getContext());
-                LayoutInflater firstTemplateInflater = getLayoutInflater(savedInstanceState);
-                firstTemplateBuilder.setTitle("Choose Template");
-                firstTemplateBuilder.setSingleChoiceItems(new String[]{"General","Christmas","Wedding","Love","Energetic"}, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        firstTemplateDecision = which;
-                    }
-                });
-                firstTemplateBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder secondTemplateBuilder = new AlertDialog.Builder(Tab2.this.getContext());
-                        LayoutInflater secondTemplateInflater = getLayoutInflater(savedInstanceState);
-                        secondTemplateBuilder.setTitle("Choose Template");
-                        String[] template = new String[]{};
-                        switch (firstTemplateDecision){
-                            case 0: break;
-                            case 1: template = new String[]{"Style1", "Style2"};
-                                    break;
-                            case 2: template = new String[]{"Style1", "Style2"};
-                                    break;
-                            case 3: template = new String[]{"Style1", "Style2"};
-                                    break;
-                            case 4: break;
-                        }
-                        secondTemplateBuilder.setSingleChoiceItems(template, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                secondTemplateDecision = which;
-                            }
-                        });
-                        secondTemplateBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                AlertDialog.Builder effectBuilder = new AlertDialog.Builder(Tab2.this.getContext());
-                                LayoutInflater effectInflater = getLayoutInflater(savedInstanceState);
-                                effectBuilder.setTitle("Choose Effect");
-                                effectBuilder.setSingleChoiceItems(new String[]{"閃光過場", "模糊過場", "交錯過場", "Zooming", "Multiple In One"}, 0, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        effectDecision = which;
-                                    }
-                                });
-                                effectBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        makevideo = new File("/sdcard/MemorVi/"+eventObjectId+"/makevideo.mp4");
-                                        combine = new File("/sdcard/MemorVi/"+eventObjectId+"/combine.mp4");
-                                        Thread make_video_thread = new Thread(make_video_worker);
-                                        make_video_thread.start();
-                                    }
-                                });
-                                effectBuilder.setNegativeButton("Cancel", null);
-                                effectBuilder.show();
-                            }
-                        });
-                        secondTemplateBuilder.setNegativeButton("Cancel", null);
-                        secondTemplateBuilder.show();
-                    }
-                });
-                firstTemplateBuilder.setNegativeButton("Cancel", null);
-                firstTemplateBuilder.show();
-            }
-        });*/
-
-         //upload the encoded video to server
+        //upload the encoded video to server
         v.findViewById(R.id.upload_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,8 +187,6 @@ public class Tab2 extends Fragment {
                 });
             }
         });
-
-
         return v;
     }
 
@@ -266,8 +194,12 @@ public class Tab2 extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200){
-            System.out.println("on9Malca:" + data.getExtras().getString("chosenMusicPath") + " " +
-            data.getExtras().getInt("chosenEffect") + " " + data.getExtras().getInt("chosenTemplate"));
+            chosenMusicPath = data.getExtras().getString("chosenMusicPath");
+            firstTemplateDecision = data.getExtras().getInt("chosenTemplate");
+            secondTemplateDecision = data.getExtras().getInt("chosenInnerTemplate");
+            effectDecision = data.getExtras().getInt("chosenEffect");
+            Thread download_photo_thread = new Thread(download_photo_worker);
+            download_photo_thread.start();
         }
     }
 
@@ -369,6 +301,9 @@ public class Tab2 extends Fragment {
                     Toast.makeText(getActivity(), "Photos are Downloaded ", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            Thread make_video_thread = new Thread(make_video_worker);
+            make_video_thread.start();
         }
     };
 
@@ -377,10 +312,9 @@ public class Tab2 extends Fragment {
             completed = 0;
 
             switch (firstTemplateDecision){
-                case 0: images.add(imread("/sdcard/Download/general1.jpg"));
-                        break;
+                case 0: break;
                 case 1: switch (secondTemplateDecision){
-                            case 0: images.add(imread("/sdcard/Download/christmas1_1.jpg"));
+                            case 0: images.add(imread("/sdcard/I2V/template/christmas1_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*13,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
@@ -388,7 +322,7 @@ public class Tab2 extends Fragment {
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*25,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
                                     break;
-                            case 1: images.add(imread("/sdcard/Download/christmas2_1.jpg"));
+                            case 1: images.add(imread("/sdcard/I2V/template/christmas2_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*18,560), 3, 1.5, new opencv_core.Scalar(0, 0, 0, 0));
                                     }
@@ -399,7 +333,7 @@ public class Tab2 extends Fragment {
                         }
                         break;
                 case 2: switch (secondTemplateDecision){
-                            case 0: images.add(imread("/sdcard/Download/wedding1_1.jpg"));
+                            case 0: images.add(imread("/sdcard/I2V/template/wedding1_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
@@ -407,7 +341,7 @@ public class Tab2 extends Fragment {
                                         putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
                                     break;
-                            case 1: images.add(imread("/sdcard/Download/wedding2_1.jpg"));
+                            case 1: images.add(imread("/sdcard/I2V/template/wedding2_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(300-(eventName.length()/2)*30,320), 3, 2, new opencv_core.Scalar(0, 100, 100, 0));
                                     }
@@ -418,80 +352,76 @@ public class Tab2 extends Fragment {
                         }
                         break;
                 case 3: switch(secondTemplateDecision){
-                            case 0: images.add(imread("/sdcard/Download/love1_1.jpg"));
+                            case 0: images.add(imread("/sdcard/I2V/template/love1_1.jpg"));
                                     break;
-                            case 1: images.add(imread("/sdcard/Download/love2_1.jpg"));
+                            case 1: images.add(imread("/sdcard/I2V/template/love2_1.jpg"));
                                     break;
                         }
                         break;
-                case 4: images.add(imread("/sdcard/Download/energetic1.jpg"));
+                case 4: images.add(imread("/sdcard/I2V/template/energetic1.jpg"));
                         break;
             }
 
             for (int k = 0 ; k< myPhotosWithOrder.size(); k++){
                 switch (firstTemplateDecision){
-                    case 0: if (k == myPhotosWithOrder.size()/2)
-                                images.add(imread("/sdcard/Download/general2.jpg"));
-                            if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                images.add(imread("/sdcard/Download/general3.jpg"));
-                            break;
+                    case 0: break;
                     case 1: switch (secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/2){
-                                            images.add(imread("sdcard/Download/christmas1_2.jpg"));
+                                            images.add(imread("sdcard/I2V/template/christmas1_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/Download/christmas1_3.jpg"));
+                                            images.add(imread("/sdcard/I2V/template/christmas1_3.jpg"));
                                         }
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/2){
-                                            images.add(imread("sdcard/Download/christmas2_2.jpg"));
+                                            images.add(imread("sdcard/I2V/template/christmas2_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/Download/christmas2_3.jpg"));
+                                            images.add(imread("/sdcard/I2V/christmas2_3.jpg"));
                                         }
                                         break;
                             }
                             break;
                     case 2: switch (secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/3){
-                                            images.add(imread("sdcard/Download/wedding1_2.jpg"));
+                                            images.add(imread("sdcard/I2V/template/wedding1_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()/3*2){
-                                            images.add(imread("sdcard/Download/wedding1_3.jpg"));
+                                            images.add(imread("sdcard/I2V/template/wedding1_3.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/Download/wedding1_4.jpg"));
+                                            images.add(imread("/sdcard/I2V/template/wedding1_4.jpg"));
                                         }
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/3){
-                                            images.add(imread("sdcard/Download/wedding2_2.jpg"));
+                                            images.add(imread("sdcard/I2V/template/wedding2_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()/3*2){
-                                            images.add(imread("sdcard/Download/wedding2_3.jpg"));
+                                            images.add(imread("sdcard/I2V/template/wedding2_3.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/Download/wedding2_4.jpg"));
+                                            images.add(imread("/sdcard/I2V/template/wedding2_4.jpg"));
                                         }
                                         break;
                             }
                             break;
                     case 3: switch(secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/2)
-                                            images.add(imread("sdcard/Download/love1_2.jpg"));
+                                            images.add(imread("sdcard/I2V/template/love1_2.jpg"));
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                            images.add(imread("/sdcard/Download/love1_3.jpg"));
+                                            images.add(imread("/sdcard/I2V/template/love1_3.jpg"));
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/2)
-                                            images.add(imread("sdcard/Download/love2_2.jpg"));
+                                            images.add(imread("sdcard/I2V/template/love2_2.jpg"));
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                            images.add(imread("/sdcard/Download/love2_3.jpg"));
+                                            images.add(imread("/sdcard/I2V/template/love2_3.jpg"));
                                         break;
                             }
                             break;
                     case 4: if (k == myPhotosWithOrder.size()/2)
-                                images.add(imread("/sdcard/Download/energetic2.jpg"));
+                                images.add(imread("/sdcard/I2V/template/energetic2.jpg"));
                             if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                images.add(imread("/sdcard/Download/energetic3.jpg"));
+                                images.add(imread("/sdcard/I2V/template/energetic3.jpg"));
                             break;
                 }
                 opencv_core.Mat m = myPhotosWithOrder.get(k).getMat();
@@ -499,7 +429,7 @@ public class Tab2 extends Fragment {
             }
 
             // add background
-            opencv_core.Mat black = imread("/sdcard/Download/b1.jpg");
+            opencv_core.Mat black = imread("/sdcard/I2V/template/black.jpg");
             for (int k = 0 ; k<images.size(); k++){
                 imagesWithBackground.add(addBackground(images.get(k), black));
                 imagesWithEffect1.add(addBackground(images.get(k), black));
@@ -702,6 +632,9 @@ public class Tab2 extends Fragment {
                     statusText.setText(String.format("Completed %d", completed));
                 }
             });
+
+            makevideo = new File("/sdcard/I2V/makevideo.mp4");
+
             OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
             FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(makevideo.getAbsolutePath(), 640, 480,1);
             Frame captured_frame;
@@ -817,9 +750,9 @@ public class Tab2 extends Fragment {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    //playVideoOnView(makevideo);
-                    Thread combine_thread = new Thread(combine_worker);
-                    combine_thread.start();
+                    playVideoOnView(makevideo);
+                    /*Thread combine_thread = new Thread(combine_worker);
+                    combine_thread.start();*/
                 }
             });
         }
