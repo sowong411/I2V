@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity implements
     private boolean googleLogin;
 
     private String userObjectId;
+    Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,9 @@ public class LoginActivity extends AppCompatActivity implements
 
 
         // save template photo
-        new Thread(){
+        /*new Thread(){
             public void run(){saveTemplateImage();}
-        }.start();
+        }.start();*/
 
         /***************Google Login***************/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -317,7 +318,7 @@ public class LoginActivity extends AppCompatActivity implements
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize =1;
         for (int i=0; i<templateFileName.length; i++) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), resourceID[i], options);
+            bmp = BitmapFactory.decodeResource(getResources(), resourceID[i], options);
             File f = new File("/sdcard/I2V/template/", templateFileName[i]);
             if (!f.exists()) {
                 f.getParentFile().mkdirs();

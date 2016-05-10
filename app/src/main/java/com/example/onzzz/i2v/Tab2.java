@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -69,6 +70,7 @@ public class Tab2 extends Fragment {
     private int completed=0;
     private Handler handler;
     VideoView videoview;
+    ImageButton download_video,upload_video;
     private int maxFaceNum;
 
     private int transitionFrameDuration;
@@ -125,6 +127,9 @@ public class Tab2 extends Fragment {
             }
         });
 
+        download_video = (ImageButton)v.findViewById(R.id.download_button);
+        upload_video = (ImageButton) v.findViewById(R.id.upload_button);
+
         handler = new Handler();
         progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         videoview = (VideoView) v.findViewById(R.id.video01);
@@ -141,18 +146,18 @@ public class Tab2 extends Fragment {
         });
 
         //upload the encoded video to server
-        v.findViewById(R.id.upload_button).setOnClickListener(new View.OnClickListener() {
+        upload_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File video2 = new File("/sdcard/MemorVi/"+eventObjectId+"/combine.mp4");
+                File video2 = new File("/sdcard/MemorVi/" + eventObjectId + "/combine.mp4");
                 ParseObject VVV = new ParseObject("video");
                 byte[] data = videoTobyte(video2);
                 System.out.println("data to string " + data.toString());
                 ParseFile file = new ParseFile("66.mp4", data);
                 file.saveInBackground();
                 VVV.put("file", file);
-                VVV.put("eventID" , eventObjectId);
-                VVV.put("generatedBy" ,userObjectId);
+                VVV.put("eventID", eventObjectId);
+                VVV.put("generatedBy", userObjectId);
                 VVV.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -163,7 +168,7 @@ public class Tab2 extends Fragment {
             }
         });
 
-        v.findViewById(R.id.download_button).setOnClickListener(new View.OnClickListener() {
+        download_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("video");
@@ -171,6 +176,10 @@ public class Tab2 extends Fragment {
                 query.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> videos, ParseException e) {
                         if (e == null) {
+                            if (videos.size() == 0) {
+                                Toast.makeText(getActivity(), " No Existing Video", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             ParseObject o = videos.get(0);
                             ParseFile file = o.getParseFile("file");
                             try {
@@ -200,6 +209,8 @@ public class Tab2 extends Fragment {
             effectDecision = data.getExtras().getInt("chosenEffect");
             Thread download_photo_thread = new Thread(download_photo_worker);
             download_photo_thread.start();
+            download_video.setVisibility(View.GONE);
+            upload_video.setVisibility(View.VISIBLE);
         }
     }
 
@@ -750,7 +761,7 @@ public class Tab2 extends Fragment {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    playVideoOnView(makevideo);
+                    //playVideoOnView(makevideo);
                     /*Thread combine_thread = new Thread(combine_worker);
                     combine_thread.start();*/
                 }
@@ -864,6 +875,7 @@ public class Tab2 extends Fragment {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
                     playVideoOnView(combine);
+                    //if (!videoview.isPlaying()){videoview.stopPlayback();}
                 }
             });
         }
@@ -877,8 +889,8 @@ public class Tab2 extends Fragment {
 
     private opencv_core.Mat addBackground ( opencv_core.Mat image , opencv_core.Mat background) {
         resize(background, background, new opencv_core.Size(640, 480));
-        opencv_core.Mat tempBlackGround = background.clone();
         resize(image, image, new opencv_core.Size(620, 460));
+        opencv_core.Mat tempBlackGround = background.clone();
         image.copyTo(tempBlackGround.rowRange(10, 470).colRange(10,630));
         return tempBlackGround;
     }
@@ -893,9 +905,9 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat move (opencv_core.Mat image, opencv_core.Mat background, int startingColumn, int startingRow){
-        resize(background, background, new opencv_core.Size(960,720));
+        resize(background, background, new opencv_core.Size(960, 720));
         opencv_core.Mat tempBlackGround = background.clone();
-        image.copyTo(tempBlackGround.colRange(startingColumn, startingColumn+image.cols()).rowRange(startingRow, startingRow+image.rows()));
+        image.copyTo(tempBlackGround.colRange(startingColumn, startingColumn + image.cols()).rowRange(startingRow, startingRow + image.rows()));
         return tempBlackGround;
     }
 
