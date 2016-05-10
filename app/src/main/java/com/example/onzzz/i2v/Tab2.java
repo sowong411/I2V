@@ -923,16 +923,10 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat addBackground ( opencv_core.Mat image , opencv_core.Mat background) {
-        resize(background, background, new opencv_core.Size(960, 720));
+        resize(background, background, new opencv_core.Size(640, 480));
         opencv_core.Mat tempBlackGround = background.clone();
-        if (image.cols() < image.rows()){
-            resize(image, image, new opencv_core.Size(320, 480));
-            image.copyTo(tempBlackGround.rowRange(0, 480).colRange(240, 560));
-        }
-        else {
-            resize(image, image, new opencv_core.Size(640, 480));
-            image.copyTo(tempBlackGround.rowRange(0, 480).colRange(80, 720));
-        }
+        resize(image, image, new opencv_core.Size(620, 460));
+        image.copyTo(tempBlackGround.rowRange(10, 470).colRange(10,630));
         return tempBlackGround;
     }
 
