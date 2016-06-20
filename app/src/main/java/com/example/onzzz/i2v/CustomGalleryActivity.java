@@ -66,15 +66,9 @@ public class CustomGalleryActivity extends Activity {
     private int numOfFace;
     private int totalSmile;
     private double averageSmile;
-    private ArrayList<Integer> age = new ArrayList<Integer>();
     private ArrayList<String> allPath = new ArrayList<String>();
-    private int totalAge;
-    private double totalSquareAge;
-    private double averageAge;
-    private double varianceAge;
     private int numOfMale;
     private int numOfFemale;
-    private int facePosition;
     private String  userObjectId;
     private String  eventObjectId;
 
@@ -164,7 +158,6 @@ public class CustomGalleryActivity extends Activity {
                     bmp = BitmapFactory.decodeFile(allPath.get(i));
                     final ParseObject photo = new ParseObject("Photo");
                     final String encodedString = encodeTobase64(bmp);
-                    System.out.println("Testing the:" + i + " photo");
                     faceppDetect.setDetectCallback(new DetectCallback() {
                         public void detectResult(JSONObject rst) {
                             try {
@@ -175,11 +168,6 @@ public class CustomGalleryActivity extends Activity {
                                     //Way to detect smile
                                     totalSmile += rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("smiling").getInt("value");
-                                    //Way to detect age
-                                    System.out.println("Age " + i + ": " + rst.getJSONArray("face").getJSONObject(i)
-                                            .getJSONObject("attribute").getJSONObject("age").getInt("value"));
-                                    age.add(rst.getJSONArray("face").getJSONObject(i)
-                                            .getJSONObject("attribute").getJSONObject("age").getInt("value"));
                                     //Way to detect gender
                                     String gender = rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("gender").getString("value");
@@ -188,28 +176,13 @@ public class CustomGalleryActivity extends Activity {
                                     } else if (gender.equals("Female")) {
                                         numOfFemale++;
                                     }
-                                    //Way to detect face position
-                                    if (numOfFace == 1) {
-                                        if (rst.getJSONArray("face").getJSONObject(i)
-                                                .getJSONObject("position").getJSONObject("center").getInt("x") < 50) {
-                                            facePosition = -1;
-                                        } else if (rst.getJSONArray("face").getJSONObject(i)
-                                                .getJSONObject("position").getJSONObject("center").getInt("x") > 50) {
-                                            facePosition = 1;
-                                        }
-                                    }
                                     photo.put("Image", encodedString);
-                                    photo.put("Location", "");
-                                    photo.put("Time", "");
                                     photo.put("Event", eventObjectId);
                                     photo.put("UploadedBy", userObjectId);
                                     photo.put("FaceNumber", numOfFace);
-                                    photo.put("AverageSmileLevel", 	averageSmile);
+                                    photo.put("AverageSmileLevel", averageSmile);
                                     photo.put("MaleNumber", numOfMale);
                                     photo.put("FemaleNumber", numOfFemale);
-                                    photo.put("AverageAge", averageAge);
-                                    photo.put("VarianceAge", varianceAge);
-                                    photo.put("FacePosition", facePosition);
                                     photo.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -222,16 +195,10 @@ public class CustomGalleryActivity extends Activity {
                                         }
                                     });
 
-                                    averageAge = 0;
-                                    varianceAge = 0;
                                     averageSmile = 0;
                                     totalSmile = 0;
-                                    totalSquareAge = 0;
-                                    totalAge = 0;
                                     numOfMale = 0;
                                     numOfFemale = 0;
-                                    facePosition = 0;
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
