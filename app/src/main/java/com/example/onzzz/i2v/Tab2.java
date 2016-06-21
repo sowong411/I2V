@@ -209,8 +209,6 @@ public class Tab2 extends Fragment {
             effectDecision = data.getExtras().getInt("chosenEffect");
             Thread download_photo_thread = new Thread(download_photo_worker);
             download_photo_thread.start();
-            /*download_video.setVisibility(View.GONE);
-            upload_video.setVisibility(View.VISIBLE);*/
         }
     }
 
@@ -219,7 +217,7 @@ public class Tab2 extends Fragment {
             completed = 0;
             handler.post(new Runnable() {
                 public void run() {
-                    Toast.makeText(getActivity(), "Downloading photos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Downloading Photo", Toast.LENGTH_LONG).show();
                     progressBar.setProgress(completed);
                     statusText.setText(String.format("Completed %d", completed));
                 }
@@ -282,34 +280,12 @@ public class Tab2 extends Fragment {
             myPhotosWithOrder.addAll(landscapes);
             myPhotosWithOrder.addAll(photoWithOneFace);
             myPhotosWithOrder.addAll(normalPhotos);
-
-            /*int indexOfLandscape = 0;
-            int indexOfOneFace = 0;
-            int indexOfNormal = 0;
-
-            while (indexOfLandscape+indexOfOneFace+indexOfNormal < landscapes.size()+photoWithOneFace.size()+normalPhotos.size()){
-                int random = (int) random()*100;
-                if (random % 3 == 0 && indexOfLandscape < landscapes.size()){
-                    myPhotosWithOrder.add(landscapes.get(indexOfLandscape));
-                    indexOfLandscape++;
-                }
-                else if (random % 3 == 1 && indexOfOneFace < photoWithOneFace.size()){
-                    myPhotosWithOrder.add(photoWithOneFace.get(indexOfOneFace));
-                    indexOfOneFace++;
-                }
-                else {
-                    myPhotosWithOrder.add(normalPhotos.get(indexOfNormal));
-                    indexOfNormal++;
-                }
-            }*/
-
             myPhotosWithOrder.addAll(sortByLevelOfSmile(groupPhoto));
 
             handler.post(new Runnable() {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    Toast.makeText(getActivity(), "Photos are Downloaded ", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -450,30 +426,9 @@ public class Tab2 extends Fragment {
 
             switch (effectDecision){
                 case 0: {
-                    for (int i=0; i<imagesWithBackground.size(); i++){
-                        imagesWithEffect1.get(i).convertTo(imagesWithEffect1.get(i), -1, 1.0, 20);
-                        imagesWithEffect2.get(i).convertTo(imagesWithEffect2.get(i), -1, 1.0, 40);
-                        imagesWithEffect3.get(i).convertTo(imagesWithEffect3.get(i), -1, 1.0, 60);
-                    }
                     break;
                 }
                 case 1: {
-                    for (int i=0; i<imagesWithBackground.size(); i++){
-                        GaussianBlur(imagesWithEffect1.get(i), imagesWithEffect1.get(i), new opencv_core.Size(23,23), 0);
-                        GaussianBlur(imagesWithEffect2.get(i), imagesWithEffect2.get(i), new opencv_core.Size(45,45), 0);
-                        GaussianBlur(imagesWithEffect3.get(i), imagesWithEffect3.get(i), new opencv_core.Size(69,69), 0);
-                    }
-                    break;
-                }
-                case 2: {
-                    for (int i=0; i<imagesWithBackground.size()-1; i++){
-                        addWeighted(imagesWithEffect1.get(i), 0.8, imagesWithEffect1.get(i+1), 0.2, 0.0, imagesWithEffect1.get(i));
-                        addWeighted(imagesWithEffect2.get(i), 0.5, imagesWithEffect2.get(i+1), 0.5, 0.0, imagesWithEffect2.get(i));
-                        addWeighted(imagesWithEffect3.get(i), 0.2, imagesWithEffect3.get(i+1), 0.8, 0.0, imagesWithEffect3.get(i));
-                    }
-                    break;
-                }
-                case 3: {
                     for (int i=0; i<images.size(); i++){
                         int typeOfPhoto = checkPhotoType(images.get(i).cols(), images.get(i).rows());
                         setZoom(typeOfPhoto);
@@ -564,7 +519,7 @@ public class Tab2 extends Fragment {
                     }
                     break;
                 }
-                case 4: {
+                case 2: {
                     int count = images.size();
                     for (int i=0; i<images.size();){
                         int randomNumber = (int) (random()*100) % 8;
@@ -639,6 +594,7 @@ public class Tab2 extends Fragment {
 
             handler.post(new Runnable() {
                 public void run() {
+                    Toast.makeText(getActivity(), "Making Video", Toast.LENGTH_LONG).show();
                     progressBar.setProgress(completed);
                     statusText.setText(String.format("Completed %d", completed));
                 }
@@ -655,7 +611,53 @@ public class Tab2 extends Fragment {
                 transitionFrameDuration = 4;
                 mainFrameDuration = 80;
                 recorder.start();
-                if (effectDecision == 0 || effectDecision == 1){
+                if (effectDecision == 0){
+                    for (int i = 0; i < imagesWithBackground.size(); i++) {
+                        captured_frame = converter.convert(imagesWithBackground.get(i));
+                        for(int j =0 ; j<mainFrameDuration; j++) {
+                            recorder.record(captured_frame);
+                        }
+                        completed = (int)(( (float)i/(float) imagesWithBackground.size())*100);
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(completed);
+                                statusText.setText(String.format("Completed %d", completed));
+                            }
+                        });
+                    }
+                }
+                else if (effectDecision == 1){
+                    for (int i = 0; i < zooming.size(); i++) {
+                        captured_frame = converter.convert(zooming.get(i));
+                        for (int j=0; j<transitionFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+
+                        completed = (int)(( (float)i/(float) zooming.size())*100);
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(completed);
+                                statusText.setText(String.format("Completed %d", completed));
+                            }
+                        });
+                    }
+                }
+                else if (effectDecision == 2){
+                    for (int i=0; i<multipleInOne.size(); i++){
+                        captured_frame = converter.convert(multipleInOne.get(i));
+                        for (int j=0; j<mainFrameDuration; j++){
+                            recorder.record(captured_frame);
+                        }
+                        completed = (int)(( (float)i/(float) multipleInOne.size())*100);
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(completed);
+                                statusText.setText(String.format("Completed %d", completed));
+                            }
+                        });
+                    }
+                }
+                /*if (effectDecision == 0 || effectDecision == 1){
                     for (int i = 0; i < imagesWithBackground.size(); i++) {
                         captured_frame = converter.convert(imagesWithEffect3.get(i));
                         for (int j=0; j<transitionFrameDuration; j++){
@@ -752,7 +754,7 @@ public class Tab2 extends Fragment {
                             }
                         });
                     }
-                }
+                }*/
                 recorder.stop();
                 recorder.release();
             } catch (Exception e) {
@@ -775,6 +777,7 @@ public class Tab2 extends Fragment {
             completed = 0;
             handler.post(new Runnable() {
                 public void run() {
+                    Toast.makeText(getActivity(), "Adding Sound", Toast.LENGTH_LONG).show();
                     progressBar.setProgress(completed);
                     statusText.setText(String.format("Completed %d", completed));
                 }
@@ -986,7 +989,7 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat combine_style_1a (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c, opencv_core.Mat d){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(310, 230));
@@ -1003,7 +1006,7 @@ public class Tab2 extends Fragment {
 
 
     private opencv_core.Mat combine_style_1b (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c, opencv_core.Mat d){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(310, 230));
@@ -1019,7 +1022,7 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat combine_style_2a (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c , opencv_core.Mat d, opencv_core.Mat e){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(310, 230));
@@ -1038,7 +1041,7 @@ public class Tab2 extends Fragment {
 
 
     private opencv_core.Mat combine_style_2b (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c , opencv_core.Mat d, opencv_core.Mat e){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(310, 230));
@@ -1056,7 +1059,7 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat combine_style_3a (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c , opencv_core.Mat d, opencv_core.Mat e){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(450, 370));
@@ -1075,7 +1078,7 @@ public class Tab2 extends Fragment {
 
 
     private opencv_core.Mat combine_style_3b (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c , opencv_core.Mat d, opencv_core.Mat e){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(450, 370));
@@ -1093,7 +1096,7 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat combine_style_4 (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c, opencv_core.Mat d){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(470, 350));
@@ -1109,7 +1112,7 @@ public class Tab2 extends Fragment {
     }
 
     private opencv_core.Mat combine_style_5 (opencv_core.Mat a, opencv_core.Mat b, opencv_core.Mat c, opencv_core.Mat d, opencv_core.Mat e, opencv_core.Mat f, opencv_core.Mat g, opencv_core.Mat h,opencv_core.Mat i){
-        opencv_core.Mat black = imread("/sdcard/Download/black.jpg");
+        opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
         opencv_core.Mat temp = black.clone();
         resize(temp, temp, new opencv_core.Size(960, 720));
         resize(a, a, new opencv_core.Size(310, 230));
@@ -1139,10 +1142,10 @@ public class Tab2 extends Fragment {
         videoview.setMediaController(new MediaController(Tab2.this.getContext()));
         DisplayMetrics displaymetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        /*int h = displaymetrics.heightPixels;
+        int h = displaymetrics.heightPixels;
         int w = displaymetrics.widthPixels;
         videoview.setMinimumHeight(h*3);
-        videoview.setMinimumWidth(w * 4);*/
+        videoview.setMinimumWidth(w * 4);
         videoview.start();
     }
 
@@ -1166,10 +1169,8 @@ public class Tab2 extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Path is here :  " + f.getAbsolutePath());
         return  f.getAbsolutePath();
     }
-
 
     //  The functions  below have not been tested  **********
 
@@ -1183,8 +1184,7 @@ public class Tab2 extends Fragment {
         }
     }
 
-
-        // can not use so Far
+    // can not use so Far
     private ArrayList<Photo> blurring (Photo toBlur){
         ArrayList<Photo> blurPhotos = new ArrayList<Photo>();
         opencv_core.Mat toBlurMat = new opencv_core.Mat(toBlur.getMat().rows(), toBlur.getMat().cols());
