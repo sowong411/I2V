@@ -64,7 +64,7 @@ public class CustomGalleryActivity extends Activity {
     String action;
     private ImageLoader imageLoader;
     private int numOfFace;
-    private int totalSmile;
+    private double totalSmile;
     private double averageSmile;
     private ArrayList<String> allPath = new ArrayList<String>();
     private int numOfMale;
@@ -167,7 +167,7 @@ public class CustomGalleryActivity extends Activity {
                                 for (int i = 0; i < numOfFace; ++i) {
                                     //Way to detect smile
                                     totalSmile += rst.getJSONArray("face").getJSONObject(i)
-                                            .getJSONObject("attribute").getJSONObject("smiling").getInt("value");
+                                            .getJSONObject("attribute").getJSONObject("smiling").getDouble("value");
                                     //Way to detect gender
                                     String gender = rst.getJSONArray("face").getJSONObject(i)
                                             .getJSONObject("attribute").getJSONObject("gender").getString("value");
@@ -176,30 +176,32 @@ public class CustomGalleryActivity extends Activity {
                                     } else if (gender.equals("Female")) {
                                         numOfFemale++;
                                     }
-                                    photo.put("Image", encodedString);
-                                    photo.put("Event", eventObjectId);
-                                    photo.put("UploadedBy", userObjectId);
-                                    photo.put("FaceNumber", numOfFace);
-                                    photo.put("AverageSmileLevel", averageSmile);
-                                    photo.put("MaleNumber", numOfMale);
-                                    photo.put("FemaleNumber", numOfFemale);
-                                    photo.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                Toast.makeText(CustomGalleryActivity.this, "Uploading", Toast.LENGTH_LONG).show();
-                                                Intent data = new Intent();
-                                                setResult(RESULT_OK, data);
-                                                finish();
-                                            }
-                                        }
-                                    });
-
-                                    averageSmile = 0;
-                                    totalSmile = 0;
-                                    numOfMale = 0;
-                                    numOfFemale = 0;
                                 }
+                                averageSmile = totalSmile/numOfFace;
+
+                                photo.put("Image", encodedString);
+                                photo.put("Event", eventObjectId);
+                                photo.put("UploadedBy", userObjectId);
+                                photo.put("FaceNumber", numOfFace);
+                                photo.put("AverageSmileLevel", averageSmile);
+                                photo.put("MaleNumber", numOfMale);
+                                photo.put("FemaleNumber", numOfFemale);
+                                photo.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            Toast.makeText(CustomGalleryActivity.this, "Uploading", Toast.LENGTH_LONG).show();
+                                            Intent data = new Intent();
+                                            setResult(RESULT_OK, data);
+                                            finish();
+                                        }
+                                    }
+                                });
+
+                                averageSmile = 0;
+                                totalSmile = 0;
+                                numOfMale = 0;
+                                numOfFemale = 0;
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 CustomGalleryActivity.this.runOnUiThread(new Runnable() {
