@@ -21,7 +21,6 @@
         android:visibility="gone"
         android:text="Click the button"/>
 
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -29,30 +28,7 @@
         android:textSize = "5sp"
         android:paddingTop="20dip"
         android:visibility="gone"
-        android:text="Progress:"
-        />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_below="@+id/video01"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="false"
-        android:padding="10dip"
-        android:layout_marginTop="5dp"
-        android:clickable="false"
-        android:layout_above="@+id/make_button"
-        android:layout_marginBottom="10dp"/>
-
-
-
-        <!--android:padding="1dip"
-        android:layout_weight="1"
-        android:layout_alignTop="@+id/video01"
-        android:layout_toLeftOf="@+id/download_button"
-        android:layout_toStartOf="@+id/download_button"
-        android:layout_alignBottom="@+id/download_button" />-->
+        android:text="Progress:" />
 
     <VideoView
         android:id="@+id/video01"
@@ -66,7 +42,15 @@
         android:minHeight="240dp"
         android:minWidth="320dp" />
 
-    <ImageButton
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_below="@id/video01"
+        android:layout_marginTop="5dp"/>
+
+    <!--<ImageButton
         android:id="@+id/download_button"
         android:src="@drawable/download"
         android:background="#00000000"
@@ -78,9 +62,9 @@
         android:layout_marginLeft="1dp"
         android:layout_marginBottom="1dp"
         android:layout_marginTop="65dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp" />-->
 
-    <ImageButton
+    <!--<ImageButton
         android:id="@+id/upload_button"
         android:src="@drawable/upload"
         android:background="#00000000"
@@ -90,7 +74,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignBottom="@+id/download_button"
         android:layout_toLeftOf="@+id/download_button"
-        android:layout_toStartOf="@+id/download_button" />
+        android:layout_toStartOf="@+id/download_button" />-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/make_button"
@@ -101,8 +85,10 @@
         app:backgroundTint="@color/app_primary"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/download_button"
-        android:layout_alignEnd="@+id/download_button"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"/>
+    <!--android:layout_alignRight="@+id/download_button"
+        android:layout_alignEnd="@+id/download_button"-->
 
 </RelativeLayout>
