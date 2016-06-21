@@ -127,8 +127,8 @@ public class Tab2 extends Fragment {
             }
         });
 
-        /*download_video = (ImageButton)v.findViewById(R.id.download_button);
-        upload_video = (ImageButton) v.findViewById(R.id.upload_button);*/
+        download_video = (ImageButton)v.findViewById(R.id.download_button);
+        upload_video = (ImageButton) v.findViewById(R.id.upload_button);
 
         handler = new Handler();
         progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
@@ -146,7 +146,7 @@ public class Tab2 extends Fragment {
         });
 
         //upload the encoded video to server
-        /*upload_video.setOnClickListener(new View.OnClickListener() {
+        upload_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 File video2 = new File("/sdcard/MemorVi/" + eventObjectId + "/combine.mp4");
@@ -166,9 +166,9 @@ public class Tab2 extends Fragment {
                     }
                 });
             }
-        });*/
+        });
 
-        /*download_video.setOnClickListener(new View.OnClickListener() {
+        download_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("video");
@@ -195,7 +195,7 @@ public class Tab2 extends Fragment {
                     }
                 });
             }
-        });*/
+        });
         return v;
     }
 
@@ -600,8 +600,8 @@ public class Tab2 extends Fragment {
                 }
             });
 
-            makevideo = new File("/sdcard/MemorVi/makevideo.mp4");
-            combine = new File("/sdcard/MemorVi/combine.mp4");
+            makevideo = new File("/sdcard/MemorVi/" + eventObjectId + "/makevideo.mp4");
+            combine = new File("/sdcard/MemorVi/" + eventObjectId + "/combine.mp4");
 
             OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
             FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(makevideo.getAbsolutePath(), 640, 480,1);
