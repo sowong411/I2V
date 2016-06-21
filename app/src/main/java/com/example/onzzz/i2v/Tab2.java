@@ -127,8 +127,8 @@ public class Tab2 extends Fragment {
             }
         });
 
-        download_video = (ImageButton)v.findViewById(R.id.download_button);
-        upload_video = (ImageButton) v.findViewById(R.id.upload_button);
+        /*download_video = (ImageButton)v.findViewById(R.id.download_button);
+        upload_video = (ImageButton) v.findViewById(R.id.upload_button);*/
 
         handler = new Handler();
         progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
@@ -146,7 +146,7 @@ public class Tab2 extends Fragment {
         });
 
         //upload the encoded video to server
-        upload_video.setOnClickListener(new View.OnClickListener() {
+        /*upload_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 File video2 = new File("/sdcard/MemorVi/" + eventObjectId + "/combine.mp4");
@@ -166,9 +166,9 @@ public class Tab2 extends Fragment {
                     }
                 });
             }
-        });
+        });*/
 
-        download_video.setOnClickListener(new View.OnClickListener() {
+        /*download_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("video");
@@ -195,7 +195,7 @@ public class Tab2 extends Fragment {
                     }
                 });
             }
-        });
+        });*/
         return v;
     }
 
@@ -209,8 +209,8 @@ public class Tab2 extends Fragment {
             effectDecision = data.getExtras().getInt("chosenEffect");
             Thread download_photo_thread = new Thread(download_photo_worker);
             download_photo_thread.start();
-            download_video.setVisibility(View.GONE);
-            upload_video.setVisibility(View.VISIBLE);
+            /*download_video.setVisibility(View.GONE);
+            upload_video.setVisibility(View.VISIBLE);*/
         }
     }
 
@@ -325,7 +325,7 @@ public class Tab2 extends Fragment {
             switch (firstTemplateDecision){
                 case 0: break;
                 case 1: switch (secondTemplateDecision){
-                            case 0: images.add(imread("/sdcard/I2V/template/christmas1_1.jpg"));
+                            case 0: images.add(imread("/sdcard/MemorVi/template/christmas1_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*13,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
@@ -333,7 +333,7 @@ public class Tab2 extends Fragment {
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*25,350), 7, 1.5, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
                                     break;
-                            case 1: images.add(imread("/sdcard/I2V/template/christmas2_1.jpg"));
+                            case 1: images.add(imread("/sdcard/MemorVi/template/christmas2_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(280-(eventName.length()/2)*18,560), 3, 1.5, new opencv_core.Scalar(0, 0, 0, 0));
                                     }
@@ -344,7 +344,7 @@ public class Tab2 extends Fragment {
                         }
                         break;
                 case 2: switch (secondTemplateDecision){
-                            case 0: images.add(imread("/sdcard/I2V/template/wedding1_1.jpg"));
+                            case 0: images.add(imread("/sdcard/MemorVi/template/wedding1_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
@@ -352,7 +352,7 @@ public class Tab2 extends Fragment {
                                         putText(images.get(0), eventName, new Point(80,65), 6, 2, new opencv_core.Scalar(0, 0, 255, 0));
                                     }
                                     break;
-                            case 1: images.add(imread("/sdcard/I2V/template/wedding2_1.jpg"));
+                            case 1: images.add(imread("/sdcard/MemorVi/template/wedding2_1.jpg"));
                                     if (eventName.length()%2 == 0){
                                         putText(images.get(0), eventName, new Point(300-(eventName.length()/2)*30,320), 3, 2, new opencv_core.Scalar(0, 100, 100, 0));
                                     }
@@ -363,13 +363,13 @@ public class Tab2 extends Fragment {
                         }
                         break;
                 case 3: switch(secondTemplateDecision){
-                            case 0: images.add(imread("/sdcard/I2V/template/love1_1.jpg"));
+                            case 0: images.add(imread("/sdcard/MemorVi/template/love1_1.jpg"));
                                     break;
-                            case 1: images.add(imread("/sdcard/I2V/template/love2_1.jpg"));
+                            case 1: images.add(imread("/sdcard/MemorVi/template/love2_1.jpg"));
                                     break;
                         }
                         break;
-                case 4: images.add(imread("/sdcard/I2V/template/energetic1.jpg"));
+                case 4: images.add(imread("/sdcard/MemorVi/template/energetic1.jpg"));
                         break;
             }
 
@@ -378,61 +378,61 @@ public class Tab2 extends Fragment {
                     case 0: break;
                     case 1: switch (secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/2){
-                                            images.add(imread("sdcard/I2V/template/christmas1_2.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/christmas1_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/I2V/template/christmas1_3.jpg"));
+                                            images.add(imread("/sdcard/MemorVi/template/christmas1_3.jpg"));
                                         }
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/2){
-                                            images.add(imread("sdcard/I2V/template/christmas2_2.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/christmas2_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/I2V/christmas2_3.jpg"));
+                                            images.add(imread("/sdcard/MemorVi/christmas2_3.jpg"));
                                         }
                                         break;
                             }
                             break;
                     case 2: switch (secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/3){
-                                            images.add(imread("sdcard/I2V/template/wedding1_2.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/wedding1_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()/3*2){
-                                            images.add(imread("sdcard/I2V/template/wedding1_3.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/wedding1_3.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/I2V/template/wedding1_4.jpg"));
+                                            images.add(imread("/sdcard/MemorVi/template/wedding1_4.jpg"));
                                         }
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/3){
-                                            images.add(imread("sdcard/I2V/template/wedding2_2.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/wedding2_2.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()/3*2){
-                                            images.add(imread("sdcard/I2V/template/wedding2_3.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/wedding2_3.jpg"));
                                         }
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1){
-                                            images.add(imread("/sdcard/I2V/template/wedding2_4.jpg"));
+                                            images.add(imread("/sdcard/MemorVi/template/wedding2_4.jpg"));
                                         }
                                         break;
                             }
                             break;
                     case 3: switch(secondTemplateDecision){
                                 case 0: if (k == myPhotosWithOrder.size()/2)
-                                            images.add(imread("sdcard/I2V/template/love1_2.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/love1_2.jpg"));
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                            images.add(imread("/sdcard/I2V/template/love1_3.jpg"));
+                                            images.add(imread("/sdcard/MemorVi/template/love1_3.jpg"));
                                         break;
                                 case 1: if (k == myPhotosWithOrder.size()/2)
-                                            images.add(imread("sdcard/I2V/template/love2_2.jpg"));
+                                            images.add(imread("sdcard/MemorVi/template/love2_2.jpg"));
                                         if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                            images.add(imread("/sdcard/I2V/template/love2_3.jpg"));
+                                            images.add(imread("/sdcard/MemorVi/template/love2_3.jpg"));
                                         break;
                             }
                             break;
                     case 4: if (k == myPhotosWithOrder.size()/2)
-                                images.add(imread("/sdcard/I2V/template/energetic2.jpg"));
+                                images.add(imread("/sdcard/MemorVi/template/energetic2.jpg"));
                             if (k == myPhotosWithOrder.size()-groupPhoto.size()-1)
-                                images.add(imread("/sdcard/I2V/template/energetic3.jpg"));
+                                images.add(imread("/sdcard/MemorVi/template/energetic3.jpg"));
                             break;
                 }
                 opencv_core.Mat m = myPhotosWithOrder.get(k).getMat();
@@ -440,7 +440,7 @@ public class Tab2 extends Fragment {
             }
 
             // add background
-            opencv_core.Mat black = imread("/sdcard/I2V/template/black.jpg");
+            opencv_core.Mat black = imread("/sdcard/MemorVi/template/black.jpg");
             for (int k = 0 ; k<images.size(); k++){
                 imagesWithBackground.add(addBackground(images.get(k), black));
                 imagesWithEffect1.add(addBackground(images.get(k), black));
@@ -644,7 +644,8 @@ public class Tab2 extends Fragment {
                 }
             });
 
-            makevideo = new File("/sdcard/I2V/makevideo.mp4");
+            makevideo = new File("/sdcard/MemorVi/makevideo.mp4");
+            combine = new File("/sdcard/MemorVi/combine.mp4");
 
             OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
             FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(makevideo.getAbsolutePath(), 640, 480,1);
@@ -761,9 +762,8 @@ public class Tab2 extends Fragment {
                 public void run() {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
-                    //playVideoOnView(makevideo);
-                    /*Thread combine_thread = new Thread(combine_worker);
-                    combine_thread.start();*/
+                    Thread combine_thread = new Thread(combine_worker);
+                    combine_thread.start();
                 }
             });
         }
@@ -783,11 +783,11 @@ public class Tab2 extends Fragment {
             switch (firstTemplateDecision){
                 case 0: randomNumber %= 3;
                         if (randomNumber == 0)
-                            audio = new File("/sdcard/Download/general1.mp3");
+                            audio = new File("/sdcard/Download/general1_1.mp3");
                         if (randomNumber == 1)
-                            audio = new File("/sdcard/Download/general2.mp3");
+                            audio = new File("/sdcard/Download/general1_2.mp3");
                         if (randomNumber == 2)
-                            audio = new File("/sdcard/Download/general3.mp3");
+                            audio = new File("/sdcard/Download/general1_3.mp3");
                         break;
                 case 1: switch(secondTemplateDecision){
                             case 0: randomNumber %= 3;
@@ -809,26 +809,30 @@ public class Tab2 extends Fragment {
                                     if (randomNumber == 1)
                                         audio = new File("/sdcard/Download/wedding1_2.mp3");
                                     break;
-                            case 1: audio = new File("/sdcard/Download/wedding2.mp3");
+                            case 1: randomNumber %= 2;
+                                    if (randomNumber == 0)
+                                        audio = new File("/sdcard/Download/wedding2_1.mp3");
+                                    if (randomNumber == 1)
+                                        audio = new File("/sdcard/Download/wedding2_2.mp3");
                                     break;
                         }
                         break;
                 case 3: switch(secondTemplateDecision){
                             case 0: randomNumber %= 2;
                                     if (randomNumber == 0)
-                                        audio = new File("/sdcard/Download/love1_1.mp3");
+                                        audio = new File("/sdcard/Download/general_love1_1.mp3");
                                     if (randomNumber == 1)
-                                        audio = new File("/sdcard/Download/love1_2.mp3");
+                                        audio = new File("/sdcard/Download/general_love1_2.mp3");
                                     break;
-                            case 1: audio = new File("/sdcard/Download/love2.mp3");
+                            case 1: audio = new File("/sdcard/Download/classical_love2.mp3");
                                     break;
                         }
                         break;
                 case 4: randomNumber %= 2;
                         if (randomNumber == 0)
-                            audio = new File("/sdcard/Download/energetic1.mp3");
+                            audio = new File("/sdcard/Download/energetic1_1.mp3");
                         if (randomNumber == 1)
-                            audio = new File("/sdcard/Download/energetic2.mp3");
+                            audio = new File("/sdcard/Download/energetic1_2.mp3");
                         break;
             }
             FFmpegFrameGrabber grabber1 = new FFmpegFrameGrabber(makevideo.getAbsolutePath());
@@ -875,7 +879,6 @@ public class Tab2 extends Fragment {
                     progressBar.setProgress(100);
                     statusText.setText(String.format("Completed %d", 100));
                     playVideoOnView(combine);
-                    //if (!videoview.isPlaying()){videoview.stopPlayback();}
                 }
             });
         }
@@ -1136,10 +1139,10 @@ public class Tab2 extends Fragment {
         videoview.setMediaController(new MediaController(Tab2.this.getContext()));
         DisplayMetrics displaymetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int h = displaymetrics.heightPixels;
+        /*int h = displaymetrics.heightPixels;
         int w = displaymetrics.widthPixels;
         videoview.setMinimumHeight(h*3);
-        videoview.setMinimumWidth(w * 4);
+        videoview.setMinimumWidth(w * 4);*/
         videoview.start();
     }
 
